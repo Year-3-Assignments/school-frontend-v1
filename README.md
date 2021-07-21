@@ -1,6 +1,6 @@
-### School Management REST API
+### School Management Frontend React Application
 
-This is the REST API application for school management system. This is build using React and Redux as the state management system.
+This is the frontend React application for school management system. This is build using React and Redux as the state management system.
 
 ### How to contribute
 
