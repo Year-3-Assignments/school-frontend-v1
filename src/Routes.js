@@ -1,14 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import ExaminationPage from './pages/examination/teacher/view/examination_page';
+import './App.css';
 
 function PageRoutes() {
   return (
     <div>
-      <Router>
-        <section>
-          <Switch>{/* All page routes here */}</Switch>
-        </section>
-      </Router>
+      <div className="container">
+        <Router>
+          <section>
+            <Switch>
+              <Route path="/examination" component={ExaminationPage} />
+            </Switch>
+          </section>
+        </Router>
+      </div>
     </div>
   );
 }

@@ -107,7 +107,7 @@ function examinationReducer(state = INITIALSTATE, action) {
       return {
         ...state,
         loading: false,
-        createexaminationerror: action.payload.data,
+        createexaminationerror: action.payload,
         state: INITIALSTATE,
       };
     case `${GET_EXAMINAITONS_FOR_TEACHER}_REJECTED`:
