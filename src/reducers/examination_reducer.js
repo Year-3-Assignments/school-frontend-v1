@@ -9,6 +9,7 @@ import {
   GET_QUESTION,
   UPDATE_QUESTION,
   DELETE_QUESTION,
+  SET_EXAMINATION,
 } from '../actions';
 
 const INITIALSTATE = {
@@ -22,6 +23,7 @@ const INITIALSTATE = {
   getquestion: '',
   updatequestion: '',
   deletequestion: '',
+  setexamination: '',
   createexaminationerror: null,
   getexaminationsforteachererror: null,
   updateexaminationerror: null,
@@ -44,7 +46,8 @@ function examinationReducer(state = INITIALSTATE, action) {
     getquestionsforteacher,
     getquestion,
     updatequestion,
-    deletequestion;
+    deletequestion,
+    setexamination;
 
   switch (action.type) {
     case `${CREATE_EXAMINATION}_PENDING`:
@@ -102,6 +105,9 @@ function examinationReducer(state = INITIALSTATE, action) {
     case `${DELETE_QUESTION}_FULFILLED`:
       deletequestion = action.payload.data.data;
       return { ...state, loading: false, deletequestion };
+    case `${SET_EXAMINATION}`:
+      setexamination = action.payload;
+      return { ...state, loading: false, setexamination };
 
     case `${CREATE_EXAMINATION}_REJECTED`:
       return {
@@ -163,7 +169,7 @@ function examinationReducer(state = INITIALSTATE, action) {
       return {
         ...state,
         loading: false,
-        updatequestionerror: action.payload.data,
+        updatequestionerror: action.payload,
         state: INITIALSTATE,
       };
     case `${DELETE_QUESTION}_REJECTED`:

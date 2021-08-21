@@ -10,7 +10,15 @@ import {
   GET_QUESTION,
   UPDATE_QUESTION,
   DELETE_QUESTION,
+  SET_EXAMINATION,
 } from './index';
+
+export function setExam(examData) {
+  return {
+    type: SET_EXAMINATION,
+    payload: examData,
+  };
+}
 
 export function createExamination(examinationData) {
   return {

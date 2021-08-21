@@ -1,7 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getExaminationsForTeacher } from '../../../../actions/examination_actions';
+import {
+  getExaminationsForTeacher,
+  setExam,
+} from '../../../../actions/examination_actions';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   Search,
@@ -9,6 +12,7 @@ import ToolkitProvider, {
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
 import CreateExam from '../add/create_new_exam';
+import UpdateExam from '../update/update_exam';
 
 const { SearchBar } = Search;
 
@@ -17,11 +21,17 @@ const Constants = {
   STATUS_COMPLETE: 'COMPLETE',
 };
 
+const rowClass = (row, rowIndex) => {
+  return 'custom-row-class';
+};
+
 class ExaminationPage extends Component {
   constructor(props) {
     super(props);
+    this.onSelectExamToUpdate = this.onSelectExamToUpdate.bind(this);
     this.state = {
       exams: [],
+      selectedExam: '',
     };
   }
 
@@ -39,6 +49,10 @@ class ExaminationPage extends Component {
     if (this.props.createExam !== nextProps.createExam) {
       this.props.getExaminationsForTeacher();
     }
+
+    if (this.props.updateExam !== nextProps.updateExam) {
+      this.props.getExaminationsForTeacher();
+    }
   };
 
   // react bootstrap table data & functions
@@ -46,9 +60,9 @@ class ExaminationPage extends Component {
     {
       dataField: 'actions',
       text: 'Actions',
-      formatter: () => this.actionButtonFormatter(),
+      formatter: (cell, row) => this.actionButtonFormatter(row),
       headerStyle: () => {
-        return { width: '100px' };
+        return { width: '80px' };
       },
     },
     {
@@ -59,23 +73,44 @@ class ExaminationPage extends Component {
       },
     },
     { dataField: 'title', text: 'Exam Title' },
-    { dataField: 'createdFor', text: 'Class' },
-    { dataField: 'subject', text: 'Subject' },
+    {
+      dataField: 'createdFor',
+      text: 'Class',
+      headerStyle: () => {
+        return { width: '110px' };
+      },
+    },
+    {
+      dataField: 'subject',
+      text: 'Subject',
+      headerStyle: () => {
+        return { width: '130px' };
+      },
+    },
     {
       dataField: 'startDateTime',
       text: 'Date & Time',
       formatter: (cell) => this.examDateTimeFormatter(cell),
     },
-    { dataField: 'accessPassword', text: 'Access Code' },
+    {
+      dataField: 'accessPassword',
+      text: 'Access Code',
+      headerStyle: () => {
+        return { width: '110px' };
+      },
+    },
     {
       dataField: 'status',
-      text: 'Exam Status',
+      text: 'Status',
       formatter: (cell) => this.examStatusStyle(cell),
+      headerStyle: () => {
+        return { width: '110px' };
+      },
     },
     {
       dataField: 'createdBy',
       text: 'Created By',
-      formatter: (cell) => this.examCreatedByFormatter(cell),
+      formatter: (cell, row) => this.examCreatedByFormatter(cell, row),
     },
   ];
 
@@ -95,7 +130,16 @@ class ExaminationPage extends Component {
     }
   };
 
-  actionButtonFormatter = () => {
+  onSelectExamToUpdate = (event, examId) => {
+    const { exams } = this.state;
+    if (event && exams && exams.length > 0 && examId) {
+      const selectedExam = exams.find((exam) => exam._id === examId);
+      this.props.setExam(selectedExam);
+      this.setState({ selectedExam: selectedExam });
+    }
+  };
+
+  actionButtonFormatter = (row) => {
     return (
       <span className="dropdown show">
         <span className="dropdown">
@@ -107,7 +151,13 @@ class ExaminationPage extends Component {
             <i className="fas fa-ellipsis-h"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a className="dropdown-item" href="#">
+            <a
+              className="dropdown-item"
+              href="#"
+              data-mdb-toggle="modal"
+              data-mdb-target="#update-exam"
+              onClick={(e) => this.onSelectExamToUpdate(e, row._id)}
+            >
               <i className="far fa-edit" /> Edit
             </a>
 
@@ -128,14 +178,25 @@ class ExaminationPage extends Component {
     return moment(cell).format('llll');
   };
 
-  examCreatedByFormatter = (cell) => {
-    if (cell) {
-      return `${cell.firstName} ${cell.lastName}`;
+  examCreatedByFormatter = (cell, row) => {
+    if (cell && row) {
+      return (
+        <div>
+          <img
+            src={row.createdBy && row.createdBy.imageurl}
+            className="teacher-img"
+            alt="teacher"
+          />
+          <div>
+            {cell.firstName} {cell.lastName}
+          </div>
+        </div>
+      );
     }
   };
 
   render() {
-    const { exams } = this.state;
+    const { exams, selectedExam } = this.state;
     return (
       <div className="pt-5 pb-5">
         <div className="card p-4 exam-table">
@@ -168,9 +229,10 @@ class ExaminationPage extends Component {
                   {...props.baseProps}
                   pagination={paginationFactory()}
                   bordered={true}
-                  striped={true}
+                  striped={false}
                   headerClasses="header-class"
                   wrapperClasses="table-responsive"
+                  rowClasses="custom-row-class"
                   hover
                 />
               </div>
@@ -178,6 +240,7 @@ class ExaminationPage extends Component {
           </ToolkitProvider>
         </div>
         <CreateExam />
+        <UpdateExam selectedExam={selectedExam} />
       </div>
     );
   }
@@ -186,11 +249,16 @@ class ExaminationPage extends Component {
 const mapStateToProps = (state) => ({
   examinations: state.examinationReducer.getexaminationsforteacher,
   createExam: state.examinationReducer.createexamination,
+  updateExam: state.examinationReducer.updateexamination,
+  updateExamError: state.examinationReducer.updateexaminationerror,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getExaminationsForTeacher: () => {
     dispatch(getExaminationsForTeacher());
+  },
+  setExam: (examData) => {
+    dispatch(setExam(examData));
   },
 });
 
