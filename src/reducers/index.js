@@ -1,5 +1,8 @@
 import { combineReducers } from 'redux';
+import examinationReducer from './examination_reducer';
 
-const allReducers = combineReducers({});
+const allReducers = combineReducers({
+  examinationReducer,
+});
 
 export default allReducers;
