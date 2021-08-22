@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   getExaminationsForTeacher,
   setExam,
@@ -13,6 +14,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
 import CreateExam from '../add/create_new_exam';
 import UpdateExam from '../update/update_exam';
+import Examination from './examination';
 
 const { SearchBar } = Search;
 
@@ -151,6 +153,9 @@ class ExaminationPage extends Component {
             <i className="fas fa-ellipsis-h"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
+            <Link className="dropdown-item" to={`/examination/${row._id}`}>
+              <i className="far fa-eye" /> View
+            </Link>
             <a
               className="dropdown-item"
               href="#"
@@ -163,10 +168,6 @@ class ExaminationPage extends Component {
 
             <a className="dropdown-item" href="#">
               <i class="far fa-trash-alt" /> Delete
-            </a>
-
-            <a className="dropdown-item" href="#">
-              <i className="far fa-eye" /> View
             </a>
           </div>
         </span>

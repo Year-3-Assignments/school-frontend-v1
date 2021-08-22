@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ExaminationPage from './pages/examination/teacher/view/examination_page';
 import './App.css';
+import Examination from './pages/examination/teacher/view/examination';
 
 function PageRoutes() {
   return (
@@ -10,6 +11,7 @@ function PageRoutes() {
         <Router>
           <section>
             <Switch>
+              <Route path="/examination/:id" component={Examination} />
               <Route path="/examination" component={ExaminationPage} />
             </Switch>
           </section>

@@ -141,7 +141,7 @@ function examinationReducer(state = INITIALSTATE, action) {
       return {
         ...state,
         loading: false,
-        createquestionerror: action.payload.data,
+        createquestionerror: action.payload,
         state: INITIALSTATE,
       };
     case `${GET_QUESTIONS_FOR_EXAMINATION}_REJECTED`:
@@ -176,7 +176,7 @@ function examinationReducer(state = INITIALSTATE, action) {
       return {
         ...state,
         loading: false,
-        deletequestionerror: action.payload.data,
+        deletequestionerror: action.payload,
         state: INITIALSTATE,
       };
 
