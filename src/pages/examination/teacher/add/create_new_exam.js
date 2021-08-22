@@ -112,9 +112,18 @@ class CreateExam extends Component {
     if (
       this.props.createexaminationerror !== nextProps.createexaminationerror
     ) {
-      this.setState({ isLoading: false }, () => {
-        NotificationManager.error(nextProps.createexaminationerror.message);
-      });
+      if (
+        nextProps.createexaminationerror &&
+        nextProps.createexaminationerror.message
+      ) {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error(nextProps.createexaminationerror.message);
+        });
+      } else {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error(Constants.CREATE_EXAM_FAIL);
+        });
+      }
     }
   };
 
