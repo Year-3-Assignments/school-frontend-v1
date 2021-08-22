@@ -1,12 +1,14 @@
-import './App.css';
+import "react-datepicker/dist/react-datepicker.css";
+import "react-notifications/lib/notifications.css";
+import "./App.css";
+import { NotificationContainer } from "react-notifications";
+import PageRoutes from "./Routes";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Welcome to School Management Frontend V1</h1>
-        <i>We will start working on this application soon</i>
-      </header>
+    <div className="container-color">
+      <PageRoutes />
+      <NotificationContainer />
     </div>
   );
 }
