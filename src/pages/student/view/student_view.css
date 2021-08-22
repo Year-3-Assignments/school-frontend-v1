@@ -1,0 +1,32 @@
+.student-btn {
+  width: 190px;
+  display: flex;
+  justify-content: end;
+}
+
+.header-class {
+  background-color: #88bdbc;
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.student-info {
+  font-size: 14px;
+}
+
+p {
+  margin: 0px;
+}
+
+.student-badge {
+  font-family: 16px;
+}
+
+.table-btn {
+  font-size: 11px;
+}
+
+.student-title {
+  font-size: 28px;
+  font-weight: 600;
+}
