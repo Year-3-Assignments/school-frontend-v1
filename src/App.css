@@ -89,3 +89,30 @@
 .custom-row-class {
   height: 50px;
 }
+
+.exam-page {
+  height: 100vh;
+}
+
+.creator-img {
+  width: 80px;
+  border-radius: 50%;
+}
+
+.creator-info {
+  padding-left: 50px;
+  margin: 50px;
+}
+
+.input-group.md-form.form-sm.form-3
+  input[type='text']:focus:not([readonly]).amber-border {
+  border: 1px solid #ffca28;
+  box-shadow: none;
+}
+
+textarea {
+  height: 10vh !important;
+}
+
+.create-question-modal {
+}
