@@ -10,6 +10,8 @@ import "./student.css";
 
 let formData = {};
 
+const $ = window.$;
+
 const provinces = [
   { value: "Central", label: "Central" },
   { value: "Eastern", label: "Eastern" },
@@ -146,6 +148,11 @@ class Student extends Component {
     }
   };
 
+  closeModal() {
+    $("#create-student").modal("toggle");
+    this.setState(this.state);
+  }
+
   onSubmit = (e) => {
     e.preventDefault();
     if (this.validateForm()) {
@@ -252,12 +259,26 @@ class Student extends Component {
 
   render() {
     return (
-      <div className="container mt-5 ">
-        <div className="card p-4 mb-4 content">
-          <div className="card-body p-5 mb-6">
-            <h2>Create Student Account</h2>
+      <div
+        className="modal fade"
+        id="create-student"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog ">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2 className="modal-title">Create Student Account</h2>
+              <button
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                onClick={this.closeModal}
+              ></button>
+            </div>
 
-            <div className="row mb-2">
+            <div className="modal-body">
               <div className="row m-0 mb-3 col">
                 <label htmlFor="fname" className="form-label p-0">
                   First Name
@@ -567,14 +588,22 @@ class Student extends Component {
                 ) : null}
               </div>
             </div>
-
-            <button
-              href="#"
-              className="btn btn-color btn-block"
-              onClick={this.onSubmit}
-            >
-              Create Student
-            </button>
+            <div>
+              <button
+                className="btn btn-secondary btn-no-shadow btn-rounded"
+                onClick={this.closeModal}
+              >
+                Close
+              </button>
+              &nbsp;&nbsp;
+              <button
+                href="#"
+                className="btn btn-color btn-block"
+                onClick={this.onSubmit}
+              >
+                Create Student
+              </button>
+            </div>
           </div>
         </div>
       </div>

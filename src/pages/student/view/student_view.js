@@ -7,8 +7,10 @@ import ToolkitProvider, {
 import paginationFactory from "react-bootstrap-table2-paginator";
 import moment from "moment";
 import { getAllStudents } from "../../../actions/student_actions";
+import Student from "../add/student";
 
 const { SearchBar } = Search;
+
 class StudentView extends Component {
   constructor(props) {
     super(props);
@@ -101,11 +103,61 @@ class StudentView extends Component {
     );
   }
 
+  expandRow = {
+    showExpandColumn: true,
+    renderer: (row) => (
+      <div className="row">
+        <div className="col-md-6">
+          <h6>Student Information</h6>
+          <div className="row">
+            {row.students.length < 0 &&
+              row.students.map((student, index) => {
+                <div className="mb-1 col-md-4" key={index}>
+                  <img src={student.imageurl} className="student-img" />
+                  &nbsp;&nbsp;&nbsp;
+                  <h6 className="person-info m-0">
+                    {student.firstname}&nbsp;{student.lastname}
+                  </h6>
+                  <p>
+                    <i className="fas fa-at"></i>&nbsp;&nbsp;{student.username}
+                  </p>
+                  <p>
+                    <i className="fas fa-at"></i>&nbsp;&nbsp;{student.password}
+                  </p>
+                  <p>
+                    <i className="fas fa-envelope"></i>&nbsp;&nbsp;
+                    {student.achievements}
+                  </p>
+                  <p>
+                    <i className="fas fa-phone"></i>&nbsp;&nbsp;{student.parent}
+                  </p>
+                  <p>
+                    <i className="fas fa-envelope"></i>&nbsp;&nbsp;
+                    {student.email}
+                  </p>
+                  <p>
+                    <i className="fas fa-phone"></i>&nbsp;&nbsp;{student.phone}
+                  </p>
+                </div>;
+              })}
+          </div>
+        </div>
+      </div>
+    ),
+  };
+
   render() {
     return (
       <div className="container p-4">
         <div className="card p-3">
-          <h3 className="users-title">Students</h3>
+          <h3 className="users-title">Students Page</h3>
+          <button
+            className="btn btn-primary btn-rounded btn-no-shadow"
+            data-mdb-toggle="modal"
+            data-mdb-target="#create-student"
+          >
+            Create a new Student
+          </button>
           <ToolkitProvider
             keyField="_id"
             data={this.state.students}
@@ -133,6 +185,7 @@ class StudentView extends Component {
             )}
           </ToolkitProvider>
         </div>
+        <Student />
       </div>
     );
   }

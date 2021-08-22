@@ -1,3 +1,4 @@
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-notifications/lib/notifications.css";
 import "./App.css";
