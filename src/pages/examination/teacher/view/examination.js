@@ -35,7 +35,7 @@ class Examination extends Component {
   };
 
   render() {
-    const { selectedExam, examId } = this.state;
+    const { selectedExam } = this.state;
 
     return (
       <div className="pt-5 pb-5">

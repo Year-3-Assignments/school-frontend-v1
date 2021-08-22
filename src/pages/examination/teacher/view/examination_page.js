@@ -14,17 +14,12 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
 import CreateExam from '../add/create_new_exam';
 import UpdateExam from '../update/update_exam';
-import Examination from './examination';
 
 const { SearchBar } = Search;
 
 const Constants = {
   STATUS_PENDING: 'PENDING',
   STATUS_COMPLETE: 'COMPLETE',
-};
-
-const rowClass = (row, rowIndex) => {
-  return 'custom-row-class';
 };
 
 class ExaminationPage extends Component {
