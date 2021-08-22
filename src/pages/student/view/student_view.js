@@ -1,13 +1,14 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import BootstrapTable from "react-bootstrap-table-next";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   Search,
-} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
-import paginationFactory from "react-bootstrap-table2-paginator";
-import moment from "moment";
-import { getAllStudents } from "../../../actions/student_actions";
-import Student from "../add/student";
+} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import moment from 'moment';
+import { getAllStudents } from '../../../actions/student_actions';
+import Student from '../add/student';
+import './student_view.css';
 
 const { SearchBar } = Search;
 
@@ -20,7 +21,7 @@ class StudentView extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem("token") !== null) {
+    if (localStorage.getItem('token') !== null) {
       this.props.getAllStudents();
     }
   }
@@ -33,36 +34,31 @@ class StudentView extends Component {
 
   tableColumData = [
     {
-      dataField: "_id",
-      text: "Student ID",
+      dataField: 'username',
+      text: 'Student ID',
       formatter: (cell) => this.setIdFormatter(cell),
       headerStyle: () => {
-        return { width: "150px" };
+        return { width: '150px' };
       },
     },
     {
-      dataField: "firstname",
-      text: "Name",
+      dataField: 'firstname',
+      text: 'Name',
       formatter: (cell, row) => this.setNameFormatter(cell, row),
     },
     {
-      dataField: "lastname",
-      text: "Last Name",
-      formatter: (cell, row) => this.setNameFormatter(cell, row),
-    },
-    {
-      dataField: "email",
-      text: "Email",
+      dataField: 'email',
+      text: 'Email',
       formatter: (cell) => this.setFieldFormatter(cell),
     },
     {
-      dataField: "phonenumber",
-      text: "Phone number",
+      dataField: 'phonenumber',
+      text: 'Phone number',
       formatter: (cell) => this.setFieldFormatter(cell),
     },
     {
-      dataField: "username",
-      text: "Username",
+      dataField: 'username',
+      text: 'Username',
       formatter: (cell) => this.setFieldFormatter(cell),
     },
   ];
@@ -78,10 +74,10 @@ class StudentView extends Component {
   setNameFormatter(cell, row) {
     return (
       <div>
-        <img src={row.imageurl} className="user-img" />
+        <img src={row.imageurl} className="user-img" alt="student" />
         &nbsp;&nbsp;
         <p className="m-0 badge user-badge rounded-pill bg-custom-light text-dark">
-          {row.firstname}&nbsp;&nbsp;{row.lastname}
+          {row.firstname}&nbsp;{row.lastname}
         </p>
       </div>
     );
@@ -98,7 +94,7 @@ class StudentView extends Component {
   setDateFormatter(cell) {
     return (
       <p className="badge user-badge rounded-pill bg-custom-light text-dark">
-        {moment(cell).format("lll")}
+        {moment(cell).format('lll')}
       </p>
     );
   }
@@ -107,57 +103,81 @@ class StudentView extends Component {
     showExpandColumn: true,
     renderer: (row) => (
       <div className="row">
+        {console.log('data', row)}
         <div className="col-md-6">
           <h6>Student Information</h6>
           <div className="row">
-            {row.students.length < 0 &&
-              row.students.map((student, index) => {
-                <div className="mb-1 col-md-4" key={index}>
-                  <img src={student.imageurl} className="student-img" />
-                  &nbsp;&nbsp;&nbsp;
-                  <h6 className="person-info m-0">
-                    {student.firstname}&nbsp;{student.lastname}
-                  </h6>
-                  <p>
-                    <i className="fas fa-at"></i>&nbsp;&nbsp;{student.username}
-                  </p>
-                  <p>
-                    <i className="fas fa-at"></i>&nbsp;&nbsp;{student.password}
-                  </p>
-                  <p>
-                    <i className="fas fa-envelope"></i>&nbsp;&nbsp;
-                    {student.achievements}
-                  </p>
-                  <p>
-                    <i className="fas fa-phone"></i>&nbsp;&nbsp;{student.parent}
-                  </p>
-                  <p>
-                    <i className="fas fa-envelope"></i>&nbsp;&nbsp;
-                    {student.email}
-                  </p>
-                  <p>
-                    <i className="fas fa-phone"></i>&nbsp;&nbsp;{student.phone}
-                  </p>
-                </div>;
-              })}
+            {row ? (
+              <div className="mb-1 col-md-4">
+                <img src={row.imageurl} className="student-img" alt="student" />
+                &nbsp;&nbsp;&nbsp;
+                <h6 className="person-info m-0">
+                  {row.firstname}&nbsp;{row.lastname}
+                </h6>
+                <p>
+                  <i className="fas fa-at"></i>&nbsp;&nbsp;
+                  {row.username}
+                </p>
+                <p>
+                  <i className="fas fa-envelope"></i>&nbsp;&nbsp;
+                  {row.achievements}
+                </p>
+                <p>
+                  <i className="fas fa-phone"></i>&nbsp;&nbsp;
+                  {row.parent}
+                </p>
+                <p>
+                  <i className="fas fa-envelope"></i>&nbsp;&nbsp;
+                  {row.email}
+                </p>
+                <p>
+                  <i className="fas fa-phone"></i>&nbsp;&nbsp;
+                  {row.phone}
+                </p>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
     ),
+    expandHeaderColumnRenderer: ({ isAnyExpands }) => {
+      if (isAnyExpands) {
+        return <b style={{ cursor: 'pointer' }}></b>;
+      }
+      return <b style={{ cursor: 'pointer' }}></b>;
+    },
+    expandColumnRenderer: ({ expanded }) => {
+      if (expanded) {
+        return (
+          <div style={{ cursor: 'pointer', marginTop: '5px' }}>
+            <i className="fas fa-chevron-circle-up"></i>
+          </div>
+        );
+      }
+      return (
+        <div style={{ cursor: 'pointer', marginTop: '5px' }}>
+          <i className="fas fa-chevron-circle-down"></i>
+        </div>
+      );
+    },
   };
 
   render() {
     return (
       <div className="container p-4">
         <div className="card p-3">
-          <h3 className="users-title">Students Page</h3>
-          <button
-            className="btn btn-primary btn-rounded btn-no-shadow"
-            data-mdb-toggle="modal"
-            data-mdb-target="#create-student"
-          >
-            Create a new Student
-          </button>
+          <div className="d-flex">
+            <h3 className="users-title">Students Page</h3>
+            <div className="align-right">
+              <button
+                className="btn btn-primary btn-rounded btn-no-shadow"
+                data-mdb-toggle="modal"
+                data-mdb-target="#create-student"
+              >
+                Create a new Student
+              </button>
+            </div>
+          </div>
           <ToolkitProvider
             keyField="_id"
             data={this.state.students}
@@ -174,7 +194,7 @@ class StudentView extends Component {
                 <BootstrapTable
                   {...props.baseProps}
                   pagination={paginationFactory()}
-                  bordered={false}
+                  bordered={true}
                   striped
                   hover
                   headerClasses="header-class"
