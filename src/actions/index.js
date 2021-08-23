@@ -10,3 +10,14 @@ export const GET_QUESTION = 'GET_QUESTION';
 export const UPDATE_QUESTION = 'UPDATE_QUESTION';
 export const DELETE_QUESTION = 'DELETE_QUESTION';
 export const SET_EXAMINATION = 'SET_EXAMINATION';
+
+// Sport Management action types
+export const CREATE_SPORT = "CREATE_SPORT";
+export const GET_ALL_SPORT = "GET_ALL_SPORT";
+export const GET_SPORT_FOR_SPORT_INVENTORY = "GET_SPORT_FOR_SPORT_INVENTORY";
+export const SET_SPORT = "SET_SPORT";
+export const GET_SPORT = "GET_SPORT";
+export const GET_COACH_FOR_SPORT = "GET_COACH_FOR_SPORT";
+export const GET_STUDENT_FOR_SPORT = "GET_STUDENT_FOR_SPORT";
+export const UPDATE_SPORT = "UPDATE_SPORT";
+export const DELETE_SPORT = "DELETE_SPORT";
