@@ -204,7 +204,7 @@ class SportPage extends Component {
                 data-mdb-toggle="modal"
                 data-mdb-target="#create-exam"
               >
-                Create new exam
+                Create new Sport
               </button>
             </div>
           </div>

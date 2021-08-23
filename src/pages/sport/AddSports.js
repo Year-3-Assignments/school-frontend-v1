@@ -3,7 +3,7 @@ import Progress from './progress/progress';
 import firebase from "../../firebase.config";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import Select from 'react-select';
-import { createSport, getAllSportStudent } from '../../actions/sportActions';
+import { createSport, getAllSportStudent, getAllSportCoach } from '../../actions/sportActions';
 import {connect} from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -34,23 +34,36 @@ constructor(props) {
   }
 
   componentDidMount() {
-    this.state.students = this.props.getAllSportStudent();
-    console.log(this.state.students)
+    this.props.getAllSportStudent();
+    this.props.getAllSportCoach();
   }
 
-  // componentWillReceiveProps = (nextProps) => {
-  //   if (this.props.getallstdentsSports !== nextProps.getallstdentsSports) {
-  //     let options = [];
-  //     nextProps.students.map((item, index) => {
-  //       let teamPlayer = {
-  //         value: item._id,
-  //         label: <div><img src={item.imageurl} className="thumb-img" />&nbsp;&nbsp;{`${item.firstname} ${item.lastname}`}</div>
-  //       };
-  //       options.push(teamPlayer);
-  //     })
-  //     this.setState({ teamPlayers: options });
-  //   }
-  // }
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.getallstdentsSports !== nextProps.getallstdentsSports) {
+      let options = [];
+      nextProps.getallstdentsSports.map((item, index) => {
+        let teamPlayer = {
+          value: item._id,
+          label: <div><img src={item.imageurl} className="thumb-img" />&nbsp;&nbsp;{`${item.firstname} ${item.lastname} Grade:${item.grade}`} </div>
+        };
+        options.push(teamPlayer);
+      })
+      this.setState({ students: options });
+    }
+
+    if (this.props.getallcoachSports !== nextProps.getallcoachSports) {
+      let options = [];
+      nextProps.getallcoachSports.map((item, index) => {
+        let coach = {
+          value: item._id,
+          label: <div><img src={item.imageurl} className="thumb-img" />&nbsp;&nbsp;{`${item.firstName} ${item.lastName}`} </div>
+        };
+        options.push(coach);
+      })
+      this.setState({ coaches: options });
+    }
+
+  }
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -102,7 +115,6 @@ constructor(props) {
   validateResourceForm(){
     const data = {
       name: this.state.name && this.state.name.length > 0 ? this.state.name : null,
-      // imageUrl: this.state.teamImageUrl && this.state.teamImageUrl.trim().length > 0 ? this.state.teamImageUrl : null,
     };
     formData = Object.assign({}, data);
     return true;
@@ -212,7 +224,9 @@ constructor(props) {
 
 const mapStateToProps = state => ({
   newSport: state.sportReducer.createsport,
-  getallstdentsSports: state.sportReducer.getallstudents
+  getallstdentsSports: state.sportReducer.getallstudents,
+  getallcoachSports: state.sportReducer.getallcoaches
+
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -221,6 +235,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getAllSportStudent: () => {
     dispatch(getAllSportStudent());
+  },
+  getAllSportCoach: () => {
+    dispatch(getAllSportCoach());
   }
 
 });

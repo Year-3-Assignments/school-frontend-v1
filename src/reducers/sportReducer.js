@@ -60,11 +60,10 @@ import { CREATE_SPORT, GET_ALL_SPORT, GET_SPORT_FOR_SPORT_INVENTORY, SET_SPORT, 
       //   getSportForSportInventory = action.payload.data;
       //   return { ...state, loading: false, getSportForSportInventory };
       case `${GET_COACH_FOR_SPORT}_FULFILLED`:
-        getallcoaches = action.payload.data;
+        getallcoaches = action.payload.data.data;
         return { ...state, loading: false, getallcoaches };
       case `${GET_STUDENT_FOR_SPORT}_FULFILLED`:
         getallstudents = action.payload.data.data;
-        console.log("In the actions page: ", getallstudents)
         return { ...state, loading: false, getallstudents };
            
       case `${CREATE_SPORT}_REJECTED`:
