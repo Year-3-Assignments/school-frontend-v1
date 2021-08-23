@@ -5,7 +5,7 @@ import { CREATE_SPORT, GET_ALL_SPORT, GET_SPORT_FOR_SPORT_INVENTORY, SET_SPORT, 
 export function createSport(sport) {
   return {
     type: CREATE_SPORT,
-    payload: axios.post(`http://localhost:4000/sport/add/`, sport),
+    payload: axios.post(`${process.env.REACT_APP_API_DEV_URL}/sport/add/`, sport),
   };
 }
 
@@ -19,14 +19,14 @@ export function setSport(sportData) {
 export function getAllSport() {
   return {
     type: GET_ALL_SPORT,
-    payload: axios.get(`http://localhost:4000/sport/`)
+    payload: axios.get(`${process.env.REACT_APP_API_DEV_URL}/sport/`)
   };
 }
 
 export function getAllSportStudent() {
   return {
     type: GET_STUDENT_FOR_SPORT,
-    payload: axios.get(`http://localhost:4000/sport/student/`)
+    payload: axios.get(`${process.env.REACT_APP_API_DEV_URL}/sport/student/`)
   };
 }
 
@@ -34,7 +34,7 @@ export function deleteSport(examinationData) {
   return {
     type: DELETE_SPORT,
     payload: axios.delete(
-      `http://localhost:4000/sport/${examinationData._id}`
+      `${process.env.REACT_APP_API_DEV_URL}/sport/${examinationData._id}`
     ),
   };
 }
@@ -42,6 +42,6 @@ export function deleteSport(examinationData) {
 export function getAllSportCoach() {
   return {
     type: GET_COACH_FOR_SPORT,
-    payload: axios.get(`http://localhost:4000/sport/coach`)
+    payload: axios.get(`${process.env.REACT_APP_API_DEV_URL}/sport/coach`)
   };
 }
