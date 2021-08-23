@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
-import Student from './pages/student/add/student';
+
 import StudentView from './pages/student/view/student_view';
 import ExaminationPage from './pages/examination/teacher/view/examination_page';
 import Examination from './pages/examination/teacher/view/examination';

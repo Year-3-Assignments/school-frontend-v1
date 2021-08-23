@@ -108,32 +108,39 @@ class StudentView extends Component {
           <h6>Student Information</h6>
           <div className="row">
             {row ? (
-              <div className="mb-1 col-md-4">
+              <div className="mb-1 col-md-9">
                 <img src={row.imageurl} className="student-img" alt="student" />
                 &nbsp;&nbsp;&nbsp;
                 <h6 className="person-info m-0">
                   {row.firstname}&nbsp;{row.lastname}
                 </h6>
-                <p>
-                  <i className="fas fa-at"></i>&nbsp;&nbsp;
-                  {row.username}
-                </p>
-                <p>
-                  <i className="fas fa-envelope"></i>&nbsp;&nbsp;
-                  {row.achievements}
-                </p>
-                <p>
-                  <i className="fas fa-phone"></i>&nbsp;&nbsp;
-                  {row.parent}
-                </p>
-                <p>
-                  <i className="fas fa-envelope"></i>&nbsp;&nbsp;
-                  {row.email}
-                </p>
-                <p>
-                  <i className="fas fa-phone"></i>&nbsp;&nbsp;
-                  {row.phone}
-                </p>
+                <div className="mb-1 col-md-9">
+                  <p>
+                    <i className="fas fa-at"></i>&nbsp;&nbsp;
+                    Username:&nbsp;&nbsp;
+                    {row.username}
+                  </p>
+                  <p>
+                    <i className="fas fa-envelope"></i>&nbsp;&nbsp;
+                    Acheievements:&nbsp;&nbsp;
+                    {row.achievements}
+                  </p>
+                  <p>
+                    <i className="fas fa-users"></i>&nbsp;&nbsp; Parent/Guardian
+                    name:&nbsp;&nbsp;
+                    {row.parent}
+                  </p>
+                  <p>
+                    <i className="fas fa-envelope"></i>&nbsp;&nbsp; Email
+                    Address:&nbsp;&nbsp;
+                    {row.email}
+                  </p>
+                  <p>
+                    <i className="fas fa-phone"></i>&nbsp;&nbsp;Telephone
+                    Number:&nbsp;&nbsp;
+                    {row.phone}
+                  </p>
+                </div>
               </div>
             ) : null}
           </div>

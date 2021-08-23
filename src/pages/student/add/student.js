@@ -45,6 +45,7 @@ class Student extends Component {
     this.onChange = this.onChange.bind(this);
     this.setUploadPercentage = this.setUploadPercentage.bind(this);
     this.setImageUrl = this.setImageUrl.bind(this);
+    this.onTimeChange = this.onTimeChange.bind(this);
     this.setImage = this.setImage.bind(this);
     this.onSelectProvince = this.onSelectProvince.bind(this);
     this.state = {
@@ -149,7 +150,6 @@ class Student extends Component {
 
   closeModal() {
     $('#create-student').modal('toggle');
-    this.setState(this.state);
   }
 
   onSubmit = (e) => {
@@ -200,7 +200,7 @@ class Student extends Component {
           ? this.state.lname
           : null,
       dateofbirth:
-        this.state.dob && this.state.dob.trim().length > 0
+        this.state.dob && this.state.dob.toString().trim().length > 0
           ? this.state.dob
           : null,
       address1:
@@ -232,12 +232,12 @@ class Student extends Component {
           ? this.state.imageurl
           : null,
       parent:
-        this.state.parent && this.state.parent.trim().length > 0
-          ? this.state.parent
+        this.state.pname && this.state.pname.trim().length > 0
+          ? this.state.pname
           : null,
       phone:
-        this.state.cnumber && this.state.cnumber.trim().length > 0
-          ? this.state.cnumber
+        this.state.phone && this.state.phone.trim().length > 0
+          ? this.state.phone
           : null,
       email:
         this.state.email && this.state.email.trim().length > 0
@@ -278,7 +278,7 @@ class Student extends Component {
             </div>
 
             <div className="modal-body">
-              <div className="row m-0 mb-3">
+              <div className="row m-0 mb-2">
                 <label htmlFor="fname" className="form-label p-0">
                   First Name
                 </label>
@@ -297,7 +297,7 @@ class Student extends Component {
                 ) : null}
               </div>
 
-              <div className="row m-0 mb-3">
+              <div className="row m-0 mb-2">
                 <label htmlFor="lname" className="form-label p-0">
                   Last Name
                 </label>
@@ -315,293 +315,291 @@ class Student extends Component {
                   </span>
                 ) : null}
               </div>
-            </div>
 
-            <div className="input-group m-0 mb-2">
-              <label htmlFor="dateofbirth" className="form-label p-0 m-0">
-                Date of Birth
-              </label>
-              &nbsp;
-              <span>
-                <i className="far fa-calendar-alt"></i>
-              </span>
-              <DatePicker
-                className="form-control"
-                onChange={this.onTimeChange}
-                dateFormat="MM/dd/yyyy"
-                selected={this.state.dob}
-                showTimeInput={false}
-                peekNextMonth
-                showMonthDropdown
-                showYearDropdown
-                dropdownMode="select"
-              />
-              {formData.dateofbirth === null && this.state.formNotValid ? (
-                <span className="text-danger p-0 m-0">
-                  <small>Date of Birth is required</small>
-                </span>
-              ) : null}
-            </div>
+              <div className="row m-0 mb-2">
+                <label htmlFor="dob" className="form-label p-0 m-0">
+                  Date of Birth &nbsp; <i className="far fa-calendar-alt"></i>
+                </label>
 
-            <div className="row mb-2">
-              <div className="row m-0 mb-3 col">
-                <label htmlFor="address1" className="form-label p-0">
-                  Address Line 1
+                <DatePicker
+                  className="form-control"
+                  value={this.state.dob}
+                  onChange={this.onTimeChange}
+                  dateFormat="MM/dd/yyyy"
+                  selected={this.state.dob}
+                  showTimeInput={false}
+                  peekNextMonth
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode="select"
+                />
+                {formData.dateofbirth === null && this.state.formNotValid ? (
+                  <span className="text-danger validation-text p-0">
+                    Date of Birth is required
+                  </span>
+                ) : null}
+              </div>
+
+              <div className="row mb-2">
+                <div className="row m-0 mb-2 col">
+                  <label htmlFor="address1" className="form-label p-0">
+                    Address Line 1
+                  </label>
+                  <input
+                    type="text"
+                    id="address1"
+                    className="form-control"
+                    name="address1"
+                    value={this.state.address1}
+                    onChange={this.onChange}
+                  />
+                  {formData.address1 === null && this.state.formNotValid ? (
+                    <span className="text-danger validation-text p-0">
+                      Address is required
+                    </span>
+                  ) : null}
+                </div>
+
+                <div className="row m-0 mb-2 col">
+                  <label htmlFor="address2" className="form-label p-0">
+                    Address Line 2
+                  </label>
+                  <input
+                    type="text"
+                    id="address2"
+                    className="form-control"
+                    name="address2"
+                    value={this.state.address2}
+                    onChange={this.onChange}
+                  />
+                  {formData.address2 === null && this.state.formNotValid ? (
+                    <span className="text-danger validation-text p-0">
+                      Address is required
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="row m-0 mb-2 col">
+                  <label htmlFor="city" className="form-label p-0">
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    id="city"
+                    className="form-control"
+                    name="city"
+                    value={this.state.city}
+                    onChange={this.onChange}
+                  />
+                  {formData.city === null && this.state.formNotValid ? (
+                    <span className="text-danger validation-text p-0">
+                      City is required
+                    </span>
+                  ) : null}
+                </div>
+
+                <div className="col m-0 mb-3">
+                  <label htmlFor="province" className="form-label p-0 m-0">
+                    Province
+                  </label>
+                  <Select
+                    options={provinces}
+                    className="select"
+                    id="province"
+                    name="province"
+                    onChange={this.onSelectProvince}
+                  />
+                  {formData.province === null && this.state.formNotValid ? (
+                    <span className="text-danger validation-text p-0">
+                      Province is required
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="row m-0 mb-2">
+                <div className="col m-0 mb-3">
+                  <label htmlFor="grade" className="form-label p-0 m-0">
+                    Grade
+                  </label>
+                  <Select
+                    options={gradeoptions}
+                    className="select"
+                    id="grade"
+                    name="grade"
+                    onChange={this.onGradeSelect}
+                  />
+                  {formData.grade === null && this.state.formNotValid ? (
+                    <span className="text-danger validation-text p-0">
+                      Grade is required
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="row m-0 mb-3">
+                <label htmlFor="profile-image" className="form-label">
+                  Profile Image
+                </label>
+                <div className="input-group">
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="profile-image"
+                    name="imageUrl"
+                    onChange={(e) => this.setImage(e)}
+                  />
+                  <button
+                    className="btn btn-color btn-sm"
+                    type="button"
+                    onClick={this.uploadImage}
+                  >
+                    UPLOAD
+                  </button>
+                </div>
+                {formData.imageurl === null && this.state.formNotValid ? (
+                  <span className="text-danger validation-text p-0">
+                    Profile image is required
+                  </span>
+                ) : null}
+              </div>
+              <div className="mb-3">
+                <Progress percentage={this.state.uploadPercentage} />
+              </div>
+
+              <div className="row m-0 mb-2 col">
+                <label htmlFor="achievements" className="form-label p-0">
+                  Achievements
+                </label>
+                <textarea
+                  type="text"
+                  id="achievements"
+                  className="form-control"
+                  name="achievements"
+                  value={this.state.achievements}
+                  onChange={this.onChange}
+                ></textarea>
+                {formData.achievements === null && this.state.formNotValid ? (
+                  <span className="text-danger validation-text p-0">
+                    Achievements are required
+                  </span>
+                ) : null}
+              </div>
+
+              <div className="row m-0 mb-2 col">
+                <label htmlFor="pname" className="form-label p-0">
+                  Parent/Guardian Name
                 </label>
                 <input
                   type="text"
-                  id="address1"
+                  id="pname"
                   className="form-control"
-                  name="address1"
-                  value={this.state.address1}
+                  name="pname"
+                  value={this.state.pname}
                   onChange={this.onChange}
                 />
-                {formData.address1 === null && this.state.formNotValid ? (
+                {formData.parent === null && this.state.formNotValid ? (
                   <span className="text-danger validation-text p-0">
-                    Address is required
+                    Parent name is required
                   </span>
                 ) : null}
               </div>
 
-              <div className="row m-0 mb-3 col">
-                <label htmlFor="address2" className="form-label p-0">
-                  Address Line 2
+              <div className="row m-0 mb-2">
+                <label htmlFor="email" className="form-label p-0">
+                  Email Address
                 </label>
                 <input
                   type="text"
-                  id="address2"
+                  id="email"
                   className="form-control"
-                  name="address2"
-                  value={this.state.address2}
+                  name="email"
+                  value={this.state.email}
                   onChange={this.onChange}
                 />
-                {formData.address2 === null && this.state.formNotValid ? (
-                  <span className="text-danger validation-text p-0">
-                    Address is required
+                {formData.email === null && this.state.formNotValid ? (
+                  <span className="text-danger p-0 validation-text p-0">
+                    Email is required
                   </span>
                 ) : null}
               </div>
-            </div>
 
-            <div className="row">
-              <div className="row m-0 mb-3 col">
-                <label htmlFor="city" className="form-label p-0">
-                  City
+              <div className="row m-0 mb-2">
+                <label htmlFor="phone" className="form-label p-0">
+                  Contact Number
                 </label>
                 <input
-                  type="text"
-                  id="city"
+                  type="phone"
+                  id="phone"
                   className="form-control"
-                  name="city"
-                  value={this.state.city}
+                  name="phone"
+                  value={this.state.phone}
                   onChange={this.onChange}
                 />
-                {formData.city === null && this.state.formNotValid ? (
+                {formData.phone === null && this.state.formNotValid ? (
                   <span className="text-danger validation-text p-0">
-                    City is required
+                    Phone number is required
                   </span>
                 ) : null}
               </div>
 
-              <div className="col-md-6 mb-4">
-                <label htmlFor="province" className="form-label p-0 m-0">
-                  Province
-                </label>
-                <Select
-                  options={provinces}
-                  className="select"
-                  id="province"
-                  name="province"
-                  onChange={this.onSelectProvince}
-                />
-                {formData.province === null && this.state.formNotValid ? (
-                  <span className="text-danger validation-text p-0">
-                    Province is required
-                  </span>
-                ) : null}
-              </div>
-            </div>
+              <div className="row mb-2">
+                <div className="row m-0 mb-2 col">
+                  <label htmlFor="username" className="form-label p-0">
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    id="username"
+                    className="form-control"
+                    name="username"
+                    value={this.state.username}
+                    onChange={this.onChange}
+                  />
+                  {formData.username === null && this.state.formNotValid ? (
+                    <span className="text-danger validation-text p-0">
+                      Username is required
+                    </span>
+                  ) : null}
+                </div>
 
-            <div className="row m-0 mb-2">
-              <div className="col-md-6 mb-4">
-                <label htmlFor="grade" className="form-label p-0 m-0">
-                  Grade
-                </label>
-                <Select
-                  options={gradeoptions}
-                  className="select"
-                  id="grade"
-                  name="grade"
-                  onChange={this.onGradeSelect}
-                />
-                {formData.grade === null && this.state.formNotValid ? (
-                  <span className="text-danger validation-text p-0">
-                    Grade is required
-                  </span>
-                ) : null}
+                <div className="row m-0 mb-2 col">
+                  <label htmlFor="password" className="form-label p-0">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    className="form-control"
+                    name="password"
+                    value={this.state.password}
+                    onChange={this.onChange}
+                  />
+                  {formData.password === null && this.state.formNotValid ? (
+                    <span className="text-danger validation-text p-0">
+                      Password is required
+                    </span>
+                  ) : null}
+                </div>
               </div>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="profile-image" className="form-label">
-                Profile Image
-              </label>
-              <div className="input-group">
-                <input
-                  type="file"
-                  className="form-control"
-                  id="profile-image"
-                  name="imageUrl"
-                  onChange={(e) => this.setImage(e)}
-                />
+              <div>
                 <button
-                  className="btn btn-color btn-sm"
-                  type="button"
-                  onClick={this.uploadImage}
+                  className="btn btn-secondary btn-no-shadow btn-rounded"
+                  onClick={this.closeModal}
                 >
-                  UPLOAD
+                  Close
+                </button>
+                &nbsp;&nbsp;
+                <button
+                  href="#"
+                  className="btn btn-primary btn-no-shadow btn-rounded"
+                  onClick={this.onSubmit}
+                >
+                  Create Student
                 </button>
               </div>
-              {formData.imageurl === null && this.state.formNotValid ? (
-                <span className="text-danger validation-text p-0">
-                  Profile image is required
-                </span>
-              ) : null}
-            </div>
-            <div className="mb-3">
-              <Progress percentage={this.state.uploadPercentage} />
-            </div>
-
-            <div className="row m-0 mb-3 col">
-              <label htmlFor="achievements" className="form-label p-0">
-                Achievements
-              </label>
-              <input
-                type="text"
-                id="achievements"
-                className="form-control"
-                name="achievements"
-                value={this.state.achievements}
-                onChange={this.onChange}
-              />
-              {formData.achievements === null && this.state.formNotValid ? (
-                <span className="text-danger validation-text p-0">
-                  Achievements are required
-                </span>
-              ) : null}
-            </div>
-
-            <div className="row m-0 mb-3 col">
-              <label htmlFor="pname" className="form-label p-0">
-                Parent/Guardian Name
-              </label>
-              <input
-                type="text"
-                id="pname"
-                className="form-control"
-                name="pname"
-                value={this.state.pname}
-                onChange={this.onChange}
-              />
-              {formData.parent === null && this.state.formNotValid ? (
-                <span className="text-danger validation-text p-0">
-                  Parent name is required
-                </span>
-              ) : null}
-            </div>
-
-            <div className="row m-0 mb-2">
-              <label htmlFor="email" className="form-label p-0">
-                Email Address
-              </label>
-              <input
-                type="text"
-                id="email"
-                className="form-control"
-                name="email"
-                value={this.state.email}
-                onChange={this.onChange}
-              />
-              {formData.email === null && this.state.formNotValid ? (
-                <span className="text-danger p-0 validation-text p-0">
-                  Email is required
-                </span>
-              ) : null}
-            </div>
-
-            <div className="row m-0 mb-2">
-              <label htmlFor="phone" className="form-label p-0">
-                Contact Number
-              </label>
-              <input
-                type="phone"
-                id="phone"
-                className="form-control"
-                name="phone"
-                value={this.state.phone}
-                onChange={this.onChange}
-              />
-              {formData.phone === null && this.state.formNotValid ? (
-                <span className="text-danger validation-text p-0">
-                  Phone number is required
-                </span>
-              ) : null}
-            </div>
-
-            <div className="row mb-2">
-              <div className="row m-0 mb-3 col">
-                <label htmlFor="username" className="form-label p-0">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  id="username"
-                  className="form-control"
-                  name="username"
-                  value={this.state.username}
-                  onChange={this.onChange}
-                />
-                {formData.username === null && this.state.formNotValid ? (
-                  <span className="text-danger validation-text p-0">
-                    Username is required
-                  </span>
-                ) : null}
-              </div>
-
-              <div className="row m-0 mb-3 col">
-                <label htmlFor="password" className="form-label p-0">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  className="form-control"
-                  name="password"
-                  value={this.state.password}
-                  onChange={this.onChange}
-                />
-                {formData.password === null && this.state.formNotValid ? (
-                  <span className="text-danger validation-text p-0">
-                    Password is required
-                  </span>
-                ) : null}
-              </div>
-            </div>
-            <div>
-              <button
-                className="btn btn-secondary btn-no-shadow btn-rounded"
-                onClick={this.closeModal}
-              >
-                Close
-              </button>
-              &nbsp;&nbsp;
-              <button
-                href="#"
-                className="btn btn-color btn-block"
-                onClick={this.onSubmit}
-              >
-                Create Student
-              </button>
             </div>
           </div>
         </div>
