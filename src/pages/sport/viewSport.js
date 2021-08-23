@@ -3,24 +3,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
-  getExaminationsForTeacher,
-  setExam,
-} from '../../actions/examination_actions';
+  getAllSport, setSport
+} from '../../actions/sportActions';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   Search,
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import moment from 'moment';
 import CreateSport from './AddSports';
+import DeleteSport from './DeleteSport';
 // import UpdateExam from '../update/update_exam';
 
 const { SearchBar } = Search;
-
-const Constants = {
-  STATUS_PENDING: 'PENDING',
-  STATUS_COMPLETE: 'COMPLETE',
-};
 
 class SportPage extends Component {
   constructor(props) {
@@ -28,171 +22,102 @@ class SportPage extends Component {
     this.onSelectExamToUpdate = this.onSelectExamToUpdate.bind(this);
     this.state = {
       exams: [],
+      allSports: [],
+      selectedSport: '',
       selectedExam: '',
     };
   }
 
   componentDidMount() {
-    this.props.getExaminationsForTeacher();
+    this.props.getAllSport();
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.examinations !== nextProps.examinations) {
+    if (this.props.getallsports !== nextProps.getallsports) {
       this.setState({
-        exams: nextProps.examinations && nextProps.examinations.exams,
+        allSports: nextProps.getallsports
       });
     }
 
-    if (this.props.createExam !== nextProps.createExam) {
-      this.props.getExaminationsForTeacher();
+    if (this.props.createSport !== nextProps.createSport) {
+      this.props.getAllSport();
     }
 
-    if (this.props.updateExam !== nextProps.updateExam) {
-      this.props.getExaminationsForTeacher();
+    if (this.props.deleteSport !== nextProps.deleteSport) {
+      this.props.getAllSport();
     }
+
   };
 
   // react bootstrap table data & functions
   tableColumnData = [
     {
-      dataField: 'actions',
-      text: 'Actions',
-      formatter: (cell, row) => this.actionButtonFormatter(row),
-      headerStyle: () => {
-        return { width: '80px' };
-      },
+      dataField: '_id',
+      text: 'Sport ID'
     },
-    {
-      dataField: 'examId',
-      text: 'Exam ID',
-      headerStyle: () => {
-        return { width: '110px' };
-      },
+    { dataField: 'name', text: 'Sport Title' },
+    { dataField: 'view', 
+      text: 'View',
+      formatter: (cell, row) => this.viewSportDetails(row),
     },
-    { dataField: 'title', text: 'Exam Title' },
-    {
-      dataField: 'createdFor',
-      text: 'Class',
-      headerStyle: () => {
-        return { width: '110px' };
-      },
+    { dataField: 'edit', 
+      text: 'Edit',      
+      formatter: (cell, row) => this.editSportDetails(row),
     },
-    {
-      dataField: 'subject',
-      text: 'Subject',
-      headerStyle: () => {
-        return { width: '130px' };
-      },
-    },
-    {
-      dataField: 'startDateTime',
-      text: 'Date & Time',
-      formatter: (cell) => this.examDateTimeFormatter(cell),
-    },
-    {
-      dataField: 'accessPassword',
-      text: 'Access Code',
-      headerStyle: () => {
-        return { width: '110px' };
-      },
-    },
-    {
-      dataField: 'status',
-      text: 'Status',
-      formatter: (cell) => this.examStatusStyle(cell),
-      headerStyle: () => {
-        return { width: '110px' };
-      },
-    },
-    {
-      dataField: 'createdBy',
-      text: 'Created By',
-      formatter: (cell, row) => this.examCreatedByFormatter(cell, row),
-    },
+    { dataField: 'delete', 
+      text: 'Delete',      
+      formatter: (cell, row) => this.deleteDetails(row),
+    }
   ];
 
-  examStatusStyle = (cell) => {
-    if (cell && cell === Constants.STATUS_PENDING) {
-      return (
-        <span className="badge rounded-pill bg-warning text-dark">
-          {Constants.STATUS_PENDING}
-        </span>
-      );
-    } else if (cell === Constants.STATUS_COMPLETE) {
-      return (
-        <span className="badge rounded-pill bg-success">
-          {Constants.STATUS_COMPLETE}
-        </span>
-      );
+  viewSportDetails = (row) => {
+    return (<Link className="dropdown-item" to={`/examination/${row._id}`}>
+      <i className="far fa-eye" /> View
+    </Link>)
+  }
+
+  editSportDetails = (row) => {
+    return (<a
+      className="dropdown-item"
+      href="#"
+      data-mdb-toggle="modal"
+      data-mdb-target="#update-exam"
+      onClick={(e) => this.onSelectExamToUpdate(e, row._id)}
+    >
+      <i className="far fa-edit" /> Edit
+    </a>)
+  }
+
+  deleteDetails = (row) => {
+    return (<a className="dropdown-item"       
+      href="#"
+      data-mdb-toggle="modal"
+      data-mdb-target="#delete-sport"
+      onClick={(e) => this.onSportDelete(e, row._id)} >
+        <i className="far fa-trash-alt" /> Delete
+      </a>)
+  }
+
+  onSportDelete = (event, sportId) => {
+    const { allSports } = this.state;
+    if (event && allSports && allSports.length > 0 && sportId) {
+      const selectedSport = allSports.find((sport) => sport._id === sportId);
+      this.props.setSport(selectedSport);
+      this.setState({ selectedSport: selectedSport });
     }
   };
 
-  onSelectExamToUpdate = (event, examId) => {
-    const { exams } = this.state;
-    if (event && exams && exams.length > 0 && examId) {
-      const selectedExam = exams.find((exam) => exam._id === examId);
-      this.props.setExam(selectedExam);
-      this.setState({ selectedExam: selectedExam });
-    }
-  };
-
-  actionButtonFormatter = (row) => {
-    return (
-      <span className="dropdown show">
-        <span className="dropdown">
-          <a
-            href="#"
-            className="btn btn-no-shadow m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill btn-sm btn-rounded"
-            data-mdb-toggle="dropdown"
-          >
-            <i className="fas fa-ellipsis-h"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <Link className="dropdown-item" to={`/examination/${row._id}`}>
-              <i className="far fa-eye" /> View
-            </Link>
-            <a
-              className="dropdown-item"
-              href="#"
-              data-mdb-toggle="modal"
-              data-mdb-target="#update-exam"
-              onClick={(e) => this.onSelectExamToUpdate(e, row._id)}
-            >
-              <i className="far fa-edit" /> Edit
-            </a>
-
-            <a className="dropdown-item" href="#">
-              <i class="far fa-trash-alt" /> Delete
-            </a>
-          </div>
-        </span>
-      </span>
-    );
-  };
-
-  examDateTimeFormatter = (cell) => {
-    return moment(cell).format('llll');
-  };
-
-  examCreatedByFormatter = (cell, row) => {
-    if (cell && row) {
-      return (
-        <div>
-          <img
-            src={row.createdBy && row.createdBy.imageurl}
-            className="teacher-img"
-            alt="teacher"
-          />
-          <div>
-            {cell.firstName} {cell.lastName}
-          </div>
-        </div>
-      );
+  onSelectExamToUpdate = (event, sportId) => {
+    const { allSports } = this.state;
+    if (event && allSports && allSports.length > 0 && sportId) {
+      const selectedSport = allSports.find((sport) => sport._id === sportId);
+      this.props.setExam(selectedSport);
+      this.setState({ selectedSport: selectedSport });
     }
   };
 
   render() {
-    const { exams, selectedExam } = this.state;
+    const { allSports, selectedExam } = this.state;
     return (
       <div className="pt-5 pb-5">
         <div className="card p-4 exam-table">
@@ -202,7 +127,7 @@ class SportPage extends Component {
               <button
                 className="btn btn-primary btn-rounded btn-no-shadow"
                 data-mdb-toggle="modal"
-                data-mdb-target="#create-exam"
+                data-mdb-target="#create-sport"
               >
                 Create new Sport
               </button>
@@ -210,7 +135,7 @@ class SportPage extends Component {
           </div>
           <ToolkitProvider
             keyField="_id"
-            data={exams}
+            data={allSports}
             columns={this.tableColumnData}
             search
           >
@@ -218,7 +143,7 @@ class SportPage extends Component {
               <div>
                 <SearchBar
                   {...props.searchProps}
-                  placeholder="Search exams by Exam Title"
+                  placeholder="Search sport by name"
                   className="mb-3 search-bar"
                 />
                 <BootstrapTable
@@ -236,6 +161,7 @@ class SportPage extends Component {
           </ToolkitProvider>
         </div>
         <CreateSport />
+        <DeleteSport id={this.state.selectedSport} />
         {/* <UpdateExam selectedExam={selectedExam} /> */}
       </div>
     );
@@ -243,19 +169,22 @@ class SportPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  examinations: state.examinationReducer.getexaminationsforteacher,
-  createExam: state.examinationReducer.createexamination,
-  updateExam: state.examinationReducer.updateexamination,
-  updateExamError: state.examinationReducer.updateexaminationerror,
+  // examinations: state.examinationReducer.getexaminationsforteacher,
+  // createExam: state.examinationReducer.createexamination,
+  // updateExam: state.examinationReducer.updateexamination,
+  // updateExamError: state.examinationReducer.updateexaminationerror,
+  createSport: state.sportReducer.createsport,
+  getallsports: state.sportReducer.getallsports,
+  deleteSport: state.sportReducer.deletesport
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getExaminationsForTeacher: () => {
-    dispatch(getExaminationsForTeacher());
+  setSport: (sportData) => {
+    dispatch(setSport(sportData))
   },
-  setExam: (examData) => {
-    dispatch(setExam(examData));
-  },
+  getAllSport: () => {
+    dispatch(getAllSport());
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SportPage);

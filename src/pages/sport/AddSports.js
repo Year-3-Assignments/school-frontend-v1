@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
 let formData = {};
+const $ = window.$;
 
 class AddSports extends Component{
 
@@ -139,6 +140,14 @@ constructor(props) {
 
         this.props.createSport(resource);
         NotificationManager.success('New Sport is created');
+
+        this.setState({
+          name: [],
+          teamImageUrl: [],
+          coach: [],
+          teamPlayers: [],
+        })
+        this.closeModal();
       }else{
         this.setState({ isFormInvalid: true});
         NotificationManager.warning('Please fill the input fields!')
@@ -146,14 +155,30 @@ constructor(props) {
     }
   }
 
+    // close create exam modal
+    closeModal() {
+      $('#create-sport').modal('toggle');
+    }
 
   render() {
     return(
-    <div>
-        <div className="modal-dialog modal-lg">
+      <div
+        className="modal fade"
+        id="create-sport"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >        
+      <div className="modal-dialog modal-lg">
           <div className="modal-content">
             <div className="modal-header">
             <h5 className="modal-title" id="ModalLabel">Add Sports</h5>
+            <button
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                onClick={this.closeModal}
+              />
           </div>
           <div className="modal-body">
 

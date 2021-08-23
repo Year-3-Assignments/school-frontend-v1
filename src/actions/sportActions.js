@@ -9,6 +9,13 @@ export function createSport(sport) {
   };
 }
 
+export function setSport(sportData) {
+  return {
+    type: SET_SPORT,
+    payload: sportData,
+  };
+}
+
 export function getAllSport() {
   return {
     type: GET_ALL_SPORT,
@@ -20,6 +27,15 @@ export function getAllSportStudent() {
   return {
     type: GET_STUDENT_FOR_SPORT,
     payload: axios.get(`http://localhost:4000/sport/student/`)
+  };
+}
+
+export function deleteSport(examinationData) {
+  return {
+    type: DELETE_SPORT,
+    payload: axios.delete(
+      `http://localhost:4000/sport/${examinationData._id}`
+    ),
   };
 }
 

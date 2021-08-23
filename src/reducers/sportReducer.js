@@ -54,7 +54,7 @@ import { CREATE_SPORT, GET_ALL_SPORT, GET_SPORT_FOR_SPORT_INVENTORY, SET_SPORT, 
         deletesport = action.payload.data;
         return { ...state, loading: false, deletesport };
       case `${GET_ALL_SPORT}_FULFILLED`:
-        getallsports = action.payload.data;
+        getallsports = action.payload.data.data;
         return { ...state, loading: false, getallsports };
       // case `${GET_SPORT_FOR_SPORT_INVENTORY}_FULFILLED`:
       //   getSportForSportInventory = action.payload.data;
