@@ -3,20 +3,24 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ExaminationPage from './pages/examination/teacher/view/examination_page';
 import './App.css';
 import Examination from './pages/examination/teacher/view/examination';
+import NavigationBar from './components/navigation_bar';
+import LoginPage from './pages/login/login_page';
 
 function PageRoutes() {
   return (
     <div>
-      <div className="container">
-        <Router>
+      <Router>
+        <NavigationBar />
+        <div className="container pages">
           <section>
             <Switch>
               <Route path="/examination/:id" component={Examination} />
               <Route path="/examination" component={ExaminationPage} />
+              <Route path="/login" component={LoginPage} exact />
             </Switch>
           </section>
-        </Router>
-      </div>
+        </div>
+      </Router>
     </div>
   );
 }

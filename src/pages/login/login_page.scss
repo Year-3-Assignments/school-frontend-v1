@@ -1,0 +1,70 @@
+@media (min-width: 0px) {
+  .login-card {
+    width: 100vw;
+    height: 95vh;
+  }
+
+  .login-img {
+    width: 320px;
+  }
+
+  .title-text {
+    text-align: center;
+    padding-top: 50px;
+  }
+}
+
+@media (min-width: 576px) {
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+}
+
+// X-Large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+  .login-card {
+    width: 70vw;
+    height: 75vh;
+    margin-top: 30px;
+  }
+
+  .login-img {
+    width: 400px;
+  }
+
+  .title-text {
+    text-align: center;
+    padding-top: 50px;
+  }
+
+  .login-form {
+    margin-top: 130px;
+  }
+}
+
+// XX-Large devices (larger desktops, 1400px and up)
+@media (min-width: 1400px) {
+  .login-card {
+    width: 50vw;
+    height: 60vh;
+    margin-top: 80px;
+  }
+
+  .login-img {
+    width: 400px;
+  }
+
+  .title-text {
+    text-align: center;
+    padding-top: 50px;
+  }
+
+  .login-form {
+    margin-top: 130px;
+  }
+}
