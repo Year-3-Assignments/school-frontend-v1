@@ -228,7 +228,7 @@ class ExaminationPage extends Component {
                   striped={false}
                   headerClasses="header-class"
                   wrapperClasses="table-responsive"
-                  rowClasses="custom-row-class"
+                  rowStyle={{ fontSize: '13px' }}
                   hover
                 />
               </div>

@@ -4,6 +4,7 @@ import { getExaminationsForTeacher } from '../../../../actions/examination_actio
 import moment from 'moment';
 import CreateQuestion from '../add/create_new_question';
 import Questions from './questions';
+import './examination.scss';
 
 const initialState = {
   examId: '',
@@ -57,7 +58,7 @@ class Examination extends Component {
           </div>
           <div className="row">
             <div className="col-4">
-              <div className="card p-3 mb-3">
+              <div className="card p-3 mb-3 exam-data">
                 <h5>Exam Information</h5>
                 <span>
                   <i className="fas fa-stream"></i> Title :{' '}
