@@ -52,7 +52,7 @@ class DeleteSport extends Component {
               </div>  
                 <div className="modal-footer">
                 <button type="button" className="btn btn-secondary btn--pill" onClick={this.closeModal}>Cancel</button>
-                  <button type="button" className="btn btn-secondary btn--pill" onClick={this.onSubmit}>Create</button>
+                  <button type="button" className="btn btn-warning btn--pill" onClick={this.onSubmit}>Delete</button>
                 </div>
               </div>
             </div>
