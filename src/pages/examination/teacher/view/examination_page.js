@@ -194,8 +194,8 @@ class ExaminationPage extends Component {
   render() {
     const { exams, selectedExam } = this.state;
     return (
-      <div className="pt-5 pb-5">
-        <div className="card p-4 exam-table">
+      <div className="pt-5 pb-5 admin-container-color">
+        <div className="card p-4 exam-table container">
           <div className="d-flex">
             <h3>Examination Page</h3>
             <div className="align-right">

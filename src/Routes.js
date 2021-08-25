@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ExaminationPage from './pages/examination/teacher/view/examination_page';
-import './App.css';
+import './App.scss';
 import Examination from './pages/examination/teacher/view/examination';
 import NavigationBar from './components/navigation_bar';
 import LoginPage from './pages/login/login_page';
@@ -11,7 +11,7 @@ function PageRoutes() {
     <div>
       <Router>
         <NavigationBar />
-        <div className="container pages">
+        <div className="pages">
           <section>
             <Switch>
               <Route path="/examination/:id" component={Examination} />

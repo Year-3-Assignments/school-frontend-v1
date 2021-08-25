@@ -143,11 +143,11 @@ class LoginPage extends Component {
   render() {
     const { userName, password, isLoading, isFormNotValid } = this.state;
     return (
-      <div className="p-xl-5 p-2 my--3 d-flex justify-content-center">
+      <div className="p-xl-5 p-2 d-flex justify-content-center login-container-color login-background">
         <div className="card login-card">
           <div className="row  g-0">
-            <div className="col-md-6 col-sm-12">
-              <div className="text-center mt-xl-5">
+            <div className="col-md-6 col-sm-12 mb-5">
+              <div className="text-center mt-xl-4">
                 <h1 className="title-text">REACH College</h1>
                 <img src={loginImage} alt="login" className="login-img" />
               </div>
@@ -204,7 +204,7 @@ class LoginPage extends Component {
                   Reset my password
                 </a>
               </div>
-              <div className="d-flex justify-content-end px-5 mt-1">
+              <div className="d-flex justify-content-end px-5 mt-1 mb-5">
                 {isLoading ? (
                   <Loader size={35} />
                 ) : (
