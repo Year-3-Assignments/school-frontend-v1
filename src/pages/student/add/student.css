@@ -1,0 +1,22 @@
+@media (min-width: 992px) {
+}
+
+@media (min-width: 1200px) {
+}
+
+@media (min-width: 1400px) {
+  .signup {
+    width: 700px;
+    margin-bottom: 30px;
+  }
+}
+
+.content {
+  max-width: 800px;
+  margin: auto;
+}
+
+.modal-body {
+  width: 750px;
+  margin: auto;
+}

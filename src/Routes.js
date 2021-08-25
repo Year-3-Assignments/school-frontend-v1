@@ -1,7 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import ExaminationPage from './pages/examination/teacher/view/examination_page';
 import './App.scss';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import StudentView from './pages/student/view/student_view';
+import ExaminationPage from './pages/examination/teacher/view/examination_page';
 import Examination from './pages/examination/teacher/view/examination';
 import NavigationBar from './components/navigation_bar';
 import LoginPage from './pages/login/login_page';
@@ -14,6 +15,7 @@ function PageRoutes() {
         <div className="pages">
           <section>
             <Switch>
+              <Route path="/student/view" component={StudentView} exact />
               <Route path="/examination/:id" component={Examination} />
               <Route path="/examination" component={ExaminationPage} />
               <Route path="/login" component={LoginPage} exact />
