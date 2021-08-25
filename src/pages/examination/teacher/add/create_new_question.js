@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import { createQuestion } from '../../../../actions/examination_actions';
 import Loader from '../../../../components/loader';
-import './custom_form.scss';
 import { NotificationManager } from 'react-notifications';
 
 const $ = window.$;
@@ -68,7 +67,7 @@ class CreateQuestion extends Component {
         nextProps.createquestionerror.message
       ) {
         this.setState({ isLoading: false }, () => {
-          NotificationManager.success(Constants.QUESTION_CREATE_SUCCESS);
+          NotificationManager.success(nextProps.createquestionerror.message);
         });
       } else {
         this.setState({ isLoading: false }, () => {

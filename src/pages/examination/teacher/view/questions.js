@@ -179,7 +179,7 @@ class Questions extends Component {
                     {question.isMCQQuestion ? (
                       <p>
                         Correct Option :{' '}
-                        <span className="badge rounded-pill bg-light text-dark">
+                        <span className="badge rounded-pill bg-success text-dark question-badge">
                           {question.correctOption}
                         </span>
                       </p>

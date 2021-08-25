@@ -1,12 +1,13 @@
-import firebase from 'firebase';
+import firebase from "firebase";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDT3rTrF38Pv0I85rN2jLkbOe30rTwurHI",
-  authDomain: "conference-management-storage.firebaseapp.com",
-  projectId: "conference-management-storage",
-  storageBucket: "conference-management-storage.appspot.com",
-  messagingSenderId: "908881323106",
-  appId: "1:908881323106:web:e15b448d36bb99dca5dd3b"
+  apiKey: "AIzaSyBnaI7dfHWN1nDIQYwslbubTgKHofdaDcU",
+  authDomain: "school-frontend-v1.firebaseapp.com",
+  projectId: "school-frontend-v1",
+  storageBucket: "school-frontend-v1.appspot.com",
+  messagingSenderId: "734325480312",
+  appId: "1:734325480312:web:0d54843d1526f7cfd6068d",
+  measurementId: "G-GL2EGZ9LW2",
 };
 
 firebase.initializeApp(firebaseConfig);
