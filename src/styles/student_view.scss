@@ -6,7 +6,6 @@
 
 .header-class {
   background-color: #88bdbc;
-  font-weight: 900;
 }
 
 .student-info {
@@ -21,17 +20,20 @@ p {
   font-family: 16px;
 }
 
-.table-btn {
-  font-size: 11px;
-}
-
-.student-title {
-  font-weight: 600;
-}
-
 .user-img {
-  width: 60px;
-  height: 60px;
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.student-data {
+  font-size: 12.2px;
+}
+
+.student-img {
+  width: 170px;
+  height: 170px;
   object-fit: cover;
   border-radius: 50%;
 }

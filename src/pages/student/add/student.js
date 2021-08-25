@@ -6,7 +6,6 @@ import Progress from '../../../components/progress';
 import DatePicker from 'react-datepicker';
 import { createStudent } from '../../../actions/student_actions';
 import { connect } from 'react-redux';
-import './student.css';
 
 let formData = {};
 
@@ -268,7 +267,7 @@ class Student extends Component {
         <div className="modal-dialog modal-lg">
           <div className="modal-content">
             <div className="modal-header">
-              <h2 className="modal-title">Create Student Account</h2>
+              <h3 className="modal-title">Create Student Account</h3>
               <button
                 type="button"
                 className="btn-close"
@@ -401,12 +400,12 @@ class Student extends Component {
                 </div>
 
                 <div className="col m-0 mb-3">
-                  <label htmlFor="province" className="form-label p-0 m-0">
+                  <label htmlFor="province" className="form-label p-0 m-0 mb-2">
                     Province
                   </label>
                   <Select
                     options={provinces}
-                    className="select"
+                    className="select basic-single"
                     id="province"
                     name="province"
                     onChange={this.onSelectProvince}
@@ -419,27 +418,25 @@ class Student extends Component {
                 </div>
               </div>
 
-              <div className="row m-0 mb-2">
-                <div className="col m-0 mb-3">
-                  <label htmlFor="grade" className="form-label p-0 m-0">
-                    Grade
-                  </label>
-                  <Select
-                    options={gradeoptions}
-                    className="select"
-                    id="grade"
-                    name="grade"
-                    onChange={this.onGradeSelect}
-                  />
-                  {formData.grade === null && this.state.formNotValid ? (
-                    <span className="text-danger validation-text p-0">
-                      Grade is required
-                    </span>
-                  ) : null}
-                </div>
+              <div className="m-0 mb-2">
+                <label htmlFor="grade" className="form-label p-0 m-0">
+                  Grade
+                </label>
+                <Select
+                  options={gradeoptions}
+                  className="select basic-single"
+                  id="grade"
+                  name="grade"
+                  onChange={this.onGradeSelect}
+                />
+                {formData.grade === null && this.state.formNotValid ? (
+                  <span className="text-danger validation-text p-0">
+                    Grade is required
+                  </span>
+                ) : null}
               </div>
 
-              <div className="row m-0 mb-3">
+              <div className="m-0 mb-3">
                 <label htmlFor="profile-image" className="form-label">
                   Profile Image
                 </label>
@@ -452,7 +449,7 @@ class Student extends Component {
                     onChange={(e) => this.setImage(e)}
                   />
                   <button
-                    className="btn btn-color btn-sm"
+                    className="btn btn-outline-primary btn-sm btn-no-shadow"
                     type="button"
                     onClick={this.uploadImage}
                   >
@@ -565,7 +562,7 @@ class Student extends Component {
                   ) : null}
                 </div>
 
-                <div className="row m-0 mb-2 col">
+                <div className="row m-0 mb-3 col">
                   <label htmlFor="password" className="form-label p-0">
                     Password
                   </label>
@@ -584,7 +581,7 @@ class Student extends Component {
                   ) : null}
                 </div>
               </div>
-              <div>
+              <div className="d-flex justify-content-end mb-3">
                 <button
                   className="btn btn-secondary btn-no-shadow btn-rounded"
                   onClick={this.closeModal}

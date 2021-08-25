@@ -4,7 +4,6 @@ import loginImage from '../../assets/login-image.gif';
 import { NotificationManager } from 'react-notifications';
 import { loginUser } from '../../actions/user_actions';
 import Loader from '../../components/loader';
-import './login_page.scss';
 
 const Constants = {
   LOGIN_SUCCESS: 'User login success',

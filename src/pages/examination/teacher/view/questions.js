@@ -6,7 +6,6 @@ import {
   deleteQuestion,
 } from '../../../../actions/examination_actions';
 import { NotificationManager } from 'react-notifications';
-import './examination.scss';
 
 const initialState = {
   questions: [],

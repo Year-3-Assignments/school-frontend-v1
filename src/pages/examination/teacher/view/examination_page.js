@@ -15,7 +15,6 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
 import CreateExam from '../add/create_new_exam';
 import UpdateExam from '../update/update_exam';
-import './examination.scss';
 
 const { SearchBar } = Search;
 const { ExportCSVButton } = CSVExport;

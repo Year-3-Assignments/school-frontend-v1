@@ -4,7 +4,6 @@ import { getExaminationsForTeacher } from '../../../../actions/examination_actio
 import moment from 'moment';
 import CreateQuestion from '../add/create_new_question';
 import Questions from './questions';
-import './examination.scss';
 
 const initialState = {
   examId: '',
