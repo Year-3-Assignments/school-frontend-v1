@@ -39,8 +39,8 @@ class Examination extends Component {
     const { selectedExam } = this.state;
 
     return (
-      <div className="pt-5 pb-5">
-        <div className="card p-4 exam-page">
+      <div className="pt-5 pb-5 admin-container-color">
+        <div className="card p-4 exam-page container">
           <div className="d-flex">
             <h4>
               {selectedExam && selectedExam.title} :{' '}

@@ -9,13 +9,31 @@ import {
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   Search,
+  CSVExport,
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
 import CreateExam from '../add/create_new_exam';
 import UpdateExam from '../update/update_exam';
+import './examination.scss';
 
 const { SearchBar } = Search;
+const { ExportCSVButton } = CSVExport;
+
+const rowStyle = (row, rowIndex) => {
+  const style = {};
+  style.fontSize = 12.3;
+  style.height = 2;
+  style.padding = '0px';
+  style.margin = '0px';
+  return style;
+};
+
+const options = {
+  paginationSize: 4,
+  pageStartIndex: 1,
+  sizePerPage: 12,
+};
 
 const Constants = {
   STATUS_PENDING: 'PENDING',
@@ -58,9 +76,10 @@ class ExaminationPage extends Component {
       dataField: 'actions',
       text: 'Actions',
       formatter: (cell, row) => this.actionButtonFormatter(row),
-      headerStyle: () => {
-        return { width: '80px' };
+      headerClasses: (column, colIndex) => {
+        return 'action-column';
       },
+      csvExport: false,
     },
     {
       dataField: 'examId',
@@ -69,7 +88,13 @@ class ExaminationPage extends Component {
         return { width: '110px' };
       },
     },
-    { dataField: 'title', text: 'Exam Title' },
+    {
+      dataField: 'title',
+      text: 'Exam Title',
+      headerStyle: () => {
+        return { width: '170px' };
+      },
+    },
     {
       dataField: 'createdFor',
       text: 'Class',
@@ -81,7 +106,7 @@ class ExaminationPage extends Component {
       dataField: 'subject',
       text: 'Subject',
       headerStyle: () => {
-        return { width: '130px' };
+        return { width: '200px' };
       },
     },
     {
@@ -108,6 +133,7 @@ class ExaminationPage extends Component {
       dataField: 'createdBy',
       text: 'Created By',
       formatter: (cell, row) => this.examCreatedByFormatter(cell, row),
+      csvExport: false,
     },
   ];
 
@@ -171,13 +197,13 @@ class ExaminationPage extends Component {
   };
 
   examDateTimeFormatter = (cell) => {
-    return moment(cell).format('llll');
+    return moment(cell).format('lll');
   };
 
   examCreatedByFormatter = (cell, row) => {
     if (cell && row) {
       return (
-        <div>
+        <div className="d-flex">
           <img
             src={row.createdBy && row.createdBy.imageurl}
             className="teacher-img"
@@ -196,8 +222,8 @@ class ExaminationPage extends Component {
     return (
       <div className="pt-5 pb-5 admin-container-color">
         <div className="card p-4 exam-table container">
-          <div className="d-flex">
-            <h3>Examination Page</h3>
+          <div className="d-flex mb-4">
+            <h4 className="teacher-exam-header">Teacher Exam Portal</h4>
             <div className="align-right">
               <button
                 className="btn btn-primary btn-rounded btn-no-shadow"
@@ -213,22 +239,32 @@ class ExaminationPage extends Component {
             data={exams}
             columns={this.tableColumnData}
             search
+            exportCSV
           >
             {(props) => (
               <div>
-                <SearchBar
-                  {...props.searchProps}
-                  placeholder="Search exams by Exam Title"
-                  className="mb-3 search-bar"
-                />
+                <div className="d-flex">
+                  <SearchBar
+                    {...props.searchProps}
+                    placeholder="Search exams by Exam Title"
+                    className="mb-3 search-bar"
+                  />
+                  <ExportCSVButton
+                    {...props.csvProps}
+                    className="btn-secondary btn-rounded btn-no-shadow mx-3 mb-3"
+                  >
+                    DOWNLOAD EXAM DATA
+                  </ExportCSVButton>
+                </div>
                 <BootstrapTable
+                  keyField="id"
                   {...props.baseProps}
-                  pagination={paginationFactory()}
+                  pagination={paginationFactory(options)}
                   bordered={true}
-                  striped={false}
+                  striped={true}
                   headerClasses="header-class"
                   wrapperClasses="table-responsive"
-                  rowStyle={{ fontSize: '13px' }}
+                  rowStyle={rowStyle}
                   hover
                 />
               </div>
