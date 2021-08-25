@@ -182,7 +182,10 @@ class SportPage extends Component {
                   placeholder="Search sport by name"
                   className="mb-3 search-bar"
                 />
-                <ExportCSVButton { ...props.csvProps }>Export CSV!!</ExportCSVButton>
+                <div className="align-right">
+                  <ExportCSVButton { ...props.csvProps }>Export CSV!!</ExportCSVButton>
+                </div>
+                <br/>
                 <BootstrapTable
                   {...props.baseProps}
                   pagination={paginationFactory()}
