@@ -13,3 +13,4 @@ export const SET_EXAMINATION = 'SET_EXAMINATION';
 
 // User actions
 export const USER_LOGIN = 'USER_LOGIN';
+export const GET_USER_PROFILE = 'GET_USER_PROFILE';

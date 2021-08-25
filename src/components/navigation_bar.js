@@ -1,9 +1,59 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { NotificationManager } from 'react-notifications';
 import schoolLogo from '../assets/school-logo.png';
+import { getUserInfo } from '../actions/user_actions';
 
-export default class NavigationBar extends Component {
+const Constant = {
+  ROLE_TEACHER: 'TEACHER',
+  ROLE_ADMIN: 'ADMIN',
+  ROLE_STUDENT: 'STUDENT',
+  LOGOUT_MESSAGE: 'You are successfully logout',
+};
+
+const initialState = {
+  imageUrl: '',
+  userName: '',
+  userRole: '',
+};
+
+class NavigationBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = initialState;
+  }
+
+  componentDidMount() {
+    this.props.getUserInfo();
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.getUser !== nextProps.getUser) {
+      this.setState({
+        imageUrl: nextProps.getUser && nextProps.getUser.imageUrl,
+        userName: nextProps.getUser && nextProps.getUser.userName,
+        userRole: nextProps.getUser && nextProps.getUser.role,
+      });
+    }
+  };
+
+  logoutUser = (event) => {
+    if (event) {
+      localStorage.removeItem('user_id');
+      localStorage.removeItem('role');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('token');
+
+      NotificationManager.success(Constant.LOGOUT_MESSAGE);
+      window.location = '/login';
+    }
+  };
+
   render() {
+    const { imageUrl, userRole } = this.state;
+
     return (
       <div>
         <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light">
@@ -33,47 +83,59 @@ export default class NavigationBar extends Component {
                   height="30"
                 />
               </a>
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Dashboard
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Team
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Projects
-                  </a>
-                </li>
-              </ul>
+
+              {userRole === Constant.ROLE_TEACHER ? (
+                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/examination">
+                      Examinations
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="#">
+                      Answer Sheets
+                    </a>
+                  </li>
+                </ul>
+              ) : null}
+
+              {userRole === Constant.ROLE_ADMIN ? (
+                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li className="nav-item">
+                    <a className="nav-link" href="#">
+                      Dashboard
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="#">
+                      Employees
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="#">
+                      Students
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="#">
+                      Sports
+                    </a>
+                  </li>
+                </ul>
+              ) : null}
+
+              {userRole === Constant.ROLE_STUDENT ? (
+                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li className="nav-item">
+                    <a className="nav-link" href="#">
+                      Examinations
+                    </a>
+                  </li>
+                </ul>
+              ) : null}
             </div>
 
             <div className="d-flex align-items-center">
-              <ul
-                className="dropdown-menu dropdown-menu-end"
-                aria-labelledby="navbarDropdownMenuLink"
-              >
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Some news
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Another news
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Something else here
-                  </a>
-                </li>
-              </ul>
-
               <a
                 className="dropdown-toggle d-flex align-items-center hidden-arrow"
                 href="#"
@@ -83,9 +145,9 @@ export default class NavigationBar extends Component {
                 aria-expanded="false"
               >
                 <img
-                  src="https://mdbootstrap.com/img/new/avatars/2.jpg"
+                  src={imageUrl}
                   className="rounded-circle"
-                  height="25"
+                  height="40"
                   alt=""
                   loading="lazy"
                 />
@@ -100,7 +162,11 @@ export default class NavigationBar extends Component {
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={this.logoutUser}
+                  >
                     Logout
                   </a>
                 </li>
@@ -112,3 +178,16 @@ export default class NavigationBar extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  getUser: state.userReducer.getUserInfo,
+  getUserError: state.userReducer.getUserInfoError,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getUserInfo: () => {
+    dispatch(getUserInfo());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavigationBar);

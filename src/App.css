@@ -4,7 +4,7 @@
 
 .container-color {
   background-color: #282c34;
-  height: 100vh;
+  height: fit-content;
 }
 
 .react-bootstrap-table {
@@ -92,7 +92,7 @@
 }
 
 .exam-page {
-  height: 100vh;
+  height: 90vh;
 }
 
 .creator-img {
@@ -120,4 +120,8 @@ textarea {
 
 .pages {
   margin-top: 50px;
+}
+
+.nav-item {
+  font-size: 14px;
 }
