@@ -12,6 +12,8 @@ import ToolkitProvider, {
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import CreateSport from './AddSports';
 import DeleteSport from './DeleteSport';
+import ShowSport from './ShowSport';
+
 // import UpdateExam from '../update/update_exam';
 
 const { SearchBar } = Search;
@@ -19,11 +21,11 @@ const { SearchBar } = Search;
 class SportPage extends Component {
   constructor(props) {
     super(props);
-    this.onSelectExamToUpdate = this.onSelectExamToUpdate.bind(this);
+    this.onSelectSportToUpdate = this.onSelectSportToUpdate.bind(this);
     this.state = {
       exams: [],
       allSports: [],
-      selectedSport: '',
+      selectedSport: [],
       selectedExam: '',
     };
   }
@@ -71,20 +73,13 @@ class SportPage extends Component {
   ];
 
   viewSportDetails = (row) => {
-    return (<Link className="dropdown-item" to={`/examination/${row._id}`}>
-      <i className="far fa-eye" /> View
-    </Link>)
-  }
-
-  editSportDetails = (row) => {
-    return (<a
-      className="dropdown-item"
-      href="#"
-      data-mdb-toggle="modal"
-      data-mdb-target="#update-exam"
-      onClick={(e) => this.onSelectExamToUpdate(e, row._id)}
-    >
-      <i className="far fa-edit" /> Edit
+      return (<a
+        className="dropdown-item"
+        href="#"
+        data-mdb-toggle="modal"
+        data-mdb-target="#one-sport"
+        onClick={(e) => this.onViewSportDetail(e, row._id)} >
+       <i className="far fa-eye" /> View
     </a>)
   }
 
@@ -98,6 +93,27 @@ class SportPage extends Component {
       </a>)
   }
 
+  editSportDetails = (row) => {
+    return (<a
+      className="dropdown-item"
+      href="#"
+      data-mdb-toggle="modal"
+      data-mdb-target="#update-exam"
+      onClick={(e) => this.onSelectSportToUpdate(e, row._id)}
+    >
+      <i className="far fa-edit" /> Edit
+    </a>)
+  }
+
+  onViewSportDetail = (event, sportId) => {
+    const { allSports } = this.state;
+    if (event && allSports && allSports.length > 0 && sportId) {
+      const selectedSport = allSports.find((sport) => sport._id === sportId);
+      this.props.setSport(selectedSport);
+      this.setState({ selectedSport: selectedSport });
+    }
+  };
+
   onSportDelete = (event, sportId) => {
     const { allSports } = this.state;
     if (event && allSports && allSports.length > 0 && sportId) {
@@ -107,7 +123,7 @@ class SportPage extends Component {
     }
   };
 
-  onSelectExamToUpdate = (event, sportId) => {
+  onSelectSportToUpdate = (event, sportId) => {
     const { allSports } = this.state;
     if (event && allSports && allSports.length > 0 && sportId) {
       const selectedSport = allSports.find((sport) => sport._id === sportId);
@@ -162,6 +178,7 @@ class SportPage extends Component {
         </div>
         <CreateSport />
         <DeleteSport id={this.state.selectedSport} />
+        <ShowSport id={this.state.selectedSport} />
         {/* <UpdateExam selectedExam={selectedExam} /> */}
       </div>
     );
