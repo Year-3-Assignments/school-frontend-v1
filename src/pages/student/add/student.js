@@ -189,39 +189,17 @@ class Student extends Component {
   };
 
   validateForm() {
+    const { fname, lname, email, phone, city, dob, address1, address2, grade } =
+      this.state;
     const data = {
-      firstname:
-        this.state.fname && this.state.fname.trim().length > 0
-          ? this.state.fname
-          : null,
-      lastname:
-        this.state.lname && this.state.lname.trim().length > 0
-          ? this.state.lname
-          : null,
-      dateofbirth:
-        this.state.dob && this.state.dob.toString().trim().length > 0
-          ? this.state.dob
-          : null,
-      address1:
-        this.state.address1 && this.state.address1.trim().length > 0
-          ? this.state.address1
-          : null,
-      address2:
-        this.state.address2 && this.state.address2.trim().length > 0
-          ? this.state.address2
-          : null,
-      city:
-        this.state.city && this.state.city.trim().length > 0
-          ? this.state.city
-          : null,
-      province:
-        this.state.province && this.state.province.trim().length > 0
-          ? this.state.province
-          : null,
-      grade:
-        this.state.grade && this.state.grade.trim().length > 0
-          ? this.state.grade
-          : null,
+      firstname: fname && fname.trim().length > 0 ? fname : null,
+      lastname: lname && lname.trim().length > 0 ? lname : null,
+      dateofbirth: dob && dob.toString().trim().length > 0 ? dob : null,
+      address1: address1 && address1.trim().length > 0 ? address1 : null,
+      address2: address2 && address2.trim().length > 0 ? address2 : null,
+      city: city && city.trim().length > 0 ? city : null,
+      province: provinces && provinces.trim().length > 0 ? provinces : null,
+      grade: grade && grade.trim().length > 0 ? grade : null,
       achievements:
         this.state.achievements && this.state.achievements.trim().length > 0
           ? this.state.achievements
