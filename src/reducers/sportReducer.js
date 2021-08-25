@@ -6,6 +6,7 @@ import { CREATE_SPORT, GET_ALL_SPORT, GET_SPORT_FOR_SPORT_INVENTORY, SET_SPORT, 
     getsport: '',
     updatesport: '',
     deletesport: '',
+    setsport: '',
     getallsports: [],
     getallcoaches: [],
     getallstudents: [],
@@ -20,7 +21,7 @@ import { CREATE_SPORT, GET_ALL_SPORT, GET_SPORT_FOR_SPORT_INVENTORY, SET_SPORT, 
   
   function sportReducer(state = initialState, action) {
     let createsport, getsport, updatesport, deletesport, getallsports, 
-      getallcoaches, getallstudents;
+      getallcoaches, getallstudents, setsport;
   
     switch (action.type) {
       case `${CREATE_SPORT}_PENDING`:
@@ -65,6 +66,9 @@ import { CREATE_SPORT, GET_ALL_SPORT, GET_SPORT_FOR_SPORT_INVENTORY, SET_SPORT, 
       case `${GET_STUDENT_FOR_SPORT}_FULFILLED`:
         getallstudents = action.payload.data.data;
         return { ...state, loading: false, getallstudents };
+      case `${SET_SPORT}`:
+        setsport = action.payload;
+        return { ...state, loading: false, setsport };
            
       case `${CREATE_SPORT}_REJECTED`:
         return { ...state, loading: false, createsportError: action.payload.data, state: initialState };

@@ -13,6 +13,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import CreateSport from './AddSports';
 import DeleteSport from './DeleteSport';
 import ShowSport from './ShowSport';
+import EditSport from './EditSport';
 
 // import UpdateExam from '../update/update_exam';
 
@@ -54,55 +55,29 @@ class SportPage extends Component {
   // react bootstrap table data & functions
   tableColumnData = [
     {
+      dataField: 'actions',
+      text: 'Actions',
+      formatter: (cell, row) => this.actionButtonFormatter(row),
+      headerStyle: () => {
+        return { width: '80px' };
+      },
+    },
+    {
       dataField: '_id',
       text: 'Sport ID'
     },
     { dataField: 'name', text: 'Sport Title' },
-    { dataField: 'view', 
-      text: 'View',
-      formatter: (cell, row) => this.viewSportDetails(row),
+    {
+      dataField: 'coach',
+      text: 'Coach Name',
+      formatter: (cell, row) => this.showCoach(row),
     },
-    { dataField: 'edit', 
-      text: 'Edit',      
-      formatter: (cell, row) => this.editSportDetails(row),
-    },
-    { dataField: 'delete', 
-      text: 'Delete',      
-      formatter: (cell, row) => this.deleteDetails(row),
-    }
   ];
 
-  viewSportDetails = (row) => {
-      return (<a
-        className="dropdown-item"
-        href="#"
-        data-mdb-toggle="modal"
-        data-mdb-target="#one-sport"
-        onClick={(e) => this.onViewSportDetail(e, row._id)} >
-       <i className="far fa-eye" /> View
-    </a>)
-  }
-
-  deleteDetails = (row) => {
-    return (<a className="dropdown-item"       
-      href="#"
-      data-mdb-toggle="modal"
-      data-mdb-target="#delete-sport"
-      onClick={(e) => this.onSportDelete(e, row._id)} >
-        <i className="far fa-trash-alt" /> Delete
-      </a>)
-  }
-
-  editSportDetails = (row) => {
-    return (<a
-      className="dropdown-item"
-      href="#"
-      data-mdb-toggle="modal"
-      data-mdb-target="#update-exam"
-      onClick={(e) => this.onSelectSportToUpdate(e, row._id)}
-    >
-      <i className="far fa-edit" /> Edit
-    </a>)
+  showCoach = (row) => {
+    return (row.coach.map((item, index) => (
+      <p>{item.firstName} {item.lastName}</p>
+    )))
   }
 
   onViewSportDetail = (event, sportId) => {
@@ -127,9 +102,52 @@ class SportPage extends Component {
     const { allSports } = this.state;
     if (event && allSports && allSports.length > 0 && sportId) {
       const selectedSport = allSports.find((sport) => sport._id === sportId);
-      this.props.setExam(selectedSport);
+      this.props.setSport(selectedSport);
       this.setState({ selectedSport: selectedSport });
     }
+  };
+
+  actionButtonFormatter = (row) => {
+    return (
+      <span className="dropdown show">
+        <span className="dropdown">
+          <a
+            href="#"
+            className="btn btn-no-shadow m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill btn-sm btn-rounded"
+            data-mdb-toggle="dropdown"
+          >
+            <i className="fas fa-ellipsis-h"></i>
+          </a>
+          <div className="dropdown-menu dropdown-menu-right">
+            <a
+              className="dropdown-item"
+              href="#"
+              data-mdb-toggle="modal"
+              data-mdb-target="#one-sport"
+              onClick={(e) => this.onViewSportDetail(e, row._id)} >
+              <i className="far fa-eye" /> View
+            </a>
+            <a
+              className="dropdown-item"
+              href="#"
+              data-mdb-toggle="modal"
+              data-mdb-target="#update-sport"
+              onClick={(e) => this.onSelectSportToUpdate(e, row._id)}
+            >
+            <i className="far fa-edit" /> Edit
+            </a>
+
+            <a className="dropdown-item"       
+              href="#"
+              data-mdb-toggle="modal"
+              data-mdb-target="#delete-sport"
+              onClick={(e) => this.onSportDelete(e, row._id)} >
+              <i className="far fa-trash-alt" /> Delete
+            </a>
+          </div>
+        </span>
+      </span>
+    );
   };
 
   render() {
@@ -179,7 +197,7 @@ class SportPage extends Component {
         <CreateSport />
         <DeleteSport id={this.state.selectedSport} />
         <ShowSport id={this.state.selectedSport} />
-        {/* <UpdateExam selectedExam={selectedExam} /> */}
+        <EditSport id={this.state.selectedSport} />
       </div>
     );
   }
