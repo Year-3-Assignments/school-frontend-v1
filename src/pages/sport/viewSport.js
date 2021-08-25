@@ -6,7 +6,7 @@ import {
   getAllSport, setSport
 } from '../../actions/sportActions';
 import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, {
+import ToolkitProvider, { CSVExport,
   Search,
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -18,6 +18,7 @@ import EditSport from './EditSport';
 // import UpdateExam from '../update/update_exam';
 
 const { SearchBar } = Search;
+const { ExportCSVButton } = CSVExport;
 
 class SportPage extends Component {
   constructor(props) {
@@ -172,6 +173,7 @@ class SportPage extends Component {
             data={allSports}
             columns={this.tableColumnData}
             search
+            exportCSV
           >
             {(props) => (
               <div>
@@ -180,6 +182,7 @@ class SportPage extends Component {
                   placeholder="Search sport by name"
                   className="mb-3 search-bar"
                 />
+                <ExportCSVButton { ...props.csvProps }>Export CSV!!</ExportCSVButton>
                 <BootstrapTable
                   {...props.baseProps}
                   pagination={paginationFactory()}
