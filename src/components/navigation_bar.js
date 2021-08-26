@@ -82,6 +82,17 @@ class NavigationBar extends Component {
                   width="30"
                   height="30"
                 />
+                {userRole && userRole === Constant.ROLE_TEACHER ? (
+                  <span className="header-text">
+                    REACH <small>teacher</small>
+                  </span>
+                ) : null}
+                {userRole && userRole === Constant.ROLE_ADMIN ? (
+                  <span className="header-text">
+                    REACH <small>admin</small>
+                  </span>
+                ) : null}
+                {userRole === '' ? <span>REACH College</span> : null}
               </a>
 
               {userRole === Constant.ROLE_TEACHER ? (
@@ -112,9 +123,9 @@ class NavigationBar extends Component {
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="#">
+                    <NavLink className="nav-link" to="/student/view">
                       Students
-                    </a>
+                    </NavLink>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href="#">
