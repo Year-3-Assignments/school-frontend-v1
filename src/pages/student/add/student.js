@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import { createStudent } from '../../../actions/student_actions';
 import { connect } from 'react-redux';
 import 'react-rangeslider/lib/index.css';
+import Loader from '../../../components/loader';
 import ImagePreviewer from '../../../components/image_previewer';
 
 let formData = {};
@@ -56,19 +57,20 @@ class Student extends Component {
       province: '',
       grade: 0,
       profileImage: '',
-      uploadPercentage: 0,
       achievements: '',
       parentName: '',
       email: '',
       phone: '',
       username: '',
       password: '',
+      isLoading: false,
+      formNotValid: false,
       role: 'ROLE_ADMIN',
     };
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.createStudent !== nextProps.createStudent) {
+    if (this.props.createstudent !== nextProps.createstudent) {
       this.setState({ isLoading: false }, () => {
         NotificationManager.success('Student created successfull!');
       });
@@ -161,7 +163,7 @@ class Student extends Component {
       lname,
       parentName,
       email,
-      imageurl,
+      profileImage,
       achievements,
       phone,
       city,
@@ -184,7 +186,8 @@ class Student extends Component {
       grade: grade && grade.trim().length > 0 ? grade : null,
       achievements:
         achievements && achievements.trim().length > 0 ? achievements : null,
-      imageurl: imageurl && imageurl.trim().length > 0 ? imageurl : null,
+      imageurl:
+        profileImage && profileImage.trim().length > 0 ? profileImage : null,
       parent: parentName && parentName.trim().length > 0 ? parentName : null,
       phone: phone && phone.trim().length > 0 ? phone : null,
       email: email && email.trim().length > 0 ? email : null,
@@ -196,6 +199,7 @@ class Student extends Component {
   }
 
   render() {
+    const { isLoading, formNotValid } = this.state;
     return (
       <div
         className="modal fade"
@@ -218,6 +222,13 @@ class Student extends Component {
 
             <div className="modal-body">
               <ImagePreviewer getEditedImage={this.onEditImageChange} />
+              {formData.imageurl === null && formNotValid ? (
+                <div className="d-flex justify-content-center mt-1">
+                  <span className="text-danger validation-text p-0 text-center">
+                    Please select & upload profile image
+                  </span>
+                </div>
+              ) : null}
               <div className="row m-0 mb-2">
                 <label htmlFor="fname" className="form-label p-0">
                   First Name
@@ -492,22 +503,30 @@ class Student extends Component {
                   ) : null}
                 </div>
               </div>
-              <div className="d-flex justify-content-end mb-3">
-                <button
-                  className="btn btn-secondary btn-no-shadow btn-rounded"
-                  onClick={this.closeModal}
-                >
-                  Close
-                </button>
-                &nbsp;&nbsp;
-                <button
-                  href="#"
-                  className="btn btn-primary btn-no-shadow btn-rounded"
-                  onClick={this.onSubmit}
-                >
-                  Create Student
-                </button>
-              </div>
+            </div>
+            <div className="modal-footer d-flex">
+              {isLoading ? (
+                <div className="justify-content-left text-center">
+                  <Loader size={40} />
+                </div>
+              ) : (
+                <div className="d-flex justify-content-end">
+                  <button
+                    className="btn btn-secondary btn-no-shadow btn-rounded"
+                    onClick={this.closeModal}
+                  >
+                    Close
+                  </button>
+                  &nbsp;&nbsp;
+                  <button
+                    href="#"
+                    className="btn btn-primary btn-no-shadow btn-rounded"
+                    onClick={this.onSubmit}
+                  >
+                    Create Student
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
