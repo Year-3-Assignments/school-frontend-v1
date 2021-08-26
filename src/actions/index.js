@@ -17,6 +17,22 @@ export const UPDATE_QUESTION = 'UPDATE_QUESTION';
 export const DELETE_QUESTION = 'DELETE_QUESTION';
 export const SET_EXAMINATION = 'SET_EXAMINATION';
 
+// Sport Management action types
+export const CREATE_SPORT = "CREATE_SPORT";
+export const GET_ALL_SPORT = "GET_ALL_SPORT";
+export const GET_SPORT_FOR_SPORT_INVENTORY = "GET_SPORT_FOR_SPORT_INVENTORY";
+export const SET_SPORT = "SET_SPORT";
+export const GET_SPORT = "GET_SPORT";
+export const GET_COACH_FOR_SPORT = "GET_COACH_FOR_SPORT";
+export const GET_STUDENT_FOR_SPORT = "GET_STUDENT_FOR_SPORT";
+export const UPDATE_SPORT = "UPDATE_SPORT";
+export const DELETE_SPORT = "DELETE_SPORT";
 // User actions
 export const USER_LOGIN = 'USER_LOGIN';
 export const GET_USER_PROFILE = 'GET_USER_PROFILE';
+
+// Employee actions
+export const CREATE_EMPLOYEE_ACCOUNT = 'CREATE_EMPLOYEE_ACCOUNT';
+export const GET_ALL_EMPLOYEE_LIST = 'GET_ALL_EMPLOYEE_LIST';
+export const DELETE_EMPLOYEE = 'DELETE_EMPLOYEE';
+export const UPDATE_EMPLOYEE = 'UPDATE_EMPLOYEE';

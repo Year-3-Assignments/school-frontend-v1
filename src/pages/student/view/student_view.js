@@ -36,6 +36,8 @@ class StudentView extends Component {
   componentDidMount() {
     if (localStorage.getItem('token') !== null) {
       this.props.getAllStudents();
+    } else {
+      window.location = '/login';
     }
   }
 

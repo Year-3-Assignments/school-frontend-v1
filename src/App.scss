@@ -3,6 +3,7 @@
 @import './styles/student_view.scss';
 @import './styles/student.scss';
 @import './styles/login_page.scss';
+@import './styles/employee_view.scss';
 
 .btn-no-shadow {
   box-shadow: none !important;
@@ -189,10 +190,21 @@ textarea {
   font-size: 25px;
 }
 
+.thumb-img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .image-preview {
   font-size: 10px;
 }
 
-span.text-danger {
+.span.text-danger {
   font-size: 11px;
+}
+
+.header-text {
+  font-family: 'Roboto';
 }

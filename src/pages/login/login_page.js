@@ -14,6 +14,7 @@ const Constants = {
   USER_NOT_FOUND: 'User not found',
   PASSWORD_NOT_MATCH: 'Password is not matched',
   ROLE_TEACHER: 'TEACHER',
+  ROLE_ADMIN: 'ADMIN',
 };
 
 const initialState = {
@@ -75,10 +76,15 @@ class LoginPage extends Component {
               'role',
               nextProps.loginData.data.responseData.role
             );
-            NotificationManager.success(Constants.LOGIN_SUCCESS);
 
             if (localStorage.getItem('role') === Constants.ROLE_TEACHER) {
               window.location = '/examination';
+              NotificationManager.success(Constants.LOGIN_SUCCESS);
+            }
+
+            if (localStorage.getItem('role') === Constants.ROLE_ADMIN) {
+              window.location = '/student/view';
+              NotificationManager.success(Constants.LOGIN_SUCCESS);
             }
           }
         }
