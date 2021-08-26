@@ -9,6 +9,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
 import { getAllStudents } from '../../../actions/student_actions';
 import Student from '../add/student';
+import ImagePreviewer from '../../../components/image_previewer';
 
 const { SearchBar } = Search;
 const rowStyle = (row, rowIndex) => {
@@ -32,6 +33,8 @@ class StudentView extends Component {
   componentDidMount() {
     if (localStorage.getItem('token') !== null) {
       this.props.getAllStudents();
+    } else {
+      window.location = '/login';
     }
   }
 
