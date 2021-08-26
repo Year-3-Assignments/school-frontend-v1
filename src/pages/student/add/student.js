@@ -59,7 +59,7 @@ class Student extends Component {
       profileImage: null,
       uploadPercentage: 0,
       achievements: '',
-      pname: '',
+      parent: '',
       email: '',
       phone: '',
       username: '',
@@ -76,9 +76,18 @@ class Student extends Component {
     }
 
     if (this.props.createstudenterror !== nextProps.createstudenterror) {
-      this.setState({ isLoading: false }, () => {
-        NotificationManager.error(nextProps.createstudenterror.message);
-      });
+      if (
+        nextProps.createstudenterror &&
+        nextProps.createstudenterror.message
+      ) {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error(nextProps.createstudenterror.message);
+        });
+      } else {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error('CREATE STUDENT FAILED');
+        });
+      }
     }
   };
 
@@ -179,7 +188,7 @@ class Student extends Component {
 
         console.log('DATA TO SEND', studentData);
         this.props.createStudent(studentData);
-        NotificationManager.success('Student Profile is Successfully created!');
+        this.setState({ isLoading: true });
       } else {
         this.setState({ formNotValid: true }, () => {
           NotificationManager.warning('Please check the input fields');
@@ -189,8 +198,23 @@ class Student extends Component {
   };
 
   validateForm() {
-    const { fname, lname, email, phone, city, dob, address1, address2, grade } =
-      this.state;
+    const {
+      fname,
+      lname,
+      parent,
+      email,
+      imageurl,
+      achievements,
+      phone,
+      city,
+      province,
+      dob,
+      address1,
+      address2,
+      grade,
+      username,
+      password,
+    } = this.state;
     const data = {
       firstname: fname && fname.trim().length > 0 ? fname : null,
       lastname: lname && lname.trim().length > 0 ? lname : null,
@@ -198,36 +222,16 @@ class Student extends Component {
       address1: address1 && address1.trim().length > 0 ? address1 : null,
       address2: address2 && address2.trim().length > 0 ? address2 : null,
       city: city && city.trim().length > 0 ? city : null,
-      province: provinces && provinces.trim().length > 0 ? provinces : null,
+      province: province && province.trim().length > 0 ? province : null,
       grade: grade && grade.trim().length > 0 ? grade : null,
       achievements:
-        this.state.achievements && this.state.achievements.trim().length > 0
-          ? this.state.achievements
-          : null,
-      imageurl:
-        this.state.imageurl && this.state.imageurl.trim().length > 0
-          ? this.state.imageurl
-          : null,
-      parent:
-        this.state.pname && this.state.pname.trim().length > 0
-          ? this.state.pname
-          : null,
-      phone:
-        this.state.phone && this.state.phone.trim().length > 0
-          ? this.state.phone
-          : null,
-      email:
-        this.state.email && this.state.email.trim().length > 0
-          ? this.state.email
-          : null,
-      username:
-        this.state.username && this.state.username.trim().length > 0
-          ? this.state.username
-          : null,
-      password:
-        this.state.password && this.state.password.trim().length > 0
-          ? this.state.password
-          : null,
+        achievements && achievements.trim().length > 0 ? achievements : null,
+      imageurl: imageurl && imageurl.trim().length > 0 ? imageurl : null,
+      parent: parent && parent.trim().length > 0 ? parent : null,
+      phone: phone && phone.trim().length > 0 ? phone : null,
+      email: email && email.trim().length > 0 ? email : null,
+      username: username && username.trim().length > 0 ? username : null,
+      password: password && password.trim().length > 0 ? password : null,
     };
     formData = Object.assign({}, data);
     return true;
@@ -464,15 +468,15 @@ class Student extends Component {
               </div>
 
               <div className="row m-0 mb-2 col">
-                <label htmlFor="pname" className="form-label p-0">
+                <label htmlFor="parent" className="form-label p-0">
                   Parent/Guardian Name
                 </label>
                 <input
                   type="text"
-                  id="pname"
+                  id="parent"
                   className="form-control"
-                  name="pname"
-                  value={this.state.pname}
+                  name="parent"
+                  value={this.state.parent}
                   onChange={this.onChange}
                 />
                 {formData.parent === null && this.state.formNotValid ? (
