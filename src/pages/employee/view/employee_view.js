@@ -1,8 +1,10 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   Search,
+  CSVExport,
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
@@ -17,6 +19,24 @@ const initialState = {
   employees: [],
 };
 
+const { ExportCSVButton } = CSVExport;
+
+const rowStyle = (row, rowIndex) => {
+  const style = {};
+  style.fontSize = 16;
+  style.fontWeight = 'normal';
+  style.height = 2;
+  style.padding = '10px';
+  style.margin = '10px';
+  return style;
+};
+
+const options = {
+  paginationSize: 4,
+  pageStartIndex: 1,
+  sizePerPage: 12,
+};
+
 class EmployeePage extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +44,6 @@ class EmployeePage extends Component {
   }
 
   componentDidMount() {
-    console.log('data');
     this.props.getEmployeeList();
   }
 
@@ -34,9 +53,22 @@ class EmployeePage extends Component {
         console.log('employee list', this.state.employees);
       });
     }
+
+    if (this.props.addEmployee !== nextProps.addEmployee) {
+      this.props.getEmployeeList();
+    }
   };
 
   tableColumData = [
+    {
+      dataField: 'actions',
+      text: 'Actions',
+      formatter: (cell, row) => this.actionButtonFormatter(row),
+      headerStyle: () => {
+        return { width: '80px', fontSize: '9px' };
+      },
+      csvExport: false,
+    },
     {
       dataField: 'userName',
       text: 'Username',
@@ -49,6 +81,9 @@ class EmployeePage extends Component {
       dataField: 'firstName',
       text: 'Name',
       formatter: (cell, row) => this.setNameFormatter(cell, row),
+      headerStyle: () => {
+        return { width: '250px' };
+      },
     },
     {
       dataField: 'email',
@@ -57,8 +92,45 @@ class EmployeePage extends Component {
     },
     {
       dataField: 'phoneNumber',
-      text: 'Mobile Number',
+      text: 'Phone',
       formatter: (cell) => this.setFieldFormatter(cell),
+      headerStyle: () => {
+        return { width: '120px' };
+      },
+    },
+    {
+      dataField: 'createdAt',
+      text: 'Joined At',
+      formatter: (cell) => this.setDateFormatter(cell),
+      headerStyle: () => {
+        return { width: '120px' };
+      },
+      sort: true,
+    },
+    {
+      dataField: 'salary',
+      text: 'Salary',
+      formatter: (cell) => this.setFieldFormatter(cell),
+      headerStyle: () => {
+        return { width: '100px' };
+      },
+      sort: true,
+    },
+    {
+      dataField: 'city',
+      text: 'City',
+      formatter: (cell) => this.setFieldFormatter(cell),
+      headerStyle: () => {
+        return { width: '140px' };
+      },
+    },
+    {
+      dataField: 'role',
+      text: 'Role',
+      formatter: (cell) => this.setFieldFormatter(cell),
+      headerStyle: () => {
+        return { width: '100px' };
+      },
     },
   ];
 
@@ -72,44 +144,66 @@ class EmployeePage extends Component {
 
   setNameFormatter(cell, row) {
     return (
-      <div>
+      <span className="d-flex">
         <img src={row.imageurl} className="user-img" alt="employee" />
         &nbsp;&nbsp;
-        <p className="m-0 badge user-badge rounded-pill bg-custom-light text-dark">
+        <p className="m-0 student-data text-dark">
           {row.firstName}&nbsp;{row.lastName}
         </p>
-      </div>
+      </span>
     );
   }
 
   setFieldFormatter(cell) {
-    return (
-      <p className="badge user-badge rounded-pill bg-custom-light text-dark">
-        {cell}
-      </p>
-    );
+    return <p className="student-data text-dark">{cell}</p>;
   }
 
   setDateFormatter(cell) {
     return (
-      <p className="badge user-badge rounded-pill bg-custom-light text-dark">
-        {moment(cell).format('lll')}
-      </p>
+      <p className="student-data text-dark">{moment(cell).format('ll')}</p>
     );
   }
+
+  actionButtonFormatter = (row) => {
+    return (
+      <span className="dropdown show">
+        <span className="dropdown">
+          <a
+            href="#"
+            className="btn btn-no-shadow m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill btn-sm btn-rounded"
+            data-mdb-toggle="dropdown"
+          >
+            <i className="fas fa-ellipsis-h"></i>
+          </a>
+          <div className="dropdown-menu dropdown-menu-right">
+            <a className="dropdown-item" href="#">
+              <i class="far fa-edit" /> Edit
+            </a>
+
+            <a className="dropdown-item" href="#">
+              <i class="far fa-trash-alt" /> Delete
+            </a>
+          </div>
+        </span>
+      </span>
+    );
+  };
 
   expandRow = {
     showExpandColumn: true,
     renderer: (row) => (
-      <div className="row">
-        {console.log('data', row)}
-        <div className="col-md-6">
-          <h6>Employee Information</h6>
-          <div className="row">
-            {row ? (
-              <div className="mb-1 col-md-4">
-                <img src={row.imageurl} className="user-img" alt="employee" />
-                &nbsp;&nbsp;&nbsp;
+      <div>
+        <div>
+          {row ? (
+            <div className="row">
+              <div className="mb-1 col-md-2">
+                <img
+                  src={row.imageurl}
+                  className="employee-img"
+                  alt="employee"
+                />
+              </div>
+              <div className="mb-1 col-md-8">
                 <h6 className="person-info m-0">
                   {row.firstName}&nbsp;{row.lastName}
                 </h6>
@@ -126,9 +220,21 @@ class EmployeePage extends Component {
                   <i className="fas fa-phone"></i>&nbsp;&nbsp;
                   {row.phoneNumber}
                 </p>
+                <p>
+                  <i className="fas fa-map-marker-alt"></i>&nbsp;&nbsp;
+                  {row.addressLine1},&nbsp;{row.addressLine2}
+                </p>
+                <p>
+                  <i className="fas fa-city"></i>&nbsp;&nbsp;
+                  {row.city}
+                </p>
+                <p>
+                  <i class="fas fa-money-bill-wave"></i>&nbsp;&nbsp; Rs.
+                  {parseFloat(row.salary).toFixed(2)}
+                </p>
               </div>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
         </div>
       </div>
     ),
@@ -141,14 +247,20 @@ class EmployeePage extends Component {
     expandColumnRenderer: ({ expanded }) => {
       if (expanded) {
         return (
-          <div style={{ cursor: 'pointer', marginTop: '5px' }}>
-            <i className="fas fa-chevron-circle-up"></i>
+          <div
+            className="d-flex justify-content-center"
+            style={{ cursor: 'pointer' }}
+          >
+            <i className="fas fa-chevron-circle-up fa-xs"></i>
           </div>
         );
       }
       return (
-        <div style={{ cursor: 'pointer', marginTop: '5px' }}>
-          <i className="fas fa-chevron-circle-down"></i>
+        <div
+          className="d-flex justify-content-center"
+          style={{ cursor: 'pointer' }}
+        >
+          <i className="fas fa-chevron-circle-down fa-xs"></i>
         </div>
       );
     },
@@ -159,7 +271,7 @@ class EmployeePage extends Component {
     return (
       <div className="pt-5 pb-5 admin-container-color">
         <div className="card p-4 exam-table container">
-          <div className="d-flex">
+          <div className="d-flex mb-3">
             <h3>Registed Employee List</h3>
             <div className="align-right">
               <button
@@ -179,22 +291,30 @@ class EmployeePage extends Component {
           >
             {(props) => (
               <div>
-                <SearchBar
-                  {...props.searchProps}
-                  placeholder="Search Employee details"
-                  className="mb-3 search-bar"
-                />
+                <div className="d-flex">
+                  <SearchBar
+                    {...props.searchProps}
+                    placeholder="Search exams by Exam Title"
+                    className="mb-3 search-bar"
+                  />
+                  <ExportCSVButton
+                    {...props.csvProps}
+                    className="btn-secondary btn-rounded btn-no-shadow mx-3 mb-3"
+                  >
+                    DOWNLOAD EMPLOYEE DATA
+                  </ExportCSVButton>
+                </div>
                 <BootstrapTable
                   {...props.baseProps}
-                  pagination={paginationFactory()}
+                  pagination={paginationFactory(options)}
                   bordered={true}
                   striped={false}
                   headerClasses="header-class"
                   wrapperClasses="table-responsive"
                   rowClasses="custom-row-class"
+                  className="custom-table"
                   hover
-                  headerClasses="header-class"
-                  wrapperClasses="table-responsive"
+                  rowStyle={rowStyle}
                   expandRow={this.expandRow}
                 />
               </div>
@@ -210,6 +330,7 @@ class EmployeePage extends Component {
 const mapStateToProps = (state) => ({
   employees: state.employeeReducer.employeeList,
   employeeListError: state.employeeReducer.employeeListError,
+  addEmployee: state.employeeReducer.createemployee,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createEmployee } from '../../../actions/employeeAction';
+import { NotificationManager } from 'react-notifications';
 import DatePicker from 'react-datepicker';
-import firebase from '../../../firebase.config';
-import Progress from '../../../components/progress/progress';
 import Select from 'react-select';
+import ImagePreviewer from '../../../components/image_previewer';
+import Loader from '../../../components/loader';
 
 let formData = {};
 const $ = window.$;
 
 const roleOptions = [
-  { labal: 'Teacher', value: 'Teacher' },
-  { labal: 'Admin', value: 'Admin' },
-  { labal: 'Staff', value: 'Staff' },
+  { label: 'TEACHER', value: 'TEACHER' },
+  { label: 'ADMIN', value: 'ADMIN' },
+  { label: 'STAFF', value: 'STAFF' },
 ];
 
 const initialState = {
@@ -29,8 +30,8 @@ const initialState = {
   userName: '',
   password: '',
   imageUrl: '',
-  profileImage: null,
-  uploadPercentage: 0,
+  isLoading: false,
+  salary: '',
   role: 0,
 };
 
@@ -40,11 +41,34 @@ class CreateEmployee extends Component {
     this.closeModal = this.closeModal.bind(this);
     this.state = initialState;
     this.onChange = this.onChange.bind(this);
-    this.setImage = this.setImage.bind(this);
-    this.setUploadPercentage = this.setUploadPercentage.bind(this);
-    this.setImageUrl = this.setImageUrl.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onEditImageChange = this.onEditImageChange.bind(this);
     this.onTimeChange = this.onTimeChange.bind(this);
   }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.createemployee !== nextProps.createemployee) {
+      this.setState(initialState, () => {
+        NotificationManager.success('Employee added successfully');
+        this.closeModal();
+      });
+    }
+
+    if (this.props.createemployeeError !== nextProps.createemployeeError) {
+      if (
+        nextProps.createemployeeError &&
+        nextProps.createemployeeError.message
+      ) {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error(nextProps.createemployeeError.message);
+        });
+      } else {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error('Error with add new employee');
+        });
+      }
+    }
+  };
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -54,15 +78,77 @@ class CreateEmployee extends Component {
     $('#create-employee').modal('toggle');
     this.setState(initialState);
   }
+
+  onTimeChange(date) {
+    this.setState({ dateofbirth: date });
+  }
+
+  onSelectRole = (event) => {
+    if (event) {
+      this.setState({ role: event.value });
+    }
+  };
+
+  onEditImageChange(imageData) {
+    this.setState({ imageUrl: imageData });
+  }
+
+  validateForm() {
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      addressLine1,
+      addressLine2,
+      city,
+      province,
+      role,
+      description,
+      dateofbirth,
+      userName,
+      password,
+      imageUrl,
+      salary,
+    } = this.state;
+    const data = {
+      firstName: firstName && firstName.trim().length > 0 ? firstName : null,
+      lastName: lastName && lastName.trim().length > 0 ? lastName : null,
+      email: email && email.trim().length > 0 ? email : null,
+      phoneNumber:
+        phoneNumber && phoneNumber.trim().length > 0 ? phoneNumber : null,
+      addressLine1:
+        addressLine1 && addressLine1.trim().length > 0 ? addressLine1 : null,
+      addressLine2:
+        addressLine2 && addressLine2.trim().length > 0 ? addressLine2 : null,
+      city: city && city.trim().length > 0 ? city : null,
+      province: province && province.trim().length > 0 ? province : null,
+      role: role && role.trim().length > 0 ? role : null,
+      imageurl: imageUrl && imageUrl.trim().length > 0 ? imageUrl : null,
+      description:
+        description && description.trim().length > 0 ? description : null,
+      dateofbirth:
+        dateofbirth && dateofbirth.toString().trim().length > 0
+          ? dateofbirth
+          : null,
+      userName: userName && userName.trim().length > 0 ? userName : null,
+      password: password && password.trim().length > 0 ? password : null,
+      salary: salary && salary.trim().length > 0 ? salary : null,
+    };
+    formData = Object.assign({}, data);
+    return true;
+  }
+
   onSubmit = (e) => {
     e.preventDefault();
     if (this.validateForm()) {
       let data = Object.values(formData).map((key) => {
+        console.log(key !== null);
         return key != null;
       });
 
       if (!data.includes(false)) {
-        let employeeData = {
+        const employeeData = {
           firstName: this.state.firstName,
           lastName: this.state.lastName,
           dateofbirth: this.state.dateofbirth,
@@ -77,142 +163,19 @@ class CreateEmployee extends Component {
           password: this.state.password,
           description: this.state.description,
           role: this.state.role,
+          salary: this.state.salary,
         };
 
         console.log('DATA TO SEND', employeeData);
         this.props.createEmployee(employeeData);
-        //NotificationManager.success('Student Profile is Successfully created!');
+        this.setState({ isLoading: true });
       } else {
         this.setState({ formNotValid: true }, () => {
-          //NotificationManager.warning('Please check the input fields');
+          NotificationManager.warning('Please check the input fields');
         });
       }
     }
   };
-
-  onTimeChange(date) {
-    this.setState({ dateofbirth: date });
-  }
-
-  onSelectRole = (event) => {
-    if (event) {
-      this.setState({ role: event.value });
-    }
-  };
-
-  setImage = (e) => {
-    this.setState({ profileImage: e.target.files[0] });
-  };
-
-  setImageUrl = ({ imageUrl }) => {
-    this.setState({ imageUrl: imageUrl }, () => {
-      console.log('image url', this.state.imageUrl);
-    });
-  };
-
-  setUploadPercentage = (progress) => {
-    this.setState({ uploadPercentage: progress });
-  };
-
-  uploadImage = (e) => {
-    e.preventDefault();
-    if (this.state.profileImage !== null) {
-      let folderName = 'Profile-Pictures';
-      let file = this.state.profileImage;
-      let upload = firebase
-        .storage()
-        .ref(`${folderName}/${this.state.userName}`)
-        .put(file);
-
-      upload.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          this.setUploadPercentage(progress);
-        },
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          upload.snapshot.ref.getDownloadURL().then((url) => {
-            this.setImageUrl({ imageUrl: url });
-            //NotificationManager.success('Image upload success');
-            console.log('Image upload success');
-          });
-        }
-      );
-    }
-  };
-
-  validateForm() {
-    const data = {
-      firstName:
-        this.state.firstName && this.state.firstName.trim().length > 0
-          ? this.state.firstName
-          : null,
-      lastName:
-        this.state.lastName && this.state.lastName.trim().length > 0
-          ? this.state.lastName
-          : null,
-      email:
-        this.state.email && this.state.email.trim().length > 0
-          ? this.state.email
-          : null,
-      phoneNumber:
-        this.state.phoneNumber && this.state.phoneNumber.trim().length > 0
-          ? this.state.phoneNumber
-          : null,
-      addressLine1:
-        this.state.addressLine1 && this.state.addressLine1.trim().length > 0
-          ? this.state.addressLine1
-          : null,
-      addressLine2:
-        this.state.addressLine2 && this.state.addressLine2.trim().length > 0
-          ? this.state.addressLine2
-          : null,
-      city:
-        this.state.city && this.state.city.trim().length > 0
-          ? this.state.city
-          : null,
-      province:
-        this.state.province && this.state.province.trim().length > 0
-          ? this.state.province
-          : null,
-      role:
-        this.state.role && this.state.role.trim().length > 0
-          ? this.state.role
-          : null,
-      imageurl:
-        this.state.imageUrl && this.state.imageUrl.trim().length > 0
-          ? this.state.imageUrl
-          : null,
-      description:
-        this.state.description && this.state.description.trim().length > 0
-          ? this.state.description
-          : null,
-      dateofbirth:
-        this.state.dateofbirth &&
-        this.state.dateofbirth.toString().trim().length > 0
-          ? this.state.dateofbirth
-          : null,
-      userName:
-        this.state.userName && this.state.userName.trim().length > 0
-          ? this.state.userName
-          : null,
-      password:
-        this.state.password && this.state.password.trim().length > 0
-          ? this.state.password
-          : null,
-      salary:
-        this.state.salary && this.state.salary.trim().length > 0
-          ? this.state.salary
-          : null,
-    };
-    formData = Object.assign({}, data);
-    return true;
-  }
 
   render() {
     return (
@@ -235,6 +198,14 @@ class CreateEmployee extends Component {
               ></button>
             </div>
             <div className="modal-body">
+              <ImagePreviewer getEditedImage={this.onEditImageChange} />
+              {formData.imageurl === null && this.state.formNotValid ? (
+                <div className="d-flex justify-content-center mt-2">
+                  <span className="text-danger validation-text p-0">
+                    Employee image is required.
+                  </span>
+                </div>
+              ) : null}
               <div className="row m-0 mb-3">
                 <label htmlFor="firstName" className="form-label p-0">
                   First Name :
@@ -471,7 +442,7 @@ class CreateEmployee extends Component {
                 ) : null}
               </div>
 
-              <div className="row m-0 mb-2">
+              <div className="m-0 mb-2">
                 <div className="col m-0 mb-3">
                   <label htmlFor="role" className="form-label p-0 m-0">
                     Role :
@@ -491,52 +462,51 @@ class CreateEmployee extends Component {
                   ) : null}
                 </div>
               </div>
-
-              <div className="mb-3">
-                <label htmlFor="profile-image" className="form-label">
-                  Profile Image :
-                </label>
-                <div className="input-group">
+              <div className="m-0 mb-2">
+                <div className="col m-0 mb-3">
+                  <label htmlFor="role" className="form-label p-0 m-0">
+                    Monthly Salary (Rs.) :
+                  </label>
                   <input
-                    type="file"
+                    type="text"
+                    id="username"
                     className="form-control"
-                    id="profile-image"
-                    name="imageUrl"
-                    onChange={(e) => this.setImage(e)}
+                    name="salary"
+                    value={this.state.salary}
+                    onChange={this.onChange}
                   />
-                  <button
-                    className="btn btn-color btn-sm"
-                    type="button"
-                    onClick={this.uploadImage}
-                  >
-                    UPLOAD
-                  </button>
+                  {formData.salary === null && this.state.formNotValid ? (
+                    <span className="text-danger validation-text p-0">
+                      Salary is required
+                    </span>
+                  ) : null}
                 </div>
-                {FormData.imageurl === null && this.state.formNotValid ? (
-                  <span className="text-danger validation-text p-0">
-                    Profile image is required
-                  </span>
-                ) : null}
-              </div>
-              <div className="mb-3">
-                <Progress percentage={this.state.uploadPercentage} />
               </div>
             </div>
             <div className="modal-footer">
-              <button
-                className="btn btn-secondary btn-no-shadow btn-rounded"
-                onClick={this.closeModal}
-              >
-                Close
-              </button>
-              &nbsp;&nbsp;
-              <button
-                href="#"
-                className="btn btn-primary btn-no-shadow btn-rounded"
-                onClick={this.onSubmit}
-              >
-                Create New User
-              </button>
+              <div>
+                {this.state.isLoading ? (
+                  <div>
+                    <Loader size={50} />
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      className="btn btn-secondary btn-no-shadow btn-rounded"
+                      onClick={this.closeModal}
+                    >
+                      Close
+                    </button>
+                    &nbsp;&nbsp;
+                    <button
+                      className="btn btn-primary btn-no-shadow btn-rounded"
+                      onClick={this.onSubmit}
+                    >
+                      Create New User
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

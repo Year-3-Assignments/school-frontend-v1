@@ -107,9 +107,9 @@ class NavigationBar extends Component {
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="#">
+                    <NavLink className="nav-link" to="/employee">
                       Employees
-                    </a>
+                    </NavLink>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href="#">
