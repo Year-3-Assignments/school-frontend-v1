@@ -190,6 +190,13 @@ textarea {
   font-size: 25px;
 }
 
+.thumb-img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .image-preview {
   font-size: 10px;
 }

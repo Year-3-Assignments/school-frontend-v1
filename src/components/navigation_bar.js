@@ -128,9 +128,9 @@ class NavigationBar extends Component {
                     </NavLink>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="#">
+                    <NavLink className="nav-link" to="/sport">
                       Sports
-                    </a>
+                    </NavLink>
                   </li>
                 </ul>
               ) : null}
