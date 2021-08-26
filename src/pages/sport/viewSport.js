@@ -2,11 +2,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  getAllSport, setSport
-} from '../../actions/sportActions';
+import { getAllSport, setSport } from '../../actions/sportActions';
 import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, { CSVExport,
+import ToolkitProvider, {
+  CSVExport,
   Search,
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -39,7 +38,7 @@ class SportPage extends Component {
   componentWillReceiveProps = (nextProps) => {
     if (this.props.getallsports !== nextProps.getallsports) {
       this.setState({
-        allSports: nextProps.getallsports
+        allSports: nextProps.getallsports,
       });
     }
 
@@ -50,7 +49,6 @@ class SportPage extends Component {
     if (this.props.deleteSport !== nextProps.deleteSport) {
       this.props.getAllSport();
     }
-
   };
 
   // react bootstrap table data & functions
@@ -60,12 +58,12 @@ class SportPage extends Component {
       text: 'Actions',
       formatter: (cell, row) => this.actionButtonFormatter(row),
       headerStyle: () => {
-        return { width: '80px' };
+        return { width: '80px', fontSize: '9px' };
       },
     },
     {
       dataField: '_id',
-      text: 'Sport ID'
+      text: 'Sport ID',
     },
     { dataField: 'name', text: 'Sport Title' },
     {
@@ -76,10 +74,12 @@ class SportPage extends Component {
   ];
 
   showCoach = (row) => {
-    return (row.coach.map((item, index) => (
-      <p>{item.firstName} {item.lastName}</p>
-    )))
-  }
+    return row.coach.map((item, index) => (
+      <p>
+        {item.firstName} {item.lastName}
+      </p>
+    ));
+  };
 
   onViewSportDetail = (event, sportId) => {
     const { allSports } = this.state;
@@ -125,7 +125,8 @@ class SportPage extends Component {
               href="#"
               data-mdb-toggle="modal"
               data-mdb-target="#one-sport"
-              onClick={(e) => this.onViewSportDetail(e, row._id)} >
+              onClick={(e) => this.onViewSportDetail(e, row._id)}
+            >
               <i className="far fa-eye" /> View
             </a>
             <a
@@ -135,14 +136,16 @@ class SportPage extends Component {
               data-mdb-target="#update-sport"
               onClick={(e) => this.onSelectSportToUpdate(e, row._id)}
             >
-            <i className="far fa-edit" /> Edit
+              <i className="far fa-edit" /> Edit
             </a>
 
-            <a className="dropdown-item"       
+            <a
+              className="dropdown-item"
               href="#"
               data-mdb-toggle="modal"
               data-mdb-target="#delete-sport"
-              onClick={(e) => this.onSportDelete(e, row._id)} >
+              onClick={(e) => this.onSportDelete(e, row._id)}
+            >
               <i className="far fa-trash-alt" /> Delete
             </a>
           </div>
@@ -154,8 +157,8 @@ class SportPage extends Component {
   render() {
     const { allSports, selectedExam } = this.state;
     return (
-      <div className="pt-5 pb-5">
-        <div className="card p-4 exam-table">
+      <div className="pt-5 pb-5 admin-container-color">
+        <div className="card p-4 exam-table container">
           <div className="d-flex">
             <h3>Sports Details</h3>
             <div className="align-right">
@@ -183,9 +186,11 @@ class SportPage extends Component {
                   className="mb-3 search-bar"
                 />
                 <div className="align-right">
-                  <ExportCSVButton { ...props.csvProps }>Export CSV!!</ExportCSVButton>
+                  <ExportCSVButton {...props.csvProps}>
+                    Export CSV!!
+                  </ExportCSVButton>
                 </div>
-                <br/>
+                <br />
                 <BootstrapTable
                   {...props.baseProps}
                   pagination={paginationFactory()}
@@ -216,16 +221,16 @@ const mapStateToProps = (state) => ({
   // updateExamError: state.examinationReducer.updateexaminationerror,
   createSport: state.sportReducer.createsport,
   getallsports: state.sportReducer.getallsports,
-  deleteSport: state.sportReducer.deletesport
+  deleteSport: state.sportReducer.deletesport,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setSport: (sportData) => {
-    dispatch(setSport(sportData))
+    dispatch(setSport(sportData));
   },
   getAllSport: () => {
     dispatch(getAllSport());
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SportPage);

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import StudentView from './pages/student/view/student_view';
 import ExaminationPage from './pages/examination/teacher/view/examination_page';
 import Sport from './pages/sport/viewSport';
-import './App.css';
+import './App.scss';
 import Examination from './pages/examination/teacher/view/examination';
 import NavigationBar from './components/navigation_bar';
 import LoginPage from './pages/login/login_page';
