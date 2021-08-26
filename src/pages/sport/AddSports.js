@@ -128,8 +128,11 @@ constructor(props) {
         return key !== null;
       });
 
+      const uniqueId = uuidv4().substring(0, 4);
+      console.log(uniqueId);
       if(!data.includes(false)){
         let resource = {
+          sportId: uniqueId,
           name: this.state.name,
           teamImageUrl: this.state.teamImageUrl,
           coach: this.state.coach,

@@ -60,9 +60,10 @@ class SportPage extends Component {
       headerStyle: () => {
         return { width: '80px', fontSize: '9px' };
       },
+      csvExport: false,
     },
     {
-      dataField: '_id',
+      dataField: 'sportId',
       text: 'Sport ID',
     },
     { dataField: 'name', text: 'Sport Title' },
@@ -76,7 +77,7 @@ class SportPage extends Component {
   showCoach = (row) => {
     return row.coach.map((item, index) => (
       <p>
-        {item.firstName} {item.lastName}
+        <img src={item.imageurl} className="thumb-img" />&nbsp;&nbsp;{item.firstName} {item.lastName}
       </p>
     ));
   };
@@ -180,17 +181,18 @@ class SportPage extends Component {
           >
             {(props) => (
               <div>
+              <div className="d-flex">
                 <SearchBar
                   {...props.searchProps}
                   placeholder="Search sport by name"
                   className="mb-3 search-bar"
                 />
-                <div className="align-right">
-                  <ExportCSVButton {...props.csvProps}>
-                    Export CSV!!
+                  <ExportCSVButton 
+                  {...props.csvProps}
+                  className="btn-secondary btn-rounded btn-no-shadow mx-3 mb-3">
+                    Download Sport Details!!
                   </ExportCSVButton>
-                </div>
-                <br />
+              </div>
                 <BootstrapTable
                   {...props.baseProps}
                   pagination={paginationFactory()}
