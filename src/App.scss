@@ -1,0 +1,194 @@
+@import './styles/custom_form.scss';
+@import './styles/examination.scss';
+@import './styles/student_view.scss';
+@import './styles/student.scss';
+@import './styles/login_page.scss';
+
+.btn-no-shadow {
+  box-shadow: none !important;
+}
+
+.admin-container-color {
+  background: url('./assets/background_1.jpg');
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    //background-color: rgba(0,0,0,0.25);
+    background-color: rgba(0, 0, 0, 0.694);
+  }
+}
+
+.login-container-color {
+  background: url('./assets/login_background.jpg');
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    //background-color: rgba(0,0,0,0.25);
+    background-color: rgba(0, 0, 0, 0.694);
+  }
+}
+
+.react-bootstrap-table {
+  height: 90vh;
+}
+
+.search-bar {
+  width: 250px;
+}
+
+.align-right {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.btn-primary {
+  background-color: #02424d;
+}
+
+.btn-primary:hover {
+  background-color: #065e6d;
+}
+
+.btn-primary:focus {
+  background-color: #02424d;
+}
+
+.btn-primary:disabled {
+  background-color: #02424d;
+}
+
+.btn-secondary {
+  background-color: #6de3d0;
+  color: #282c34;
+}
+
+.btn-secondary:hover {
+  background-color: #8bf3e2;
+  color: #282c34;
+}
+
+.btn-secondary:focus {
+  background-color: #6de3d0;
+  color: #282c34;
+}
+
+.btn-custom-sm {
+  height: 25px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 11px;
+}
+
+.exam-message {
+  padding-left: 8px;
+  font-size: 12.5px;
+  color: #02424d;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  height: 35px;
+}
+
+.form-control {
+  height: 38px;
+}
+
+.text-danger {
+  font-size: 14px;
+}
+
+.teacher-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.custom-row-class {
+  height: 50px;
+}
+
+.exam-page {
+  height: 90vh;
+}
+
+.creator-img {
+  width: 80px;
+  border-radius: 50%;
+}
+
+.creator-info {
+  padding-left: 50px;
+  margin: 50px;
+}
+
+.input-group.md-form.form-sm.form-3
+  input[type='text']:focus:not([readonly]).amber-border {
+  border: 1px solid #ffca28;
+  box-shadow: none;
+}
+
+textarea {
+  height: 10vh !important;
+}
+
+.create-question-modal {
+}
+
+.pages {
+  margin-top: 50px;
+}
+
+.nav-item {
+  font-size: 14px;
+}
+
+.download-btn {
+  width: '130px';
+  height: '38px';
+  margin-left: '20px';
+  margin-bottom: '20px';
+}
+
+.action-column {
+  font-size: 10px;
+  width: 80px;
+  transform: rotate(-50deg);
+}
+
+.teacher-exam-header {
+  font-family: 'Roboto Light';
+  font-size: 25px;
+}
+
+.image-preview {
+  font-size: 10px;
+}
