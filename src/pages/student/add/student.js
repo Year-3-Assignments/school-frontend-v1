@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import Select from 'react-select';
-import Progress from '../../../components/progress';
+// import Progress from '../../../components/progress';
 import DatePicker from 'react-datepicker';
 import { createStudent } from '../../../actions/student_actions';
 import { connect } from 'react-redux';
