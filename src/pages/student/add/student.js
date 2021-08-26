@@ -377,36 +377,6 @@ class Student extends Component {
                 ) : null}
               </div>
 
-              <div className="m-0 mb-3">
-                <label htmlFor="profile-image" className="form-label">
-                  Profile Image
-                </label>
-                <div className="input-group">
-                  <input
-                    type="file"
-                    className="form-control"
-                    id="profile-image"
-                    name="imageUrl"
-                    onChange={(e) => this.setImage(e)}
-                  />
-                  <button
-                    className="btn btn-outline-primary btn-sm btn-no-shadow"
-                    type="button"
-                    onClick={this.uploadImage}
-                  >
-                    UPLOAD
-                  </button>
-                </div>
-                {formData.imageurl === null && this.state.formNotValid ? (
-                  <span className="text-danger validation-text p-0">
-                    Profile image is required
-                  </span>
-                ) : null}
-              </div>
-              <div className="mb-3">
-                <Progress percentage={this.state.uploadPercentage} />
-              </div>
-
               <div className="row m-0 mb-2 col">
                 <label htmlFor="achievements" className="form-label p-0">
                   Achievements
