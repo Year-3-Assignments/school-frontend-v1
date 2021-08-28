@@ -8,9 +8,14 @@ import ToolkitProvider, {
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
-import { getAllStudents } from '../../../actions/student_actions';
+import {
+  getAllStudents,
+  getStudentById,
+  setStudent,
+} from '../../../actions/student_actions';
 import Student from '../add/student';
 //import ImagePreviewer from '../../../components/image_previewer';
+import UpdateStudent from '../update/update_student';
 
 const { SearchBar } = Search;
 const { ExportCSVButton } = CSVExport;
@@ -48,6 +53,9 @@ class StudentView extends Component {
 
     if (this.props.createstudent !== nextProps.createstudent) {
       this.props.getAllStudents();
+    }
+    if (this.props.updatestudent !== nextProps.updatestudent) {
+      this.props.getStudentById();
     }
   };
 
@@ -123,6 +131,17 @@ class StudentView extends Component {
     );
   }
 
+  onSelectStudentToUpdate = (event, username) => {
+    const { students } = this.state;
+    if (event && students && students.length > 0 && username) {
+      const selectedstudent = students.find(
+        (student) => student._id === username
+      );
+      this.props.setStudent(selectedstudent);
+      this.setState({ selectedstudent: selectedstudent });
+    }
+  };
+
   actionButtonFormatter = (row) => {
     return (
       <span className="dropdown show">
@@ -135,7 +154,13 @@ class StudentView extends Component {
             <i className="fas fa-ellipsis-h"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a className="dropdown-item" href="#">
+            <a
+              className="dropdown-item"
+              href="#"
+              data-mdb-toggle="modal"
+              data-mdb-target="#update-student"
+              onClick={(e) => this.onSelectStudentToUpdate(e, row._id)}
+            >
               <i class="far fa-edit" /> Edit
             </a>
 
@@ -244,6 +269,7 @@ class StudentView extends Component {
   };
 
   render() {
+    const { students, selectedstudent } = this.state;
     return (
       <div className="p-4 admin-container-color">
         <div className="card p-3 container ">
@@ -261,7 +287,7 @@ class StudentView extends Component {
           </div>
           <ToolkitProvider
             keyField="_id"
-            data={this.state.students}
+            data={students}
             columns={this.tableColumData}
             search
             exportCSV
@@ -296,6 +322,7 @@ class StudentView extends Component {
           </ToolkitProvider>
         </div>
         <Student />
+        <UpdateStudent selectedstudent={selectedstudent} />
       </div>
     );
   }
@@ -305,11 +332,19 @@ const mapStateToProps = (state) => ({
   getallstudents: state.studentReducer.getallstudents,
   createstudent: state.studentReducer.createstudent,
   createstudenterror: state.studentReducer.createstudenterror,
+  updatestudent: state.studentReducer.updatestudent,
+  updatestudenterror: state.studentReducer.updatestudenterror,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getAllStudents: () => {
     dispatch(getAllStudents());
+  },
+  getStudentById: () => {
+    dispatch(getStudentById());
+  },
+  setStudent: (studentData) => {
+    dispatch(setStudent(studentData));
   },
 });
 export default connect(mapStateToProps, mapDispatchToProps)(StudentView);
