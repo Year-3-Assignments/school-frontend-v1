@@ -10,6 +10,7 @@ import NavigationBar from './components/navigation_bar';
 import LoginPage from './pages/login/login_page';
 import EmployeePage from './pages/employee/view/employee_view';
 import StudentExamLogin from './pages/examination/student/student_exam_login';
+import StudentExaminationPage from './pages/examination/student/student_exam_page';
 
 function PageRoutes() {
   return (
@@ -27,6 +28,11 @@ function PageRoutes() {
               <Route path="/employee" component={EmployeePage} />
               <Route
                 path="/student/examination/:examId/:accessPassword/:id"
+                component={StudentExaminationPage}
+                exact
+              />
+              <Route
+                path="/student/examination/:examId/:accessPassword/:id/login"
                 component={StudentExamLogin}
                 exact
               />

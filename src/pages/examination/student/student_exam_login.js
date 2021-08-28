@@ -2,12 +2,22 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import loginBackground from '../../../assets/login-background.png';
 import Loader from '../../../components/loader';
+import { loginUser } from '../../../actions/user_actions';
+import { NotificationManager } from 'react-notifications';
 
-const $ = window.$;
 let formData = {};
 
 const Constants = {
   ROLE_TEACHER: 'TEACHER',
+  PASSWORD_REQUIRED: 'Password is required',
+  STUDENT_ID_REQUIRED: 'Student ID is required',
+  FIELDS_REQUIRED: 'Please check the input fields',
+  LOGIN_SUCCESS: 'User login success',
+  LOGIN_FAIL: 'Username or password is invalid',
+  USER_NAME_REQUIRED: 'Username is required',
+  USER_NOT_FOUND: 'User not found',
+  PASSWORD_NOT_MATCH: 'Password is not matched',
+  ROLE_STUDENT: 'STUDENT',
 };
 
 const initialState = {
@@ -18,6 +28,8 @@ const initialState = {
   isStartButtonDisabled: true,
   studentId: '',
   password: '',
+  isFormNotValid: false,
+  urlPrefix: '/student/examination',
 };
 
 class StudentExamLogin extends Component {
@@ -42,6 +54,80 @@ class StudentExamLogin extends Component {
     );
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.studentLoginData !== nextProps.studentLoginData) {
+      this.setState({ isLoading: false }, () => {
+        if (
+          nextProps.studentLoginData &&
+          nextProps.studentLoginData.data &&
+          nextProps.studentLoginData.data === Constants.USER_NOT_FOUND
+        ) {
+          NotificationManager.warning(Constants.USER_NOT_FOUND);
+          localStorage.removeItem('userName');
+          localStorage.removeItem('token');
+          localStorage.removeItem('user_id');
+          localStorage.removeItem('role');
+        } else if (
+          nextProps.studentLoginData.data === Constants.PASSWORD_NOT_MATCH
+        ) {
+          NotificationManager.warning(Constants.PASSWORD_NOT_MATCH);
+          localStorage.removeItem('userName');
+          localStorage.removeItem('token');
+          localStorage.removeItem('user_id');
+          localStorage.removeItem('role');
+        } else {
+          if (
+            nextProps.studentLoginData &&
+            nextProps.studentLoginData.data &&
+            nextProps.studentLoginData.data.responseData
+          ) {
+            localStorage.setItem(
+              'userName',
+              nextProps.studentLoginData.data.responseData.userName
+            );
+            localStorage.setItem(
+              'token',
+              nextProps.studentLoginData.data.responseData.token
+            );
+            localStorage.setItem(
+              'user_id',
+              nextProps.studentLoginData.data.responseData.user_id
+            );
+            localStorage.setItem(
+              'role',
+              nextProps.studentLoginData.data.responseData.role
+            );
+
+            if (localStorage.getItem('role') === Constants.ROLE_STUDENT) {
+              const { urlPrefix, examDatabaseId, examId, passCode } =
+                this.state;
+              window.location =
+                urlPrefix +
+                '/' +
+                examId +
+                '/' +
+                passCode +
+                '/' +
+                examDatabaseId;
+              NotificationManager.success(Constants.LOGIN_SUCCESS);
+            }
+          }
+        }
+      });
+    }
+
+    if (this.props.studentLoginDataError !== nextProps.studentLoginDataError) {
+      this.setState({ isLoading: false }, () => {
+        if (
+          nextProps.studentLoginDataError &&
+          nextProps.studentLoginDataError.message
+        ) {
+          NotificationManager.error(nextProps.studentLoginDataError.message);
+        }
+      });
+    }
+  };
+
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -52,10 +138,6 @@ class StudentExamLogin extends Component {
     const data = {
       studentId: studentId && studentId.trim().length > 0 ? studentId : null,
       password: password && password.trim().length > 0 ? password : null,
-      id:
-        examDatabaseId && examDatabaseId.trim().length > 0
-          ? examDatabaseId
-          : null,
     };
 
     formData = Object.assign({}, data);
@@ -76,8 +158,33 @@ class StudentExamLogin extends Component {
     }
   };
 
+  submitLoginData = (event) => {
+    event.preventDefault();
+    const isFormValid = this.validateForm();
+    const { studentId, password } = this.state;
+
+    if (isFormValid) {
+      let data = Object.values(formData).map((key) => {
+        return key !== null;
+      });
+
+      if (!data.includes(false)) {
+        const loginData = {
+          userName: studentId,
+          password: password,
+        };
+
+        this.props.loginUser(loginData);
+        this.setState({ isLoading: true });
+      } else {
+        this.setState({ isFormNotValid: true });
+        NotificationManager.warning(Constants.FIELDS_REQUIRED);
+      }
+    }
+  };
+
   render() {
-    const { examId, passCode, isLoading, isStartButtonDisabled } = this.state;
+    const { isLoading, isStartButtonDisabled, isFormNotValid } = this.state;
     return (
       <div className="d-flex justify-content-center login-container-color login-background">
         <div className="card exam-login-card">
@@ -109,36 +216,6 @@ class StudentExamLogin extends Component {
                   given.
                 </small>
               )}
-              <div className="px-5 ">
-                <div className="row m-0 mb-1 mt-3">
-                  <label htmlFor="title" className="form-label p-0 m-0">
-                    Exam ID
-                  </label>
-                  <input
-                    type="text"
-                    id="userName"
-                    className="form-control"
-                    name="userName"
-                    value={examId}
-                    disabled
-                  />
-                </div>
-              </div>
-              <div className="px-5 mt-3">
-                <div className="row m-0">
-                  <label htmlFor="title" className="form-label p-0 m-0">
-                    Pass Code
-                  </label>
-                  <input
-                    type="text"
-                    id="password"
-                    className="form-control"
-                    name="password"
-                    value={passCode}
-                    disabled
-                  />
-                </div>
-              </div>
               <div className="px-5 mt-3">
                 <div className="row m-0">
                   <label htmlFor="title" className="form-label p-0 m-0">
@@ -148,9 +225,14 @@ class StudentExamLogin extends Component {
                     type="text"
                     id="password"
                     className="form-control"
-                    name="password"
+                    name="studentId"
                     onChange={this.onChange}
                   />
+                  {formData.studentId === null && isFormNotValid ? (
+                    <span className="text-danger p-0 m-0">
+                      <small>{Constants.STUDENT_ID_REQUIRED}</small>
+                    </span>
+                  ) : null}
                 </div>
               </div>
               <div className="px-5 mt-3">
@@ -165,8 +247,27 @@ class StudentExamLogin extends Component {
                     name="password"
                     onChange={this.onChange}
                   />
+                  {formData.password === null && isFormNotValid ? (
+                    <span className="text-danger p-0 m-0">
+                      <small>{Constants.PASSWORD_REQUIRED}</small>
+                    </span>
+                  ) : null}
                 </div>
               </div>
+              <ul className="mx-5 exam-rules mt-3">
+                <li>
+                  exams (examination methods and conduct) are full
+                  responsibility of the lecturer concerned;
+                </li>
+                <li>
+                  oral exams are considered to be the most effective and
+                  efficient assessment method
+                </li>
+                <li>
+                  online exams will take place via live streaming, and no
+                  recording shall be made;
+                </li>
+              </ul>
               <div className="px-5 mt-3">
                 <div className="form-check">
                   <input
@@ -188,7 +289,7 @@ class StudentExamLogin extends Component {
                 ) : (
                   <button
                     className="btn btn-primary btn-no-shadow btn-rounded"
-                    onClick={this.onLoginFormSubmit}
+                    onClick={this.submitLoginData}
                     disabled={isStartButtonDisabled}
                   >
                     Start Exam
@@ -203,8 +304,15 @@ class StudentExamLogin extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  studentLoginData: state.userReducer.loginUser,
+  studentLoginDataError: state.userReducer.loginUserError,
+});
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  loginUser: (loginData) => {
+    dispatch(loginUser(loginData));
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentExamLogin);
