@@ -121,7 +121,7 @@ export function updateQuestion(questionId) {
 export function deleteQuestion(questionId) {
   return {
     type: DELETE_QUESTION,
-    payload: axios.post(
+    payload: axios.delete(
       `${process.env.REACT_APP_API_DEV_URL}/question/delete/${questionId}`,
       null,
       { headers: { Authorization: localStorage.getItem('token') } }

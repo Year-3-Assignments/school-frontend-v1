@@ -109,17 +109,20 @@ class ExaminationPage extends Component {
       dataField: 'subject',
       text: 'Subject',
       headerStyle: () => {
-        return { width: '200px' };
+        return { width: '110px' };
       },
     },
     {
       dataField: 'startDateTime',
       text: 'Date & Time',
       formatter: (cell) => this.examDateTimeFormatter(cell),
+      headerStyle: () => {
+        return { width: '180px' };
+      },
     },
     {
       dataField: 'accessPassword',
-      text: 'Access Code',
+      text: 'Code',
       headerStyle: () => {
         return { width: '110px' };
       },
@@ -133,9 +136,9 @@ class ExaminationPage extends Component {
       },
     },
     {
-      dataField: 'createdBy',
-      text: 'Created By',
-      formatter: (cell, row) => this.examCreatedByFormatter(cell, row),
+      dataField: 'accessLink',
+      text: 'Access Link',
+      formatter: (cell) => this.examCreatedByFormatter(cell),
       csvExport: false,
     },
   ];
@@ -203,19 +206,12 @@ class ExaminationPage extends Component {
     return moment(cell).format('lll');
   };
 
-  examCreatedByFormatter = (cell, row) => {
-    if (cell && row) {
+  examCreatedByFormatter = (cell) => {
+    if (cell) {
       return (
-        <div className="d-flex">
-          <img
-            src={row.createdBy && row.createdBy.imageurl}
-            className="teacher-img"
-            alt="teacher"
-          />
-          <div>
-            {cell.firstName} {cell.lastName}
-          </div>
-        </div>
+        <a href={cell} target="_blank">
+          {cell}
+        </a>
       );
     }
   };
