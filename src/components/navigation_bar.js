@@ -56,135 +56,137 @@ class NavigationBar extends Component {
 
     return (
       <div>
-        <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-          <div className="container-fluid">
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-mdb-toggle="collapse"
-              data-mdb-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <i className="fas fa-bars"></i>
-            </button>
-
-            <div
-              className="collapse navbar-collapse"
-              id="navbarSupportedContent"
-            >
-              <a className="navbar-brand mt-2 mt-lg-0" href="#">
-                <img
-                  src={schoolLogo}
-                  alt=""
-                  loading="lazy"
-                  width="30"
-                  height="30"
-                />
-                {userRole && userRole === Constant.ROLE_TEACHER ? (
-                  <span className="header-text">
-                    REACH <small>teacher</small>
-                  </span>
-                ) : null}
-                {userRole && userRole === Constant.ROLE_ADMIN ? (
-                  <span className="header-text">
-                    REACH <small>admin</small>
-                  </span>
-                ) : null}
-                {userRole === '' ? <span>REACH College</span> : null}
-              </a>
-
-              {userRole === Constant.ROLE_TEACHER ? (
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/examination">
-                      Examinations
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="#">
-                      Answer Sheets
-                    </a>
-                  </li>
-                </ul>
-              ) : null}
-
-              {userRole === Constant.ROLE_ADMIN ? (
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li className="nav-item">
-                    <a className="nav-link" href="#">
-                      Dashboard
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/employee">
-                      Employees
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/student/view">
-                      Students
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/sport">
-                      Sports
-                    </NavLink>
-                  </li>
-                </ul>
-              ) : null}
-
-              {userRole === Constant.ROLE_STUDENT ? (
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li className="nav-item">
-                    <a className="nav-link" href="#">
-                      Examinations
-                    </a>
-                  </li>
-                </ul>
-              ) : null}
-            </div>
-
-            <div className="d-flex align-items-center">
-              <a
-                className="dropdown-toggle d-flex align-items-center hidden-arrow"
-                href="#"
-                id="navbarDropdownMenuLink"
-                role="button"
-                data-mdb-toggle="dropdown"
+        {localStorage.getItem('role') !== Constant.ROLE_STUDENT ? (
+          <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+            <div className="container-fluid">
+              <button
+                className="navbar-toggler"
+                type="button"
+                data-mdb-toggle="collapse"
+                data-mdb-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
                 aria-expanded="false"
+                aria-label="Toggle navigation"
               >
-                <img
-                  src={imageUrl}
-                  className="rounded-circle"
-                  height="40"
-                  alt=""
-                  loading="lazy"
-                />
-              </a>
-              <ul
-                className="dropdown-menu dropdown-menu-end"
-                aria-labelledby="navbarDropdownMenuLink"
+                <i className="fas fa-bars"></i>
+              </button>
+
+              <div
+                className="collapse navbar-collapse"
+                id="navbarSupportedContent"
               >
-                <li>
-                  <a className="dropdown-item" href="#">
-                    My profile
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="dropdown-item"
-                    href="#"
-                    onClick={this.logoutUser}
-                  >
-                    Logout
-                  </a>
-                </li>
-              </ul>
+                <a className="navbar-brand mt-2 mt-lg-0" href="#">
+                  <img
+                    src={schoolLogo}
+                    alt=""
+                    loading="lazy"
+                    width="30"
+                    height="30"
+                  />
+                  {userRole && userRole === Constant.ROLE_TEACHER ? (
+                    <span className="header-text">
+                      REACH <small>teacher</small>
+                    </span>
+                  ) : null}
+                  {userRole && userRole === Constant.ROLE_ADMIN ? (
+                    <span className="header-text">
+                      REACH <small>admin</small>
+                    </span>
+                  ) : null}
+                  {userRole === '' ? <span>REACH College</span> : null}
+                </a>
+
+                {userRole === Constant.ROLE_TEACHER ? (
+                  <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/examination">
+                        Examinations
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <a className="nav-link" href="#">
+                        Answer Sheets
+                      </a>
+                    </li>
+                  </ul>
+                ) : null}
+
+                {userRole === Constant.ROLE_ADMIN ? (
+                  <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li className="nav-item">
+                      <a className="nav-link" href="#">
+                        Dashboard
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/employee">
+                        Employees
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/student/view">
+                        Students
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/sport">
+                        Sports
+                      </NavLink>
+                    </li>
+                  </ul>
+                ) : null}
+
+                {userRole === Constant.ROLE_STUDENT ? (
+                  <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li className="nav-item">
+                      <a className="nav-link" href="#">
+                        Examinations
+                      </a>
+                    </li>
+                  </ul>
+                ) : null}
+              </div>
+
+              <div className="d-flex align-items-center">
+                <a
+                  className="dropdown-toggle d-flex align-items-center hidden-arrow"
+                  href="#"
+                  id="navbarDropdownMenuLink"
+                  role="button"
+                  data-mdb-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <img
+                    src={imageUrl}
+                    className="rounded-circle"
+                    height="40"
+                    alt=""
+                    loading="lazy"
+                  />
+                </a>
+                <ul
+                  className="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="navbarDropdownMenuLink"
+                >
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      My profile
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      href="#"
+                      onClick={this.logoutUser}
+                    >
+                      Logout
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-        </nav>
+          </nav>
+        ) : null}
       </div>
     );
   }
