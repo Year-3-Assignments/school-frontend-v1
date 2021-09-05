@@ -11,12 +11,25 @@ import {
   UPDATE_QUESTION,
   DELETE_QUESTION,
   SET_EXAMINATION,
+  GET_EXAMINATION_FOR_STUDENT,
 } from './index';
 
 export function setExam(examData) {
   return {
     type: SET_EXAMINATION,
     payload: examData,
+  };
+}
+
+export function getExaminationsForStudent(questionId) {
+  return {
+    type: GET_EXAMINATION_FOR_STUDENT,
+    payload: axios.get(
+      `${process.env.REACT_APP_API_DEV_URL}/exam/getquestions/${questionId}`,
+      {
+        headers: { Authorization: localStorage.getItem('token') },
+      }
+    ),
   };
 }
 
@@ -121,9 +134,8 @@ export function updateQuestion(questionId) {
 export function deleteQuestion(questionId) {
   return {
     type: DELETE_QUESTION,
-    payload: axios.post(
+    payload: axios.delete(
       `${process.env.REACT_APP_API_DEV_URL}/question/delete/${questionId}`,
-      null,
       { headers: { Authorization: localStorage.getItem('token') } }
     ),
   };

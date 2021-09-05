@@ -4,14 +4,17 @@ import { connect } from 'react-redux';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   Search,
+  CSVExport,
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
 import { getAllStudents } from '../../../actions/student_actions';
 import Student from '../add/student';
-import ImagePreviewer from '../../../components/image_previewer';
+//import ImagePreviewer from '../../../components/image_previewer';
 
 const { SearchBar } = Search;
+const { ExportCSVButton } = CSVExport;
+
 const rowStyle = (row, rowIndex) => {
   const style = {};
   style.fontSize = 16;
@@ -56,6 +59,7 @@ class StudentView extends Component {
       headerStyle: () => {
         return { width: '80px', fontSize: '9px' };
       },
+      csvExport: false,
     },
     {
       dataField: 'username',
@@ -260,6 +264,7 @@ class StudentView extends Component {
             data={this.state.students}
             columns={this.tableColumData}
             search
+            exportCSV
           >
             {(props) => (
               <div>
@@ -268,6 +273,12 @@ class StudentView extends Component {
                   placeholder="Search students by name"
                   className="mb-3"
                 />
+                <ExportCSVButton
+                  {...props.csvProps}
+                  className="btn-secondary btn-rounded btn-no-shadow mx-3 mb-3"
+                >
+                  DOWNLOAD STUDENT DATA
+                </ExportCSVButton>
                 <BootstrapTable
                   {...props.baseProps}
                   pagination={paginationFactory()}
