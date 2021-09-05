@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
-import firebase from '../../../firebase.config';
 import Select from 'react-select';
 import Progress from '../../../components/progress';
 import DatePicker from 'react-datepicker';
 import { createStudent } from '../../../actions/student_actions';
 import { connect } from 'react-redux';
+import 'react-rangeslider/lib/index.css';
+import ImagePreviewer from '../../../components/image_previewer';
 
 let formData = {};
 
@@ -42,10 +43,8 @@ class Student extends Component {
   constructor(props) {
     super(props);
     this.onChange = this.onChange.bind(this);
-    this.setUploadPercentage = this.setUploadPercentage.bind(this);
-    this.setImageUrl = this.setImageUrl.bind(this);
     this.onTimeChange = this.onTimeChange.bind(this);
-    this.setImage = this.setImage.bind(this);
+    this.onEditImageChange = this.onEditImageChange.bind(this);
     this.onSelectProvince = this.onSelectProvince.bind(this);
     this.state = {
       fname: '',
@@ -56,10 +55,10 @@ class Student extends Component {
       city: '',
       province: '',
       grade: 0,
-      profileImage: null,
+      profileImage: '',
       uploadPercentage: 0,
       achievements: '',
-      pname: '',
+      parentName: '',
       email: '',
       phone: '',
       username: '',
@@ -102,50 +101,9 @@ class Student extends Component {
     this.setState({ dob: date });
   }
 
-  setImage = (e) => {
-    this.setState({ profileImage: e.target.files[0] });
-  };
-
-  setUploadPercentage = (progress) => {
-    this.setState({ uploadPercentage: progress });
-  };
-
-  setImageUrl = ({ imageurl }) => {
-    this.setState({ imageurl: imageurl }, () => {
-      console.log('image url', this.state.imageurl);
-    });
-  };
-
-  uploadImage = (e) => {
-    e.preventDefault();
-    if (this.state.profileImage !== null) {
-      let folderName = 'Profile-Pictures';
-      let file = this.state.profileImage;
-      let upload = firebase
-        .storage()
-        .ref(`${folderName}/${this.state.username}`)
-        .put(file);
-
-      upload.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          this.setUploadPercentage(progress);
-        },
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          upload.snapshot.ref.getDownloadURL().then((url) => {
-            this.setImageUrl({ imageurl: url });
-            NotificationManager.success('Image upload success');
-          });
-        }
-      );
-    }
-  };
+  onEditImageChange(imageData) {
+    this.setState({ profileImage: imageData });
+  }
 
   closeModal() {
     $('#create-student').modal('toggle');
@@ -168,9 +126,9 @@ class Student extends Component {
           city: this.state.city,
           province: this.state.province,
           grade: this.state.grade,
-          imageurl: this.state.imageurl,
+          imageurl: this.state.profileImage,
           achievements: this.state.achievements,
-          parent: this.state.parent,
+          parent: this.state.parentName,
           phone: this.state.phone,
           email: this.state.email,
           username: this.state.username,
@@ -179,7 +137,7 @@ class Student extends Component {
 
         console.log('DATA TO SEND', studentData);
         this.props.createStudent(studentData);
-        NotificationManager.success('Student Profile is Successfully created!');
+        // NotificationManager.success('Student Profile is Successfully created!');
       } else {
         this.setState({ formNotValid: true }, () => {
           NotificationManager.warning('Please check the input fields');
@@ -198,19 +156,20 @@ class Student extends Component {
       address1: address1 && address1.trim().length > 0 ? address1 : null,
       address2: address2 && address2.trim().length > 0 ? address2 : null,
       city: city && city.trim().length > 0 ? city : null,
-      province: provinces && provinces.trim().length > 0 ? provinces : null,
-      grade: grade && grade.trim().length > 0 ? grade : null,
+      province:
+        provinces && provinces.toString().trim().length > 0 ? provinces : null,
+      grade: grade && grade.toString().trim().length > 0 ? grade : null,
       achievements:
         this.state.achievements && this.state.achievements.trim().length > 0
           ? this.state.achievements
           : null,
       imageurl:
-        this.state.imageurl && this.state.imageurl.trim().length > 0
-          ? this.state.imageurl
+        this.state.profileImage && this.state.profileImage.trim().length > 0
+          ? this.state.profileImage
           : null,
       parent:
-        this.state.pname && this.state.pname.trim().length > 0
-          ? this.state.pname
+        this.state.parentName && this.state.parentName.trim().length > 0
+          ? this.state.parentName
           : null,
       phone:
         this.state.phone && this.state.phone.trim().length > 0
@@ -255,6 +214,7 @@ class Student extends Component {
             </div>
 
             <div className="modal-body">
+              <ImagePreviewer getEditedImage={this.onEditImageChange} />
               <div className="row m-0 mb-2">
                 <label htmlFor="fname" className="form-label p-0">
                   First Name
@@ -464,15 +424,15 @@ class Student extends Component {
               </div>
 
               <div className="row m-0 mb-2 col">
-                <label htmlFor="pname" className="form-label p-0">
+                <label htmlFor="parentName" className="form-label p-0">
                   Parent/Guardian Name
                 </label>
                 <input
                   type="text"
-                  id="pname"
+                  id="parentName"
                   className="form-control"
-                  name="pname"
-                  value={this.state.pname}
+                  name="parentName"
+                  value={this.state.parentName}
                   onChange={this.onChange}
                 />
                 {formData.parent === null && this.state.formNotValid ? (

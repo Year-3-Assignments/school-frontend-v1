@@ -50,7 +50,11 @@ class ExaminationPage extends Component {
   }
 
   componentDidMount() {
-    this.props.getExaminationsForTeacher();
+    if (localStorage.getItem('token') !== null) {
+      this.props.getExaminationsForTeacher();
+    } else {
+      window.location = '/login';
+    }
   }
 
   componentWillReceiveProps = (nextProps) => {
