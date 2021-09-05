@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import {
   getExaminationsForTeacher,
   setExam,
-} from '../../../../actions/examination_actions';
+} from '../../../actions/examination_actions';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   Search,
@@ -15,6 +15,8 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
 import CreateExam from '../add/create_new_exam';
 import UpdateExam from '../update/update_exam';
+import axios from 'axios';
+import download from 'downloadjs';
 
 const { SearchBar } = Search;
 const { ExportCSVButton } = CSVExport;
@@ -136,12 +138,50 @@ class ExaminationPage extends Component {
       },
     },
     {
-      dataField: 'accessLink',
-      text: 'Access Link',
-      formatter: (cell) => this.examCreatedByFormatter(cell),
+      dataField: 'numberOfQuestions',
+      text: 'Questions',
+      headerStyle: () => {
+        return { width: '120px' };
+      },
+    },
+    {
+      dataField: 'download',
+      text: 'Download',
+      formatter: (cell, row) => this.examPaperDownLoadFormatter(cell, row),
       csvExport: false,
     },
   ];
+
+  examPaperDownLoadFormatter = (cell, row) => {
+    return (
+      <button
+        className="btn btn-rounded btn-no-shadow btn-info btn-sm"
+        onClick={(event) => this.sendGeneratePDFData(event, row)}
+      >
+        <span>
+          <i class="fas fa-cloud-download-alt"></i> Download
+        </span>
+      </button>
+    );
+  };
+
+  sendGeneratePDFData = (event, row) => {
+    if (event && row) {
+      const paperName = row.title + '-' + row.createdFor + '.pdf';
+      const examinationData = {
+        examId: row._id,
+      };
+      axios
+        .post(`${process.env.REACT_APP_API_DEV_URL}/get-pdf`, examinationData, {
+          responseType: 'blob',
+        })
+        .then((response) => {
+          const content = response.headers['content-type'];
+          download(response.data, paperName, content);
+        })
+        .catch((error) => console.log(error));
+    }
+  };
 
   examStatusStyle = (cell) => {
     if (cell && cell === Constants.STATUS_PENDING) {
@@ -192,9 +232,11 @@ class ExaminationPage extends Component {
             >
               <i className="far fa-edit" /> Edit
             </a>
-
             <a className="dropdown-item" href="#">
-              <i class="far fa-trash-alt" /> Delete
+              <i className="fas fa-check"></i> Make as Complete
+            </a>
+            <a className="dropdown-item" href="#">
+              <i className="far fa-trash-alt" /> Delete
             </a>
           </div>
         </span>
@@ -206,16 +248,6 @@ class ExaminationPage extends Component {
     return moment(cell).format('lll');
   };
 
-  examCreatedByFormatter = (cell) => {
-    if (cell) {
-      return (
-        <a href={cell} target="_blank">
-          {cell}
-        </a>
-      );
-    }
-  };
-
   render() {
     const { exams, selectedExam } = this.state;
     return (
@@ -225,7 +257,7 @@ class ExaminationPage extends Component {
             <h4 className="teacher-exam-header">Teacher Exam Portal</h4>
             <div className="align-right">
               <button
-                className="btn btn-primary btn-rounded btn-no-shadow"
+                className="btn btn-primary btn-rounded"
                 data-mdb-toggle="modal"
                 data-mdb-target="#create-exam"
               >

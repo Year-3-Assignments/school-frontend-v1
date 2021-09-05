@@ -103,11 +103,6 @@ class NavigationBar extends Component {
                         Examinations
                       </NavLink>
                     </li>
-                    <li className="nav-item">
-                      <a className="nav-link" href="#">
-                        Answer Sheets
-                      </a>
-                    </li>
                   </ul>
                 ) : null}
 
