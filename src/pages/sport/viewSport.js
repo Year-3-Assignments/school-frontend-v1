@@ -208,17 +208,14 @@ class SportPage extends Component {
         <CreateSport />
         <DeleteSport id={this.state.selectedSport} />
         <ShowSport id={this.state.selectedSport} />
-        <EditSport id={this.state.selectedSport} />
+        <EditSport selectedSport={this.state.selectedSport} />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  // examinations: state.examinationReducer.getexaminationsforteacher,
-  // createExam: state.examinationReducer.createexamination,
   // updateExam: state.examinationReducer.updateexamination,
-  // updateExamError: state.examinationReducer.updateexaminationerror,
   createSport: state.sportReducer.createsport,
   getallsports: state.sportReducer.getallsports,
   deleteSport: state.sportReducer.deletesport,

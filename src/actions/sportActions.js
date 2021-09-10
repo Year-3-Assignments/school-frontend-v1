@@ -45,3 +45,13 @@ export function getAllSportCoach() {
     payload: axios.get(`${process.env.REACT_APP_API_DEV_URL}/sport/coach`)
   };
 }
+
+export function updateSport(sportData) {
+  return {
+    type: UPDATE_SPORT,
+    payload: axios.put(
+      `${process.env.REACT_APP_API_DEV_URL}/sport/${sportData._id}`,
+      sportData
+    ),
+  };
+}
