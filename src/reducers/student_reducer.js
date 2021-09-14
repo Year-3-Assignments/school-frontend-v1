@@ -4,14 +4,16 @@ import {
   GET_ALL_STUDENTS,
   GET_STUDENT,
   UPDATE_STUDENT,
-} from "../actions";
+  SET_STUDENT,
+} from '../actions';
 
 const INITIALSTATE = {
-  createstudent: "",
-  getallstudents: " ",
+  createstudent: '',
+  getallstudents: ' ',
   getstudent: [],
-  updatestudent: "",
-  deletestudent: "",
+  updatestudent: '',
+  deletestudent: '',
+  setstudent: '',
   createstudenterror: null,
   getallstudentserror: null,
   getstudenterror: null,
@@ -20,13 +22,19 @@ const INITIALSTATE = {
 };
 
 function studentReducer(state = INITIALSTATE, action) {
-  let createstudent, getallstudents, getstudent, updatestudent, deletestudent;
+  let createstudent,
+    getallstudents,
+    getstudent,
+    setstudent,
+    updatestudent,
+    deletestudent;
 
   switch (action.type) {
     case `${CREATE_STUDENT}_PENDING`:
     case `${GET_ALL_STUDENTS}_PENDING`:
     case `${GET_STUDENT}_PENDING`:
     case `${UPDATE_STUDENT}_PENDING`:
+    case `${SET_STUDENT}_PENDING`:
     case `${DELETE_STUDENT}_PENDING`:
       return {
         ...state,
@@ -52,6 +60,9 @@ function studentReducer(state = INITIALSTATE, action) {
     case `${DELETE_STUDENT}_FULFILLED`:
       deletestudent = action.payload.data.data;
       return { ...state, loading: false, deletestudent };
+    case `${SET_STUDENT}_FULFILLED`:
+      setstudent = action.payload.data.data;
+      return { ...state, loading: false, setstudent };
 
     case `${CREATE_STUDENT}_REJECTED`:
       return {
