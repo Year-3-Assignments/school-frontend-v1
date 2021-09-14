@@ -14,8 +14,6 @@ import DeleteSport from './DeleteSport';
 import ShowSport from './ShowSport';
 import EditSport from './EditSport';
 
-// import UpdateExam from '../update/update_exam';
-
 const { SearchBar } = Search;
 const { ExportCSVButton } = CSVExport;
 
