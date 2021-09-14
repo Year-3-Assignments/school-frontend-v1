@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import Select from 'react-select';
-import Progress from '../../../components/progress';
+// import Progress from '../../../components/progress';
 import DatePicker from 'react-datepicker';
 import { createStudent } from '../../../actions/student_actions';
 import { connect } from 'react-redux';
 import 'react-rangeslider/lib/index.css';
+import Loader from '../../../components/loader';
 import ImagePreviewer from '../../../components/image_previewer';
 
 let formData = {};
@@ -56,28 +57,38 @@ class Student extends Component {
       province: '',
       grade: 0,
       profileImage: '',
-      uploadPercentage: 0,
       achievements: '',
       parentName: '',
       email: '',
       phone: '',
       username: '',
       password: '',
+      isLoading: false,
+      formNotValid: false,
       role: 'ROLE_ADMIN',
     };
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.createStudent !== nextProps.createStudent) {
+    if (this.props.createstudent !== nextProps.createstudent) {
       this.setState({ isLoading: false }, () => {
         NotificationManager.success('Student created successfull!');
       });
     }
 
     if (this.props.createstudenterror !== nextProps.createstudenterror) {
-      this.setState({ isLoading: false }, () => {
-        NotificationManager.error(nextProps.createstudenterror.message);
-      });
+      if (
+        nextProps.createstudenterror &&
+        nextProps.createstudenterror.message
+      ) {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error(nextProps.createstudenterror.message);
+        });
+      } else {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error('CREATE STUDENT FAILED');
+        });
+      }
     }
   };
 
@@ -137,7 +148,7 @@ class Student extends Component {
 
         console.log('DATA TO SEND', studentData);
         this.props.createStudent(studentData);
-        // NotificationManager.success('Student Profile is Successfully created!');
+        this.setState({ isLoading: true });
       } else {
         this.setState({ formNotValid: true }, () => {
           NotificationManager.warning('Please check the input fields');
@@ -147,8 +158,23 @@ class Student extends Component {
   };
 
   validateForm() {
-    const { fname, lname, email, phone, city, dob, address1, address2, grade } =
-      this.state;
+    const {
+      fname,
+      lname,
+      parentName,
+      email,
+      profileImage,
+      achievements,
+      phone,
+      city,
+      province,
+      dob,
+      address1,
+      address2,
+      grade,
+      username,
+      password,
+    } = this.state;
     const data = {
       firstname: fname && fname.trim().length > 0 ? fname : null,
       lastname: lname && lname.trim().length > 0 ? lname : null,
@@ -156,43 +182,24 @@ class Student extends Component {
       address1: address1 && address1.trim().length > 0 ? address1 : null,
       address2: address2 && address2.trim().length > 0 ? address2 : null,
       city: city && city.trim().length > 0 ? city : null,
-      province:
-        provinces && provinces.toString().trim().length > 0 ? provinces : null,
-      grade: grade && grade.toString().trim().length > 0 ? grade : null,
+      province: province && province.trim().length > 0 ? province : null,
+      grade: grade && grade.trim().length > 0 ? grade : null,
       achievements:
-        this.state.achievements && this.state.achievements.trim().length > 0
-          ? this.state.achievements
-          : null,
+        achievements && achievements.trim().length > 0 ? achievements : null,
       imageurl:
-        this.state.profileImage && this.state.profileImage.trim().length > 0
-          ? this.state.profileImage
-          : null,
-      parent:
-        this.state.parentName && this.state.parentName.trim().length > 0
-          ? this.state.parentName
-          : null,
-      phone:
-        this.state.phone && this.state.phone.trim().length > 0
-          ? this.state.phone
-          : null,
-      email:
-        this.state.email && this.state.email.trim().length > 0
-          ? this.state.email
-          : null,
-      username:
-        this.state.username && this.state.username.trim().length > 0
-          ? this.state.username
-          : null,
-      password:
-        this.state.password && this.state.password.trim().length > 0
-          ? this.state.password
-          : null,
+        profileImage && profileImage.trim().length > 0 ? profileImage : null,
+      parent: parentName && parentName.trim().length > 0 ? parentName : null,
+      phone: phone && phone.trim().length > 0 ? phone : null,
+      email: email && email.trim().length > 0 ? email : null,
+      username: username && username.trim().length > 0 ? username : null,
+      password: password && password.trim().length > 0 ? password : null,
     };
     formData = Object.assign({}, data);
     return true;
   }
 
   render() {
+    const { isLoading, formNotValid } = this.state;
     return (
       <div
         className="modal fade"
@@ -215,6 +222,13 @@ class Student extends Component {
 
             <div className="modal-body">
               <ImagePreviewer getEditedImage={this.onEditImageChange} />
+              {formData.imageurl === null && formNotValid ? (
+                <div className="d-flex justify-content-center mt-1">
+                  <span className="text-danger validation-text p-0 text-center">
+                    Please select & upload profile image
+                  </span>
+                </div>
+              ) : null}
               <div className="row m-0 mb-2">
                 <label htmlFor="fname" className="form-label p-0">
                   First Name
@@ -374,36 +388,6 @@ class Student extends Component {
                 ) : null}
               </div>
 
-              <div className="m-0 mb-3">
-                <label htmlFor="profile-image" className="form-label">
-                  Profile Image
-                </label>
-                <div className="input-group">
-                  <input
-                    type="file"
-                    className="form-control"
-                    id="profile-image"
-                    name="imageUrl"
-                    onChange={(e) => this.setImage(e)}
-                  />
-                  <button
-                    className="btn btn-outline-primary btn-sm btn-no-shadow"
-                    type="button"
-                    onClick={this.uploadImage}
-                  >
-                    UPLOAD
-                  </button>
-                </div>
-                {formData.imageurl === null && this.state.formNotValid ? (
-                  <span className="text-danger validation-text p-0">
-                    Profile image is required
-                  </span>
-                ) : null}
-              </div>
-              <div className="mb-3">
-                <Progress percentage={this.state.uploadPercentage} />
-              </div>
-
               <div className="row m-0 mb-2 col">
                 <label htmlFor="achievements" className="form-label p-0">
                   Achievements
@@ -519,22 +503,30 @@ class Student extends Component {
                   ) : null}
                 </div>
               </div>
-              <div className="d-flex justify-content-end mb-3">
-                <button
-                  className="btn btn-secondary btn-no-shadow btn-rounded"
-                  onClick={this.closeModal}
-                >
-                  Close
-                </button>
-                &nbsp;&nbsp;
-                <button
-                  href="#"
-                  className="btn btn-primary btn-no-shadow btn-rounded"
-                  onClick={this.onSubmit}
-                >
-                  Create Student
-                </button>
-              </div>
+            </div>
+            <div className="modal-footer d-flex">
+              {isLoading ? (
+                <div className="justify-content-left text-center">
+                  <Loader size={40} />
+                </div>
+              ) : (
+                <div className="d-flex justify-content-end">
+                  <button
+                    className="btn btn-secondary btn-no-shadow btn-rounded"
+                    onClick={this.closeModal}
+                  >
+                    Close
+                  </button>
+                  &nbsp;&nbsp;
+                  <button
+                    href="#"
+                    className="btn btn-primary btn-no-shadow btn-rounded"
+                    onClick={this.onSubmit}
+                  >
+                    Create Student
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Loader from '../../../../components/loader';
+import Loader from '../../../components/loader';
 import {
   getQuestionsForExamination,
   deleteQuestion,
-} from '../../../../actions/examination_actions';
+} from '../../../actions/examination_actions';
 import { NotificationManager } from 'react-notifications';
 
 const initialState = {
