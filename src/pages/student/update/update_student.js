@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import Select from 'react-select';
-// import Progress from '../../../components/progress';
 import DatePicker from 'react-datepicker';
-import { createStudent } from '../../../actions/student_actions';
+import { updateStudent, setStudent } from '../../../actions/student_actions';
 import { connect } from 'react-redux';
 import 'react-rangeslider/lib/index.css';
 import Loader from '../../../components/loader';
 import ImagePreviewer from '../../../components/image_previewer';
 
 let formData = {};
-
 const $ = window.$;
 
 const provinces = [
@@ -40,7 +38,7 @@ const gradeoptions = [
   { value: 'GRADE 12', label: 'GRADE 12' },
   { value: 'GRADE 13', label: 'GRADE 13' },
 ];
-class Student extends Component {
+class UpdateStudent extends Component {
   constructor(props) {
     super(props);
     this.onChange = this.onChange.bind(this);
@@ -57,7 +55,7 @@ class Student extends Component {
       address2: '',
       city: '',
       province: '',
-      grade: 0,
+      grade: '',
       profileImage: '',
       achievements: '',
       parentName: '',
@@ -72,25 +70,35 @@ class Student extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.createstudent !== nextProps.createstudent) {
-      this.setState({ isLoading: false }, () => {
-        NotificationManager.success('Student created successfull!');
+    if (this.props.selectedstudent !== nextProps.selectedstudent) {
+      this.setState({
+        _id: nextProps.selectedstudent._id,
+        fname: nextProps.selectedstudent.firstname,
+        lname: nextProps.selectedstudent.lastname,
+        dob: nextProps.selectedstudent.dateofbirth,
+        address1: nextProps.selectedstudent.address1,
+        address2: nextProps.selectedstudent.address2,
+        city: nextProps.selectedstudent.city,
+        province: nextProps.selectedstudent.province,
+        grade: nextProps.selectedstudent.grade,
+        profileImage: nextProps.selectedstudent.imageurl,
+        achievements: nextProps.selectedstudent.achievements,
+        parentName: nextProps.selectedstudent.parent,
+        email: nextProps.selectedstudent.email,
+        phone: nextProps.selectedstudent.phone,
+        username: nextProps.selectedstudent.username,
+        password: nextProps.selectedstudent.password,
       });
     }
+    if (this.props.updatestudent !== nextProps.updatestudent) {
+      NotificationManager.success('Updated Student Details successfully!');
+      this.closeModal();
+    }
 
-    if (this.props.createstudenterror !== nextProps.createstudenterror) {
-      if (
-        nextProps.createstudenterror &&
-        nextProps.createstudenterror.message
-      ) {
-        this.setState({ isLoading: false }, () => {
-          NotificationManager.error(nextProps.createstudenterror.message);
-        });
-      } else {
-        this.setState({ isLoading: false }, () => {
-          NotificationManager.error('CREATE STUDENT FAILED');
-        });
-      }
+    if (this.props.updatestudenterror !== nextProps.updatestudenterror) {
+      this.setState({ isLoading: false }, () => {
+        NotificationManager.error(nextProps.updatestudenterror.message);
+      });
     }
   };
 
@@ -119,7 +127,8 @@ class Student extends Component {
   }
 
   closeModal() {
-    $('#create-student').modal('toggle');
+    $('#update-student').modal('toggle');
+    this.props.setStudent('');
   }
 
   onSubmit = (e) => {
@@ -149,11 +158,11 @@ class Student extends Component {
         };
 
         console.log('DATA TO SEND', studentData);
-        this.props.createStudent(studentData);
+        this.props.updateStudent(studentData);
         this.setState({ isLoading: true });
       } else {
         this.setState({ formNotValid: true }, () => {
-          NotificationManager.warning('Please check the input fields');
+          NotificationManager.warning('Fields Required');
         });
       }
     }
@@ -205,9 +214,9 @@ class Student extends Component {
     return (
       <div
         className="modal fade"
-        id="create-student"
+        id="update-student"
         tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
+        aria-labelledby="update-student"
         aria-hidden="true"
       >
         <div className="modal-dialog modal-lg">
@@ -525,7 +534,7 @@ class Student extends Component {
                     className="btn btn-primary btn-no-shadow btn-rounded"
                     onClick={this.onSubmit}
                   >
-                    Create Student
+                    Update
                   </button>
                 </div>
               )}
@@ -538,14 +547,19 @@ class Student extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  createstudent: state.studentReducer.createstudent,
-  createstudenterror: state.studentReducer.createstudenterror,
+  students: state.studentReducer.getstudent,
+  selectedstudent: state.studentReducer.setstudent,
+  updatestudent: state.studentReducer.updatestudent,
+  updatestudenterror: state.studentReducer.updatestudenterror,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  createStudent: (studentData) => {
-    dispatch(createStudent(studentData));
+  setStudent: (studentData) => {
+    dispatch(setStudent(studentData));
+  },
+  updateStudent: (studentData) => {
+    dispatch(updateStudent(studentData));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Student);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateStudent);
