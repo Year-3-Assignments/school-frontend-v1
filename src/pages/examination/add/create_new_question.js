@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
-import { createQuestion } from '../../../../actions/examination_actions';
-import Loader from '../../../../components/loader';
+import { createQuestion } from '../../../actions/examination_actions';
+import Loader from '../../../components/loader';
 import { NotificationManager } from 'react-notifications';
 
 const $ = window.$;

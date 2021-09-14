@@ -10,6 +10,7 @@ import {
   UPDATE_QUESTION,
   DELETE_QUESTION,
   SET_EXAMINATION,
+  GET_EXAMINATION_FOR_STUDENT,
 } from '../actions';
 
 const INITIALSTATE = {
@@ -20,6 +21,7 @@ const INITIALSTATE = {
   createquestion: '',
   getquestionsforexamination: [],
   getquestionsforteacher: [],
+  getExaminationQuestions: [],
   getquestion: '',
   updatequestion: '',
   deletequestion: '',
@@ -34,6 +36,7 @@ const INITIALSTATE = {
   getquestionerror: null,
   updatequestionerror: null,
   deletequestionerror: null,
+  getExaminationQuestionsError: null,
 };
 
 function examinationReducer(state = INITIALSTATE, action) {
@@ -47,6 +50,7 @@ function examinationReducer(state = INITIALSTATE, action) {
     getquestion,
     updatequestion,
     deletequestion,
+    getExaminationQuestions,
     setexamination;
 
   switch (action.type) {
@@ -60,6 +64,7 @@ function examinationReducer(state = INITIALSTATE, action) {
     case `${GET_QUESTION}_PENDING`:
     case `${UPDATE_QUESTION}_PENDING`:
     case `${DELETE_QUESTION}_PENDING`:
+    case `${GET_EXAMINATION_FOR_STUDENT}_PENDING`:
       return {
         ...state,
         loading: true,
@@ -73,6 +78,7 @@ function examinationReducer(state = INITIALSTATE, action) {
         getquestionerror: null,
         updatequestionerror: null,
         deletequestionerror: null,
+        getExaminationQuestionsError: null,
       };
 
     case `${CREATE_EXAMINATION}_FULFILLED`:
@@ -108,6 +114,9 @@ function examinationReducer(state = INITIALSTATE, action) {
     case `${SET_EXAMINATION}`:
       setexamination = action.payload;
       return { ...state, loading: false, setexamination };
+    case `${GET_EXAMINATION_FOR_STUDENT}_FULFILLED`:
+      getExaminationQuestions = action.payload.data.data;
+      return { ...state, loading: false, getExaminationQuestions };
 
     case `${CREATE_EXAMINATION}_REJECTED`:
       return {
@@ -177,6 +186,14 @@ function examinationReducer(state = INITIALSTATE, action) {
         ...state,
         loading: false,
         deletequestionerror: action.payload,
+        state: INITIALSTATE,
+      };
+
+    case `${GET_EXAMINATION_FOR_STUDENT}_REJECTED`:
+      return {
+        ...state,
+        loading: false,
+        getExaminationQuestionsError: action.payload,
         state: INITIALSTATE,
       };
 

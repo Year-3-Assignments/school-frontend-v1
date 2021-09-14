@@ -17,6 +17,7 @@ export const GET_QUESTION = 'GET_QUESTION';
 export const UPDATE_QUESTION = 'UPDATE_QUESTION';
 export const DELETE_QUESTION = 'DELETE_QUESTION';
 export const SET_EXAMINATION = 'SET_EXAMINATION';
+export const GET_EXAMINATION_FOR_STUDENT = 'GET_EXAMINATION_FOR_STUDENT';
 
 // Sport Management action types
 export const CREATE_SPORT = 'CREATE_SPORT';
