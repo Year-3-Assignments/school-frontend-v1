@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Loader from '../../../../components/loader';
+import Loader from '../../../components/loader';
 import DatePicker from 'react-datepicker';
 import Select from 'react-select';
+import {
+  setExam,
+  updateExamination,
+} from '../../../actions/examination_actions';
 import { NotificationManager } from 'react-notifications';
-import { v4 as uuidv4 } from 'uuid';
-import { createExamination } from '../../../../actions/examination_actions';
+import moment from 'moment';
 
 const $ = window.$;
 let formData = {};
@@ -69,15 +72,19 @@ const Constants = {
   ACCESS_PASSWORD_REQUIRED: 'Access password is required',
   START_DATE_TIME_REQUIRED: 'Start date & time is required',
   SUBJECT_REQUIRED: 'Subject is required',
-  CREATE_EXAM_SUCCESS: 'Exam created successfully',
-  CREATE_EXAM_FAIL: 'Exam creation unsuccessful',
+  UPDATE_EXAM_SUCCESS: 'Exam update successfully',
+  UPDATE_EXAM_FAIL: 'Exam update unsuccessful',
   STATUS_PENDING: 'PENDING',
 };
 
 const initialState = {
+  _id: '',
   isLoading: false,
   isFormNotValid: false,
   examId: '',
+  exam: '',
+  selectedExamId: '',
+  exams: [],
   subject: '',
   title: '',
   duration: '',
@@ -87,43 +94,45 @@ const initialState = {
   startDateTime: '',
 };
 
-class CreateExam extends Component {
+class UpdateExam extends Component {
   constructor(props) {
     super(props);
     this.onChange = this.onChange.bind(this);
     this.onTimeChange = this.onTimeChange.bind(this);
-    this.closeModal = this.closeModal.bind(this);
     this.onGradeSelect = this.onGradeSelect.bind(this);
-    this.generateExamCredentials = this.generateExamCredentials.bind(this);
     this.onDurationSelect = this.onDurationSelect.bind(this);
     this.onNumberOfQuestionsSelect = this.onNumberOfQuestionsSelect.bind(this);
     this.onSubjectSelect = this.onSubjectSelect.bind(this);
+    this.closeModal = this.closeModal.bind(this);
     this.state = initialState;
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.createexamination !== nextProps.createexamination) {
-      this.setState({ isLoading: false }, () => {
-        NotificationManager.success(Constants.CREATE_EXAM_SUCCESS);
-        this.closeModal();
+    if (this.props.selectedExam !== nextProps.selectedExam) {
+      this.setState({
+        _id: nextProps.selectedExam._id,
+        examId: nextProps.selectedExam.examId,
+        subject: nextProps.selectedExam.subject,
+        title: nextProps.selectedExam.title,
+        duration: nextProps.selectedExam.duration,
+        grade: nextProps.selectedExam.createdFor,
+        numberOfQuestions: nextProps.selectedExam.numberOfQuestions,
+        accessPassword: nextProps.selectedExam.accessPassword,
+        startDateTime: moment(nextProps.selectedExam.startDateTime).toDate(),
       });
     }
 
+    if (this.props.updateexamination !== nextProps.updateexamination) {
+      NotificationManager.success(Constants.UPDATE_EXAM_SUCCESS);
+      this.closeModal();
+    }
+
     if (
-      this.props.createexaminationerror !== nextProps.createexaminationerror
+      this.props.updateexaminationerror !== nextProps.updateexaminationerror
     ) {
-      if (
-        nextProps.createexaminationerror &&
-        nextProps.createexaminationerror.message
-      ) {
-        this.setState({ isLoading: false }, () => {
-          NotificationManager.error(nextProps.createexaminationerror.message);
-        });
-      } else {
-        this.setState({ isLoading: false }, () => {
-          NotificationManager.error(Constants.CREATE_EXAM_FAIL);
-        });
-      }
+      this.setState({ isLoading: false }, () => {
+        NotificationManager.error(nextProps.updateexaminationerror.message);
+      });
     }
   };
 
@@ -158,6 +167,14 @@ class CreateExam extends Component {
     this.setState({ startDateTime: time });
   }
 
+  // close create exam modal
+  closeModal() {
+    $('#update-exam').modal('toggle');
+    $('#select-grade').val('');
+    this.props.setExam('');
+    this.setState(initialState);
+  }
+
   // validation
   validateForm() {
     const {
@@ -174,9 +191,10 @@ class CreateExam extends Component {
     const data = {
       title: title && title.trim().length > 0 ? title : null,
       grade: grade && grade.trim().length > 0 ? grade : null,
-      duration: duration && duration.trim().length > 0 ? duration : null,
+      duration:
+        duration && duration.toString().trim().length > 0 ? duration : null,
       numberOfQuestions:
-        numberOfQuestions && numberOfQuestions.trim().length > 0
+        numberOfQuestions && numberOfQuestions.toString().trim().length > 0
           ? numberOfQuestions
           : null,
       startDateTime:
@@ -195,11 +213,12 @@ class CreateExam extends Component {
     return true;
   }
 
-  // submit examination details
-  onCreateExamSubmit = (event) => {
+  // submit update data function
+  onUpdateExamSubmit = (event) => {
     event.preventDefault();
     const isFormValid = this.validateForm();
     const {
+      _id,
       title,
       grade,
       duration,
@@ -216,8 +235,10 @@ class CreateExam extends Component {
       });
 
       if (!data.includes(false)) {
-        const numOfQuestions = parseInt(numberOfQuestions.split(' ')[0]);
-        const examDuration = duration.split(' ');
+        const numOfQuestions = parseInt(
+          numberOfQuestions.toString().split(' ')[0]
+        );
+        const examDuration = duration.toString().split(' ');
         let newDuration;
 
         if (examDuration && examDuration.length <= 2) {
@@ -229,6 +250,7 @@ class CreateExam extends Component {
         }
 
         const examData = {
+          id: _id,
           examId: examId,
           title: title,
           createdFor: grade,
@@ -241,36 +263,11 @@ class CreateExam extends Component {
         };
 
         console.log('DATA TO SEND', examData);
-        this.props.createExamination(examData);
+        this.props.updateExamination(examData);
         this.setState({ isLoading: true });
       } else {
         this.setState({ isFormNotValid: true });
         NotificationManager.warning(Constants.FIELDS_REQUIRED);
-      }
-    }
-  };
-
-  // close create exam modal
-  closeModal() {
-    $('#create-exam').modal('toggle');
-    $('#select-grade').val('');
-    this.setState(initialState);
-  }
-
-  // generate examination credentials
-  generateExamCredentials = (event) => {
-    if (event) {
-      const { grade } = this.state;
-
-      if (grade) {
-        const uniqueId = uuidv4().substring(0, 4);
-        const classId = 'G' + grade.split(' ')[1];
-        const accessPassword = uuidv4().substring(0, 8);
-        console.log('adfaf', uniqueId + classId);
-        if (uniqueId && classId) {
-          const examId = uniqueId + classId;
-          this.setState({ examId: examId, accessPassword: accessPassword });
-        }
       }
     }
   };
@@ -280,23 +277,26 @@ class CreateExam extends Component {
       isLoading,
       isFormNotValid,
       title,
-      grade,
       examId,
+      grade,
+      subject,
+      duration,
+      numberOfQuestions,
       accessPassword,
       startDateTime,
     } = this.state;
     return (
       <div
         className="modal fade"
-        id="create-exam"
+        id="update-exam"
         tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
+        aria-labelledby="update-exam"
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Create New Examination</h5>
+              <h5 className="modal-title">Update Exam Information</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -306,145 +306,6 @@ class CreateExam extends Component {
             </div>
 
             <div className="modal-body">
-              <div className="row m-0 mb-2">
-                <label htmlFor="title" className="form-label p-0 m-0">
-                  Examination Title
-                </label>
-                <input
-                  type="text"
-                  id="title"
-                  className="form-control"
-                  name="title"
-                  value={title}
-                  onChange={this.onChange}
-                />
-                {formData.title === null && isFormNotValid ? (
-                  <span className="text-danger p-0 m-0">
-                    <small>{Constants.TITLE_REQUIRED}</small>
-                  </span>
-                ) : null}
-              </div>
-              <div className="row m-0 mb-2">
-                <label htmlFor="grade" className="form-label p-0 m-0">
-                  Grade
-                </label>
-                <Select
-                  options={gradeOptions}
-                  className="basic-single p-0 m-0"
-                  classNamePrefix="select"
-                  id="select-grade"
-                  onChange={this.onGradeSelect}
-                />
-                {formData.grade === null && isFormNotValid ? (
-                  <span className="text-danger p-0 m-0">
-                    <small>{Constants.GRADE_REQUIRED}</small>
-                  </span>
-                ) : null}
-              </div>
-              <div className="row m-0 mb-2">
-                <label htmlFor="grade" className="form-label p-0 m-0">
-                  Subject
-                </label>
-                <Select
-                  options={subjectOptions}
-                  className="basic-single p-0 m-0"
-                  classNamePrefix="select"
-                  id="select-grade"
-                  onChange={this.onSubjectSelect}
-                />
-                {formData.subject === null && isFormNotValid ? (
-                  <span className="text-danger p-0 m-0">
-                    <small>{Constants.SUBJECT_REQUIRED}</small>
-                  </span>
-                ) : null}
-              </div>
-              <div className="row">
-                <div className="col">
-                  <div className="row m-0 mb-2">
-                    <label htmlFor="duration" className="form-label p-0 m-0">
-                      Exam Duration
-                    </label>
-                    <Select
-                      options={durationOptions}
-                      className="basic-single p-0 m-0"
-                      classNamePrefix="select"
-                      onChange={this.onDurationSelect}
-                    />
-                    {formData.duration === null && isFormNotValid ? (
-                      <span className="text-danger p-0 m-0">
-                        <small>{Constants.DURATION_REQUIRED}</small>
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="row m-0 mb-2">
-                    <label
-                      htmlFor="numberOfQuestions"
-                      className="form-label p-0 m-0"
-                    >
-                      Number of Questions
-                    </label>
-                    <Select
-                      options={questionOptions}
-                      className="basic-single p-0 m-0"
-                      classNamePrefix="select"
-                      onChange={this.onNumberOfQuestionsSelect}
-                    />
-                    {formData.numberOfQuestions === null && isFormNotValid ? (
-                      <span className="text-danger p-0 m-0">
-                        <small>{Constants.NUMBER_OF_QUESTIONS_REQUIRED}</small>
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-              <div className="input-group m-0 mb-2">
-                <label
-                  htmlFor="numberOfQuestions"
-                  className="form-label p-0 m-0"
-                >
-                  Exam Date & Time
-                </label>
-                &nbsp;
-                <span>
-                  <i className="far fa-calendar-alt"></i>
-                </span>
-                <DatePicker
-                  className="form-control"
-                  value={startDateTime}
-                  onChange={this.onTimeChange}
-                  dateFormat="MM/dd/yyyy h:mm aa"
-                  selected={startDateTime}
-                  showTimeInput
-                />
-                {formData.startDateTime === null && isFormNotValid ? (
-                  <span className="text-danger p-0 m-0">
-                    <small>{Constants.START_DATE_TIME_REQUIRED}</small>
-                  </span>
-                ) : null}
-              </div>
-              <i className="fas fa-info-circle" />
-              <small className="exam-message">
-                After filling Examination Title, Grade, Exam Duration, Number of
-                Questions and Exam Date & Time click on the{' '}
-                <b>Generate Exam Credentials</b> button below
-              </small>
-              <hr />
-              <div className="d-flex">
-                <h6 className="pt-1">Exam Credentials</h6>
-                <button
-                  className="btn btn-primary btn-rounded btn-no-shadow btn-custom-sm align-right"
-                  data-mdb-toggle="tooltip"
-                  data-mdb-placement="top"
-                  title="Click here to generate Exam ID and Access Password"
-                  disabled={grade === '' || startDateTime === ''}
-                  onClick={this.generateExamCredentials}
-                >
-                  Generate exam Credentials
-                </button>
-              </div>
-
               <div className="row">
                 <div className="col">
                   <div className="row m-0 mb-2">
@@ -490,6 +351,137 @@ class CreateExam extends Component {
                   </div>
                 </div>
               </div>
+              <div className="row m-0 mb-2">
+                <label htmlFor="title" className="form-label p-0 m-0">
+                  Examination Title
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  className="form-control"
+                  name="title"
+                  value={title}
+                  onChange={this.onChange}
+                />
+                {formData.title === null && isFormNotValid ? (
+                  <span className="text-danger p-0 m-0">
+                    <small>{Constants.TITLE_REQUIRED}</small>
+                  </span>
+                ) : null}
+              </div>
+              <div className="row m-0 mb-2">
+                <label htmlFor="grade" className="form-label p-0 m-0">
+                  Grade
+                </label>
+                <Select
+                  defaultValue={{ label: grade, value: grade }}
+                  value={{ label: grade, value: grade }}
+                  options={gradeOptions}
+                  className="basic-single p-0 m-0"
+                  id="select-grade"
+                  onChange={this.onGradeSelect}
+                />
+                {formData.grade === null && isFormNotValid ? (
+                  <span className="text-danger p-0 m-0">
+                    <small>{Constants.GRADE_REQUIRED}</small>
+                  </span>
+                ) : null}
+              </div>
+              <div className="row m-0 mb-2">
+                <label htmlFor="grade" className="form-label p-0 m-0">
+                  Subject
+                </label>
+                <Select
+                  defaultValue={{ label: subject, value: subject }}
+                  value={{ label: subject, value: subject }}
+                  options={subjectOptions}
+                  className="basic-single p-0 m-0"
+                  classNamePrefix="select"
+                  id="select-grade"
+                  onChange={this.onSubjectSelect}
+                />
+                {formData.subject === null && isFormNotValid ? (
+                  <span className="text-danger p-0 m-0">
+                    <small>{Constants.SUBJECT_REQUIRED}</small>
+                  </span>
+                ) : null}
+              </div>
+              <div className="row">
+                <div className="col">
+                  <div className="row m-0 mb-2">
+                    <label htmlFor="duration" className="form-label p-0 m-0">
+                      Exam Duration <small>(Hours & Minutes)</small>
+                    </label>
+                    <Select
+                      defaultValue={{ label: duration, value: duration }}
+                      value={{ label: duration, value: duration }}
+                      options={durationOptions}
+                      className="basic-single p-0 m-0"
+                      classNamePrefix="select"
+                      onChange={this.onDurationSelect}
+                    />
+                    {formData.duration === null && isFormNotValid ? (
+                      <span className="text-danger p-0 m-0">
+                        <small>{Constants.DURATION_REQUIRED}</small>
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="col">
+                  <div className="row m-0 mb-2">
+                    <label
+                      htmlFor="numberOfQuestions"
+                      className="form-label p-0 m-0"
+                    >
+                      Number of Questions
+                    </label>
+                    <Select
+                      defaultValue={{
+                        label: numberOfQuestions,
+                        value: numberOfQuestions,
+                      }}
+                      value={{
+                        label: numberOfQuestions,
+                        value: numberOfQuestions,
+                      }}
+                      options={questionOptions}
+                      className="basic-single p-0 m-0"
+                      classNamePrefix="select"
+                      onChange={this.onNumberOfQuestionsSelect}
+                    />
+                    {formData.numberOfQuestions === null && isFormNotValid ? (
+                      <span className="text-danger p-0 m-0">
+                        <small>{Constants.NUMBER_OF_QUESTIONS_REQUIRED}</small>
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+              <div className="input-group m-0 mb-2">
+                <label
+                  htmlFor="numberOfQuestions"
+                  className="form-label p-0 m-0"
+                >
+                  Exam Date & Time
+                </label>
+                &nbsp;
+                <span>
+                  <i className="far fa-calendar-alt"></i>
+                </span>
+                <DatePicker
+                  className="form-control"
+                  value={startDateTime}
+                  onChange={this.onTimeChange}
+                  dateFormat="MM/dd/yyyy h:mm aa"
+                  selected={startDateTime}
+                  showTimeInput
+                />
+                {formData.startDateTime === null && isFormNotValid ? (
+                  <span className="text-danger p-0 m-0">
+                    <small>{Constants.START_DATE_TIME_REQUIRED}</small>
+                  </span>
+                ) : null}
+              </div>
             </div>
 
             <div className="modal-footer d-flex justify-content-center">
@@ -506,9 +498,9 @@ class CreateExam extends Component {
                   &nbsp;&nbsp;
                   <button
                     className="btn btn-primary btn-no-shadow btn-rounded"
-                    onClick={this.onCreateExamSubmit}
+                    onClick={this.onUpdateExamSubmit}
                   >
-                    Create
+                    Update
                   </button>
                 </div>
               )}
@@ -521,14 +513,19 @@ class CreateExam extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  createexamination: state.examinationReducer.createexamination,
-  createexaminationerror: state.examinationReducer.createexaminationerror,
+  exams: state.examinationReducer.getexaminationsforteacher,
+  selectedExam: state.examinationReducer.setexamination,
+  updateexamination: state.examinationReducer.updateexamination,
+  updateexaminationerror: state.examinationReducer.updateexaminationerror,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  createExamination: (examData) => {
-    dispatch(createExamination(examData));
+  setExam: (examData) => {
+    dispatch(setExam(examData));
+  },
+  updateExamination: (examData) => {
+    dispatch(updateExamination(examData));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateExam);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateExam);
