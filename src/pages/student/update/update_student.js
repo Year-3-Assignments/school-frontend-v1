@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import { NotificationManager } from 'react-notifications';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
-import { updateStudent, setStudent } from '../../../actions/student_actions';
+import {
+  updateStudent,
+  setStudent,
+  getStudentById,
+} from '../../../actions/student_actions';
 import { connect } from 'react-redux';
 import 'react-rangeslider/lib/index.css';
 import Loader from '../../../components/loader';
@@ -48,6 +53,7 @@ class UpdateStudent extends Component {
     this.onEditImageChange = this.onEditImageChange.bind(this);
     this.onSelectProvince = this.onSelectProvince.bind(this);
     this.state = {
+      _id: '',
       fname: '',
       lname: '',
       dob: '',
@@ -67,6 +73,12 @@ class UpdateStudent extends Component {
       formNotValid: false,
       role: 'ROLE_ADMIN',
     };
+  }
+
+  componentDidMount() {
+    if (!_.isNull(localStorage.getItem('token'))) {
+      this.props.getStudentById();
+    }
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -140,6 +152,7 @@ class UpdateStudent extends Component {
 
       if (!data.includes(false)) {
         let studentData = {
+          id: this.state._id,
           firstname: this.state.fname,
           lastname: this.state.lname,
           dateofbirth: this.state.dob,
@@ -222,7 +235,7 @@ class UpdateStudent extends Component {
         <div className="modal-dialog modal-lg">
           <div className="modal-content">
             <div className="modal-header">
-              <h3 className="modal-title">Create Student Account</h3>
+              <h3 className="modal-title">Update Student Account</h3>
               <button
                 type="button"
                 className="btn-close"
@@ -559,6 +572,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   updateStudent: (studentData) => {
     dispatch(updateStudent(studentData));
+  },
+  getStudentById: (studentData) => {
+    dispatch(getStudentById(studentData));
   },
 });
 

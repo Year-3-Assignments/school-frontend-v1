@@ -33,8 +33,10 @@ const rowStyle = (row, rowIndex) => {
 class StudentView extends Component {
   constructor(props) {
     super(props);
+    this.onSelectStudentToUpdate = this.onSelectStudentToUpdate.bind(this);
     this.state = {
       students: [],
+      selectedstudent: '',
     };
   }
 
@@ -161,11 +163,11 @@ class StudentView extends Component {
               data-mdb-target="#update-student"
               onClick={(e) => this.onSelectStudentToUpdate(e, row._id)}
             >
-              <i class="far fa-edit" /> Edit
+              <i className="far fa-edit" /> Edit
             </a>
 
             <a className="dropdown-item" href="#">
-              <i class="far fa-trash-alt" /> Delete
+              <i className="far fa-trash-alt" /> Delete
             </a>
           </div>
         </span>
@@ -330,6 +332,7 @@ class StudentView extends Component {
 
 const mapStateToProps = (state) => ({
   getallstudents: state.studentReducer.getallstudents,
+  students: state.studentReducer.getstudent,
   createstudent: state.studentReducer.createstudent,
   createstudenterror: state.studentReducer.createstudenterror,
   updatestudent: state.studentReducer.updatestudent,

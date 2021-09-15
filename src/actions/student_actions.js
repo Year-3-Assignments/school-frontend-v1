@@ -51,6 +51,7 @@ export function updateStudent(studentId) {
     type: UPDATE_STUDENT,
     payload: axios.get(
       `${process.env.REACT_APP_API_DEV_URL}/student/update/${studentId}`,
+      studentId,
       { headers: { Authorization: localStorage.getItem('token') } }
     ),
   };

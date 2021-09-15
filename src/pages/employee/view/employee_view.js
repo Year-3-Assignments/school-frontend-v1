@@ -177,11 +177,11 @@ class EmployeePage extends Component {
           </a>
           <div className="dropdown-menu dropdown-menu-right">
             <a className="dropdown-item" href="#">
-              <i class="far fa-edit" /> Edit
+              <i className="far fa-edit" /> Edit
             </a>
 
             <a className="dropdown-item" href="#">
-              <i class="far fa-trash-alt" /> Delete
+              <i className="far fa-trash-alt" /> Delete
             </a>
           </div>
         </span>
@@ -229,7 +229,7 @@ class EmployeePage extends Component {
                   {row.city}
                 </p>
                 <p>
-                  <i class="fas fa-money-bill-wave"></i>&nbsp;&nbsp; Rs.
+                  <i className="fas fa-money-bill-wave"></i>&nbsp;&nbsp; Rs.
                   {parseFloat(row.salary).toFixed(2)}
                 </p>
               </div>

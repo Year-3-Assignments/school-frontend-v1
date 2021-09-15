@@ -168,7 +168,7 @@ export default class ImagePreviewer extends Component {
                   className="btn btn-primary btn-rounded btn-sm"
                   onClick={this.uploadImage}
                 >
-                  <i class="fas fa-cloud-upload-alt"></i>
+                  <i className="fas fa-cloud-upload-alt"></i>
                 </button>
               </div>
             )}

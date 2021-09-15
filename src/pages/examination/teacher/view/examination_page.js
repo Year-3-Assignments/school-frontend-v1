@@ -191,7 +191,7 @@ class ExaminationPage extends Component {
             </a>
 
             <a className="dropdown-item" href="#">
-              <i class="far fa-trash-alt" /> Delete
+              <i className="far fa-trash-alt" /> Delete
             </a>
           </div>
         </span>
