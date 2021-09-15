@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker';
 import { updateStudent, setStudent } from '../../../actions/student_actions';
 import { connect } from 'react-redux';
 import 'react-rangeslider/lib/index.css';
+import moment from 'moment';
 import Loader from '../../../components/loader';
 import ImagePreviewer from '../../../components/image_previewer';
 
@@ -72,10 +73,9 @@ class UpdateStudent extends Component {
   componentWillReceiveProps = (nextProps) => {
     if (this.props.selectedstudent !== nextProps.selectedstudent) {
       this.setState({
-        _id: nextProps.selectedstudent._id,
         fname: nextProps.selectedstudent.firstname,
         lname: nextProps.selectedstudent.lastname,
-        dob: nextProps.selectedstudent.dateofbirth,
+        dob: moment(nextProps.selectedstudent.dateofbirth).toDate(),
         address1: nextProps.selectedstudent.address1,
         address2: nextProps.selectedstudent.address2,
         city: nextProps.selectedstudent.city,
@@ -87,7 +87,6 @@ class UpdateStudent extends Component {
         email: nextProps.selectedstudent.email,
         phone: nextProps.selectedstudent.phone,
         username: nextProps.selectedstudent.username,
-        password: nextProps.selectedstudent.password,
       });
     }
     if (this.props.updatestudent !== nextProps.updatestudent) {
@@ -232,7 +231,6 @@ class UpdateStudent extends Component {
             </div>
 
             <div className="modal-body">
-              <ImagePreviewer getEditedImage={this.onEditImageChange} />
               {formData.imageurl === null && formNotValid ? (
                 <div className="d-flex justify-content-center mt-1">
                   <span className="text-danger validation-text p-0 text-center">
