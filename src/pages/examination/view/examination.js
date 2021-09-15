@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getExaminationsForTeacher } from '../../../../actions/examination_actions';
+import { getExaminationsForTeacher } from '../../../actions/examination_actions';
 import moment from 'moment';
 import CreateQuestion from '../add/create_new_question';
 import Questions from './questions';
