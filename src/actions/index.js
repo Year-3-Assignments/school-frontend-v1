@@ -41,3 +41,4 @@ export const UPDATE_EMPLOYEE = 'UPDATE_EMPLOYEE';
 
 //Salary actions
 export const GET_ALL_SALARY = 'GET_ALL_SALARY';
+export const SET_EMPLOYEE = 'SET_EMPLOYEE';

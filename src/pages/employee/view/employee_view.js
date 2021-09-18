@@ -176,11 +176,12 @@ class EmployeePage extends Component {
             <i className="fas fa-ellipsis-h"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a className="dropdown-item" href="#">
+            <a className="dropdown-item" href="#" data-mdb-toggle="modal"
+              data-mdb-target="#update-employee" >
               <i class="far fa-edit" /> Edit
             </a>
 
-            <a className="dropdown-item" href="#">
+            <a className="dropdown-item" href="#" >
               <i class="far fa-trash-alt" /> Delete
             </a>
           </div>

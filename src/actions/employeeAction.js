@@ -4,7 +4,15 @@ import {
   GET_ALL_EMPLOYEE_LIST,
   UPDATE_EMPLOYEE,
   DELETE_EMPLOYEE,
+  SET_EMPLOYEE,
 } from './index';
+
+export function setEmployee(employeeData) {
+  return {
+    type: SET_EMPLOYEE,
+    payload: employeeData,
+  };
+}
 
 export function createEmployee(employee) {
   return {

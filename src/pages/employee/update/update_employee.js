@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateEmployee } from '../../../actions/employeeAction';
+import { updateEmployee,setEmployee, } from '../../../actions/employeeAction';
 import { NotificationManager } from 'react-notifications';
 import DatePicker from 'react-datepicker';
 import Select from 'react-select';
@@ -14,6 +14,23 @@ const roleOptions = [
   { label: 'ADMIN', value: 'ADMIN' },
   { label: 'STAFF', value: 'STAFF' },
 ];
+const initialState = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneNumber: '',
+  addressLine1: '',
+  addressLine2: '',
+  city: '',
+  province: '',
+  description: '',
+  dateofbirth: '',
+  userName: '',
+  password: '',
+  isLoading: false,
+  salary: '',
+  role: '0',
+}
 
 class UpdateEmployee extends Component {
   constructor(props) {
@@ -22,23 +39,7 @@ class UpdateEmployee extends Component {
     this.closeModal = this.closeModal.bind(this);
     this.onTimeChange = this.onTimeChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.state = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNumber: '',
-      addressLine1: '',
-      addressLine2: '',
-      city: '',
-      province: '',
-      description: '',
-      dateofbirth: '',
-      userName: '',
-      password: '',
-      isLoading: false,
-      salary: '',
-      role: '0',
-    };
+    this.state = initialState;
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -83,7 +84,7 @@ class UpdateEmployee extends Component {
 
   closeModal() {
     $('#update-employee').modal('toggle');
-    this.props.set('');
+    this.setState(this.state);
   }
 
   onSubmit = (e) => {
@@ -460,7 +461,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   updateEmployee: (emplyeeDate) => {
     dispatch(updateEmployee(emplyeeDate))
-  }
+  },
+  setEmployee: (employeeData) => {
+    dispatch(setEmployee(employeeData));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateEmployee);

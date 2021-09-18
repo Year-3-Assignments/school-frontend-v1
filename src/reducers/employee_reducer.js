@@ -3,7 +3,9 @@ import {
     GET_ALL_EMPLOYEE_LIST,
     DELETE_EMPLOYEE,
     UPDATE_EMPLOYEE,
+    SET_EMPLOYEE
   } from '../actions';
+import { setEmployee } from '../actions/employeeAction';
   
   const initialState = {
     createemployee: '',
@@ -69,7 +71,11 @@ import {
           loading: false,
           updateEmployee,
         };
-  
+      case `${SET_EMPLOYEE}_FULFILLED`:
+        setEmployee = action.payload.data.data;
+        return { ...state, loading: false, setEmployee 
+        };
+      
       case `${CREATE_EMPLOYEE_ACCOUNT}_REJECTED`:
         return {
           ...state,
