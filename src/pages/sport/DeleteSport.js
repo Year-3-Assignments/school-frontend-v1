@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationContainer } from 'react-notifications';
 import {
   deleteSport
 } from '../../actions/sportActions';
@@ -8,9 +8,6 @@ import {connect} from 'react-redux';
 const $ = window.$;
 
 class DeleteSport extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     // close create exam modal
     closeModal() {

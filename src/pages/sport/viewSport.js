@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { getAllSport, setSport } from '../../actions/sportActions';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
@@ -25,7 +24,6 @@ class SportPage extends Component {
       exams: [],
       allSports: [],
       selectedSport: [],
-      selectedExam: '',
     };
   }
 
@@ -47,6 +45,11 @@ class SportPage extends Component {
     if (this.props.deleteSport !== nextProps.deleteSport) {
       this.props.getAllSport();
     }
+
+    if (this.props.updatesport !== nextProps.updatesport) {
+      this.props.getAllSport();
+    }
+
   };
 
   // react bootstrap table data & functions
@@ -75,7 +78,7 @@ class SportPage extends Component {
   showCoach = (row) => {
     return row.coach.map((item, index) => (
       <p>
-        <img src={item.imageurl} className="thumb-img" />&nbsp;&nbsp;{item.firstName} {item.lastName}
+        <img alt="icon" src={item.imageurl} className="thumb-img" />&nbsp;&nbsp;{item.firstName} {item.lastName}
       </p>
     ));
   };
@@ -154,7 +157,7 @@ class SportPage extends Component {
   };
 
   render() {
-    const { allSports, selectedExam } = this.state;
+    const { allSports } = this.state;
     return (
       <div className="pt-5 pb-5 admin-container-color">
         <div className="card p-4 exam-table container">
@@ -219,6 +222,7 @@ const mapStateToProps = (state) => ({
   createSport: state.sportReducer.createsport,
   getallsports: state.sportReducer.getallsports,
   deleteSport: state.sportReducer.deletesport,
+  updatesport: state.sportReducer.updatesport
 });
 
 const mapDispatchToProps = (dispatch) => ({

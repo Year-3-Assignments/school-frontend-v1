@@ -271,6 +271,8 @@ constructor(props) {
         console.log(resource);
 
         this.props.updateSport(resource);
+        NotificationManager.success('Sport is updated');
+        this.closeModal();
 
       }else{
         this.setState({ isFormInvalid: true});
@@ -286,16 +288,7 @@ constructor(props) {
 
   render() {
     const {
-      id,
-      name,
-      coach,
-      coaches,
-      students,
-      teamPlayers,
-      selectedCoach,
-      selectedPlayers,
-      isFormInvalid,
-      uploadPercentage,
+      name
     } = this.state;
     return(
       <div

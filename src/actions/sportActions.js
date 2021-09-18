@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CREATE_SPORT, GET_ALL_SPORT, GET_SPORT_FOR_SPORT_INVENTORY, SET_SPORT, GET_SPORT, 
+import { CREATE_SPORT, GET_ALL_SPORT, SET_SPORT, 
   GET_COACH_FOR_SPORT, GET_STUDENT_FOR_SPORT, UPDATE_SPORT, DELETE_SPORT } from './index';
 
 export function createSport(sport) {

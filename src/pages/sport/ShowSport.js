@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationContainer } from 'react-notifications';
 
 const $ = window.$;
 
 export default class ShowSport extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     // close create exam modal
     closeModal() {
@@ -49,7 +46,7 @@ export default class ShowSport extends Component {
 
                 {this.props.id.teamImageUrl && this.props.id.teamImageUrl !== '' ?
                   <div>
-                    <img src={this.props.id.teamImageUrl} width="50%" height="50%" className="upload-img" />
+                    <img alt="icon" src={this.props.id.teamImageUrl} width="50%" height="50%" className="upload-img" />
                   </div>
 
                 :
