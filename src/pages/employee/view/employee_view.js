@@ -9,10 +9,10 @@ import ToolkitProvider, {
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
 import {
-  createEmployee,
   getEmployeeList,
 } from '../../../actions/employeeAction';
 import CreateEmployee from '../add/create_new_employee';
+import UpdateEmployee from '../update/update_employee';
 
 const { SearchBar } = Search;
 const initialState = {
@@ -321,7 +321,8 @@ class EmployeePage extends Component {
             )}
           </ToolkitProvider>
         </div>
-        <CreateEmployee />
+        <CreateEmployee/>
+        <UpdateEmployee/>
       </div>
     );
   }
