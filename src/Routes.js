@@ -9,6 +9,7 @@ import Examination from './pages/examination/view/examination';
 import NavigationBar from './components/navigation_bar';
 import LoginPage from './pages/login/login_page';
 import EmployeePage from './pages/employee/view/employee_view';
+import LandingPage from './pages/landing/landing_page';
 
 function PageRoutes() {
   return (
@@ -24,6 +25,7 @@ function PageRoutes() {
               <Route path="/examination" component={ExaminationPage} />
               <Route path="/login" component={LoginPage} exact />
               <Route path="/employee" component={EmployeePage} />
+              <Route path="/" component={LandingPage} />
             </Switch>
           </section>
         </div>
