@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateEmployee,setEmployee, } from '../../../actions/employeeAction';
+import {
+  updateEmployee,
+  setEmployee,
+} from '../../../actions/employeeAction';
 import { NotificationManager } from 'react-notifications';
 import DatePicker from 'react-datepicker';
 import Select from 'react-select';
@@ -14,6 +17,7 @@ const roleOptions = [
   { label: 'ADMIN', value: 'ADMIN' },
   { label: 'STAFF', value: 'STAFF' },
 ];
+
 const initialState = {
   firstName: '',
   lastName: '',
@@ -43,31 +47,30 @@ class UpdateEmployee extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.selectedemployee != nextProps.selectedemployee) {
+    if (this.props.selectedEmployee != nextProps.selectedEmployee) {
       this.setState({
         _id: nextProps.selectedstudent._id,
-        firstName: nextProps.selectedemployee.firstName,
-        lastName: nextProps.selectedemployee.lastName,
-        email: nextProps.selectedemployee.email,
-        phoneNumber: nextProps.selectedemployee.phoneNumber,
-        addressLine1: nextProps.selectedemployee.addressLine1,
-        addressLine2: nextProps.selectedemployee.addressLine2,
-        city: nextProps.selectedemployee.city,
-        province: nextProps.selectedemployee.province,
-        description: nextProps.selectedemployee.description,
-        dateofbirth: nextProps.selectedemployee.dateofbirth,
-        userName: nextProps.selectedemployee.userName,
-        password: nextProps.selectedemployee.password,
-        salary: nextProps.selectedemployee.salary,
-        role: nextProps.selectedemployee.role,
+        firstName: nextProps.selectedEmployee.firstName,
+        lastName: nextProps.selectedEmployee.lastName,
+        email: nextProps.selectedEmployee.email,
+        phoneNumber: nextProps.selectedEmployee.phoneNumber,
+        addressLine1: nextProps.selectedEmployee.addressLine1,
+        addressLine2: nextProps.selectedEmployee.addressLine2,
+        city: nextProps.selectedEmployee.city,
+        province: nextProps.selectedEmployee.province,
+        description: nextProps.selectedEmployee.description,
+        dateofbirth: nextProps.selectedEmployee.dateofbirth,
+        userName: nextProps.selectedEmployee.userName,
+        password: nextProps.selectedEmployee.password,
+        salary: nextProps.selectedEmployee.salary,
+        role: nextProps.selectedEmployee.role,
       });
     }
-    if (this.props.updateemployee !== nextProps.updateEmployee) {
-      NotificationManager.success('Updated Emplouee Details successfully!')
+    if (this.props.updateEmployee !== nextProps.updateEmployee) {
+      NotificationManager.success('Updated Employee Details successfully!')
       this.closeModal();
     }
-
-    if(this.props.updateemployeeError !== nextProps.updateemployeeerror){
+    if(this.props.updateemployeeError !== nextProps.updateemployeeError){
       this.setState({isLoading: false}, () => {
         NotificationManager.error(nextProps.updateemployeeerror.message);
       });
@@ -87,24 +90,63 @@ class UpdateEmployee extends Component {
     this.setState(this.state);
   }
 
+  //Validations
+  validationForm() {
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      addressLine1,
+      addressLine2,
+      city,
+      province,
+      description,
+      dateofbirth,
+      userName,
+      password,
+      salary,
+      role,
+    } = this.state;
+
+    const data = {
+      firstName: firstName && firstName.trim().length > 0 ? firstName : null,
+      lastName: lastName && lastName.trim().length >0 ? lastName : null,
+      email: email && email.trim().length >0 ? email : null,
+      phoneNumber: phoneNumber && phoneNumber.trim().length > 0 ? phoneNumber : null,
+      addressLine1: addressLine1 && addressLine1.trim().length > 0 ? addressLine1 : null,
+      addressLine2: addressLine2 && addressLine2.trim().length > 0 ? addressLine2 : null,
+      city: city && city.trim().length > 0 ? city : null,
+      province: province && province.trim().length > 0 ? province : null,
+      description: description && description.trim().length > 0 ? description : null,
+      dateofbirth: dateofbirth && dateofbirth.toString().trim().length > 0 ? dateofbirth : null,
+      userName: userName && userName.trim().length > 0 ? userName : null,
+      password: password && password.trim().length > 0 ? password : null,
+      salary: salary && salary.toString().trim().length > 0 ? salary : null,
+      role: role && role.trim().length > 0 ? role : null,
+    };
+    formData = Object.assign({}, data);
+    return true;
+  }
+
   onSubmit = (e) => {
     e.preventDefault();
-    if (this.validateForm()) {
+    if (this.validationForm()) {
       let data = Object.values(formData).map((key) => {
         return key != null;
       });
 
       if (!data.includes(false)) {
         let employeeData = {
-          firstNameme: this.state.firstName,
-          lastNameme: this.state.lname,
-          addressLine1: this.state.address1,
-          addressLine2: this.state.address2,
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
+          addressLine1: this.state.addressLine1,
+          addressLine2: this.state.addressLine2,
           city: this.state.city,
           province: this.state.province,
           phoneNumber: this.state.phoneNumber,
           email: this.state.email,
-          userName: this.state.username,
+          userName: this.state.userName,
           password: this.state.password,
           role: this.state.role,
           description: this.state.description,
@@ -456,6 +498,7 @@ class UpdateEmployee extends Component {
 const mapStateToProps = (state) => ({
   updateemployee: state.employeeReducer.updateEmployee,
   updateemployeeError: state.employeeReducer.updateemployeeError,
+  selectedEmployee: state.employeeReducer.setEmployee,
 });
 
 const mapDispatchToProps = (dispatch) => ({
