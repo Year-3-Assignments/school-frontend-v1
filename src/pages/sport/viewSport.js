@@ -78,7 +78,8 @@ class SportPage extends Component {
   showCoach = (row) => {
     return row.coach.map((item, index) => (
       <p>
-        <img alt="icon" src={item.imageurl} className="thumb-img" />&nbsp;&nbsp;{item.firstName} {item.lastName}
+        <img src={item.imageurl} className="thumb-img" />
+        &nbsp;&nbsp;{item.firstName} {item.lastName}
       </p>
     ));
   };
@@ -182,18 +183,19 @@ class SportPage extends Component {
           >
             {(props) => (
               <div>
-              <div className="d-flex">
-                <SearchBar
-                  {...props.searchProps}
-                  placeholder="Search sport by name"
-                  className="mb-3 search-bar"
-                />
-                  <ExportCSVButton 
-                  {...props.csvProps}
-                  className="btn-secondary btn-rounded btn-no-shadow mx-3 mb-3">
+                <div className="d-flex">
+                  <SearchBar
+                    {...props.searchProps}
+                    placeholder="Search sport by name"
+                    className="mb-3 search-bar"
+                  />
+                  <ExportCSVButton
+                    {...props.csvProps}
+                    className="btn-secondary btn-rounded btn-no-shadow mx-3 mb-3"
+                  >
                     Download Sport Details!!
                   </ExportCSVButton>
-              </div>
+                </div>
                 <BootstrapTable
                   {...props.baseProps}
                   pagination={paginationFactory()}

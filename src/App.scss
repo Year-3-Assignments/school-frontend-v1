@@ -4,6 +4,7 @@
 @import './styles/student.scss';
 @import './styles/login_page.scss';
 @import './styles/employee_view.scss';
+@import './styles/landing_page.scss';
 
 .btn-no-shadow {
   box-shadow: none !important;
@@ -159,13 +160,6 @@
 
 textarea {
   height: 10vh !important;
-}
-
-.create-question-modal {
-}
-
-.pages {
-  margin-top: 50px;
 }
 
 .nav-item {

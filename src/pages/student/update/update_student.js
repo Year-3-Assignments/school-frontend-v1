@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import { NotificationManager } from 'react-notifications';
 import Select from 'react-select';
-// import Progress from '../../../components/progress';
 import DatePicker from 'react-datepicker';
-import { createStudent } from '../../../actions/student_actions';
+import { updateStudent, setStudent } from '../../../actions/student_actions';
 import { connect } from 'react-redux';
 import 'react-rangeslider/lib/index.css';
+import moment from 'moment';
 import Loader from '../../../components/loader';
-import ImagePreviewer from '../../../components/image_previewer';
 
 let formData = {};
-
 const $ = window.$;
 
 const provinces = [
@@ -40,7 +38,7 @@ const gradeoptions = [
   { value: 'GRADE 12', label: 'GRADE 12' },
   { value: 'GRADE 13', label: 'GRADE 13' },
 ];
-class Student extends Component {
+class UpdateStudent extends Component {
   constructor(props) {
     super(props);
     this.onChange = this.onChange.bind(this);
@@ -50,6 +48,7 @@ class Student extends Component {
     this.onEditImageChange = this.onEditImageChange.bind(this);
     this.onSelectProvince = this.onSelectProvince.bind(this);
     this.state = {
+      id: '',
       fname: '',
       lname: '',
       dob: '',
@@ -57,14 +56,12 @@ class Student extends Component {
       address2: '',
       city: '',
       province: '',
-      grade: 0,
-      profileImage: '',
+      grade: '',
       achievements: '',
       parentName: '',
       email: '',
       phone: '',
       username: '',
-      password: '',
       isLoading: false,
       formNotValid: false,
       role: 'ROLE_ADMIN',
@@ -72,25 +69,33 @@ class Student extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.createstudent !== nextProps.createstudent) {
-      this.setState({ isLoading: false }, () => {
-        NotificationManager.success('Student created successfull!');
+    if (this.props.selectedstudent !== nextProps.selectedstudent) {
+      this.setState({
+        id: nextProps.selectedstudent._id,
+        fname: nextProps.selectedstudent.firstname,
+        lname: nextProps.selectedstudent.lastname,
+        dob: moment(nextProps.selectedstudent.dateofbirth).toDate(),
+        address1: nextProps.selectedstudent.address1,
+        address2: nextProps.selectedstudent.address2,
+        city: nextProps.selectedstudent.city,
+        province: nextProps.selectedstudent.province,
+        grade: nextProps.selectedstudent.grade,
+        achievements: nextProps.selectedstudent.achievements,
+        parentName: nextProps.selectedstudent.parent,
+        email: nextProps.selectedstudent.email,
+        phone: nextProps.selectedstudent.phone,
+        username: nextProps.selectedstudent.username,
       });
     }
+    if (this.props.updatestudent !== nextProps.updatestudent) {
+      NotificationManager.success('Updated Student Details successfully!');
+      this.closeModal();
+    }
 
-    if (this.props.createstudenterror !== nextProps.createstudenterror) {
-      if (
-        nextProps.createstudenterror &&
-        nextProps.createstudenterror.message
-      ) {
-        this.setState({ isLoading: false }, () => {
-          NotificationManager.error(nextProps.createstudenterror.message);
-        });
-      } else {
-        this.setState({ isLoading: false }, () => {
-          NotificationManager.error('CREATE STUDENT FAILED');
-        });
-      }
+    if (this.props.updatestudenterror !== nextProps.updatestudenterror) {
+      this.setState({ isLoading: false }, () => {
+        NotificationManager.error('Update Student Details UNSUCCESSFUL!');
+      });
     }
   };
 
@@ -119,7 +124,9 @@ class Student extends Component {
   }
 
   closeModal() {
-    $('#create-student').modal('toggle');
+    $('#update-student').modal('toggle');
+    this.props.setStudent('');
+    this.setState(this.state);
   }
 
   onSubmit = (e) => {
@@ -131,6 +138,7 @@ class Student extends Component {
 
       if (!data.includes(false)) {
         let studentData = {
+          id: this.state.id,
           firstname: this.state.fname,
           lastname: this.state.lname,
           dateofbirth: this.state.dob,
@@ -139,21 +147,19 @@ class Student extends Component {
           city: this.state.city,
           province: this.state.province,
           grade: this.state.grade,
-          imageurl: this.state.profileImage,
           achievements: this.state.achievements,
           parent: this.state.parentName,
           phone: this.state.phone,
           email: this.state.email,
           username: this.state.username,
-          password: this.state.password,
         };
 
         console.log('DATA TO SEND', studentData);
-        this.props.createStudent(studentData);
+        this.props.updateStudent(studentData);
         this.setState({ isLoading: true });
       } else {
         this.setState({ formNotValid: true }, () => {
-          NotificationManager.warning('Please check the input fields');
+          NotificationManager.warning('Fields Required');
         });
       }
     }
@@ -165,7 +171,6 @@ class Student extends Component {
       lname,
       parentName,
       email,
-      profileImage,
       achievements,
       phone,
       city,
@@ -175,7 +180,6 @@ class Student extends Component {
       address2,
       grade,
       username,
-      password,
     } = this.state;
     const data = {
       firstname: fname && fname.trim().length > 0 ? fname : null,
@@ -184,17 +188,17 @@ class Student extends Component {
       address1: address1 && address1.trim().length > 0 ? address1 : null,
       address2: address2 && address2.trim().length > 0 ? address2 : null,
       city: city && city.trim().length > 0 ? city : null,
-      province: province && province.trim().length > 0 ? province : null,
-      grade: grade && grade.trim().length > 0 ? grade : null,
+      province:
+        province && province.toString().trim().length > 0 ? province : null,
+      grade: grade && grade.toString().trim().length > 0 ? grade : null,
       achievements:
-        achievements && achievements.trim().length > 0 ? achievements : null,
-      imageurl:
-        profileImage && profileImage.trim().length > 0 ? profileImage : null,
+        achievements && achievements.toString().trim().length > 0
+          ? achievements
+          : null,
       parent: parentName && parentName.trim().length > 0 ? parentName : null,
       phone: phone && phone.trim().length > 0 ? phone : null,
       email: email && email.trim().length > 0 ? email : null,
       username: username && username.trim().length > 0 ? username : null,
-      password: password && password.trim().length > 0 ? password : null,
     };
     formData = Object.assign({}, data);
     return true;
@@ -205,9 +209,9 @@ class Student extends Component {
     return (
       <div
         className="modal fade"
-        id="create-student"
+        id="update-student"
         tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
+        aria-labelledby="update-student"
         aria-hidden="true"
       >
         <div className="modal-dialog modal-lg">
@@ -223,7 +227,6 @@ class Student extends Component {
             </div>
 
             <div className="modal-body">
-              <ImagePreviewer getEditedImage={this.onEditImageChange} />
               {formData.imageurl === null && formNotValid ? (
                 <div className="d-flex justify-content-center mt-1">
                   <span className="text-danger validation-text p-0 text-center">
@@ -485,25 +488,6 @@ class Student extends Component {
                     </span>
                   ) : null}
                 </div>
-
-                <div className="row m-0 mb-3 col">
-                  <label htmlFor="password" className="form-label p-0">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    className="form-control"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChange}
-                  />
-                  {formData.password === null && this.state.formNotValid ? (
-                    <span className="text-danger validation-text p-0">
-                      Password is required
-                    </span>
-                  ) : null}
-                </div>
               </div>
             </div>
             <div className="modal-footer d-flex">
@@ -525,7 +509,7 @@ class Student extends Component {
                     className="btn btn-primary btn-no-shadow btn-rounded"
                     onClick={this.onSubmit}
                   >
-                    Create Student
+                    Update
                   </button>
                 </div>
               )}
@@ -538,14 +522,19 @@ class Student extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  createstudent: state.studentReducer.createstudent,
-  createstudenterror: state.studentReducer.createstudenterror,
+  students: state.studentReducer.getstudent,
+  selectedstudent: state.studentReducer.setstudent,
+  updatestudent: state.studentReducer.updatestudent,
+  updatestudenterror: state.studentReducer.updatestudenterror,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  createStudent: (studentData) => {
-    dispatch(createStudent(studentData));
+  setStudent: (studentData) => {
+    dispatch(setStudent(studentData));
+  },
+  updateStudent: (studentData) => {
+    dispatch(updateStudent(studentData));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Student);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateStudent);
