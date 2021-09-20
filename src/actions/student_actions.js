@@ -46,21 +46,22 @@ export function getStudentById(studentId) {
   };
 }
 
-export function updateStudent(studentId) {
+export function updateStudent(studentData) {
   return {
     type: UPDATE_STUDENT,
-    payload: axios.get(
-      `${process.env.REACT_APP_API_DEV_URL}/student/update/${studentId}`,
+    payload: axios.put(
+      `${process.env.REACT_APP_API_DEV_URL}/student/update/${studentData.id}`,
+      studentData,
       { headers: { Authorization: localStorage.getItem('token') } }
     ),
   };
 }
 
-export function deleteStudent(studentId) {
+export function deleteStudent(studentData) {
   return {
     type: DELETE_STUDENT,
-    payload: axios.get(
-      `${process.env.REACT_APP_API_DEV_URL}/student/delete/${studentId}`,
+    payload: axios.delete(
+      `${process.env.REACT_APP_API_DEV_URL}/student/delete/${studentData}`,
       { headers: { Authorization: localStorage.getItem('token') } }
     ),
   };

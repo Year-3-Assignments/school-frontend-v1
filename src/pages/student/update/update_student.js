@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import 'react-rangeslider/lib/index.css';
 import moment from 'moment';
 import Loader from '../../../components/loader';
-import ImagePreviewer from '../../../components/image_previewer';
 
 let formData = {};
 const $ = window.$;
@@ -49,6 +48,7 @@ class UpdateStudent extends Component {
     this.onEditImageChange = this.onEditImageChange.bind(this);
     this.onSelectProvince = this.onSelectProvince.bind(this);
     this.state = {
+      id: '',
       fname: '',
       lname: '',
       dob: '',
@@ -57,13 +57,11 @@ class UpdateStudent extends Component {
       city: '',
       province: '',
       grade: '',
-      profileImage: '',
       achievements: '',
       parentName: '',
       email: '',
       phone: '',
       username: '',
-      password: '',
       isLoading: false,
       formNotValid: false,
       role: 'ROLE_ADMIN',
@@ -73,6 +71,7 @@ class UpdateStudent extends Component {
   componentWillReceiveProps = (nextProps) => {
     if (this.props.selectedstudent !== nextProps.selectedstudent) {
       this.setState({
+        id: nextProps.selectedstudent._id,
         fname: nextProps.selectedstudent.firstname,
         lname: nextProps.selectedstudent.lastname,
         dob: moment(nextProps.selectedstudent.dateofbirth).toDate(),
@@ -81,7 +80,6 @@ class UpdateStudent extends Component {
         city: nextProps.selectedstudent.city,
         province: nextProps.selectedstudent.province,
         grade: nextProps.selectedstudent.grade,
-        profileImage: nextProps.selectedstudent.imageurl,
         achievements: nextProps.selectedstudent.achievements,
         parentName: nextProps.selectedstudent.parent,
         email: nextProps.selectedstudent.email,
@@ -96,7 +94,7 @@ class UpdateStudent extends Component {
 
     if (this.props.updatestudenterror !== nextProps.updatestudenterror) {
       this.setState({ isLoading: false }, () => {
-        NotificationManager.error(nextProps.updatestudenterror.message);
+        NotificationManager.error('Update Student Details UNSUCCESSFUL!');
       });
     }
   };
@@ -128,6 +126,7 @@ class UpdateStudent extends Component {
   closeModal() {
     $('#update-student').modal('toggle');
     this.props.setStudent('');
+    this.setState(this.state);
   }
 
   onSubmit = (e) => {
@@ -139,6 +138,7 @@ class UpdateStudent extends Component {
 
       if (!data.includes(false)) {
         let studentData = {
+          id: this.state.id,
           firstname: this.state.fname,
           lastname: this.state.lname,
           dateofbirth: this.state.dob,
@@ -147,13 +147,11 @@ class UpdateStudent extends Component {
           city: this.state.city,
           province: this.state.province,
           grade: this.state.grade,
-          imageurl: this.state.profileImage,
           achievements: this.state.achievements,
           parent: this.state.parentName,
           phone: this.state.phone,
           email: this.state.email,
           username: this.state.username,
-          password: this.state.password,
         };
 
         console.log('DATA TO SEND', studentData);
@@ -173,7 +171,6 @@ class UpdateStudent extends Component {
       lname,
       parentName,
       email,
-      profileImage,
       achievements,
       phone,
       city,
@@ -183,7 +180,6 @@ class UpdateStudent extends Component {
       address2,
       grade,
       username,
-      password,
     } = this.state;
     const data = {
       firstname: fname && fname.trim().length > 0 ? fname : null,
@@ -192,17 +188,17 @@ class UpdateStudent extends Component {
       address1: address1 && address1.trim().length > 0 ? address1 : null,
       address2: address2 && address2.trim().length > 0 ? address2 : null,
       city: city && city.trim().length > 0 ? city : null,
-      province: province && province.trim().length > 0 ? province : null,
-      grade: grade && grade.trim().length > 0 ? grade : null,
+      province:
+        province && province.toString().trim().length > 0 ? province : null,
+      grade: grade && grade.toString().trim().length > 0 ? grade : null,
       achievements:
-        achievements && achievements.trim().length > 0 ? achievements : null,
-      imageurl:
-        profileImage && profileImage.trim().length > 0 ? profileImage : null,
+        achievements && achievements.toString().trim().length > 0
+          ? achievements
+          : null,
       parent: parentName && parentName.trim().length > 0 ? parentName : null,
       phone: phone && phone.trim().length > 0 ? phone : null,
       email: email && email.trim().length > 0 ? email : null,
       username: username && username.trim().length > 0 ? username : null,
-      password: password && password.trim().length > 0 ? password : null,
     };
     formData = Object.assign({}, data);
     return true;
@@ -489,25 +485,6 @@ class UpdateStudent extends Component {
                   {formData.username === null && this.state.formNotValid ? (
                     <span className="text-danger validation-text p-0">
                       Username is required
-                    </span>
-                  ) : null}
-                </div>
-
-                <div className="row m-0 mb-3 col">
-                  <label htmlFor="password" className="form-label p-0">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    className="form-control"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChange}
-                  />
-                  {formData.password === null && this.state.formNotValid ? (
-                    <span className="text-danger validation-text p-0">
-                      Password is required
                     </span>
                   ) : null}
                 </div>

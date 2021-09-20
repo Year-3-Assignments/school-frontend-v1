@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { getAllSport, setSport } from '../../actions/sportActions';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
@@ -75,7 +74,8 @@ class SportPage extends Component {
   showCoach = (row) => {
     return row.coach.map((item, index) => (
       <p>
-        <img src={item.imageurl} className="thumb-img" />&nbsp;&nbsp;{item.firstName} {item.lastName}
+        <img src={item.imageurl} className="thumb-img" />
+        &nbsp;&nbsp;{item.firstName} {item.lastName}
       </p>
     ));
   };
@@ -154,7 +154,7 @@ class SportPage extends Component {
   };
 
   render() {
-    const { allSports, selectedExam } = this.state;
+    const { allSports } = this.state;
     return (
       <div className="pt-5 pb-5 admin-container-color">
         <div className="card p-4 exam-table container">
@@ -179,18 +179,19 @@ class SportPage extends Component {
           >
             {(props) => (
               <div>
-              <div className="d-flex">
-                <SearchBar
-                  {...props.searchProps}
-                  placeholder="Search sport by name"
-                  className="mb-3 search-bar"
-                />
-                  <ExportCSVButton 
-                  {...props.csvProps}
-                  className="btn-secondary btn-rounded btn-no-shadow mx-3 mb-3">
+                <div className="d-flex">
+                  <SearchBar
+                    {...props.searchProps}
+                    placeholder="Search sport by name"
+                    className="mb-3 search-bar"
+                  />
+                  <ExportCSVButton
+                    {...props.csvProps}
+                    className="btn-secondary btn-rounded btn-no-shadow mx-3 mb-3"
+                  >
                     Download Sport Details!!
                   </ExportCSVButton>
-              </div>
+                </div>
                 <BootstrapTable
                   {...props.baseProps}
                   pagination={paginationFactory()}

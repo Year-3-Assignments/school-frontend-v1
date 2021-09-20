@@ -12,13 +12,23 @@ import {
   getAllStudents,
   getStudentById,
   setStudent,
+  deleteStudent,
 } from '../../../actions/student_actions';
 import Student from '../add/student';
 //import ImagePreviewer from '../../../components/image_previewer';
 import UpdateStudent from '../update/update_student';
+import Loader from '../../../components/loader';
+import { NotificationManager } from 'react-notifications';
 
 const { SearchBar } = Search;
 const { ExportCSVButton } = CSVExport;
+const initialState = {
+  students: [],
+  removeStudentId: '',
+  isLoading: false,
+};
+
+const $ = window.$;
 
 const rowStyle = (row, rowIndex) => {
   const style = {};
@@ -33,9 +43,9 @@ const rowStyle = (row, rowIndex) => {
 class StudentView extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      students: [],
-    };
+    this.state = initialState;
+    this.setRemoveStudentId = this.setRemoveStudentId.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentDidMount() {
@@ -43,6 +53,11 @@ class StudentView extends Component {
       this.props.getAllStudents();
     } else {
       window.location = '/login';
+    }
+
+    const studentId = this.props.studentId;
+    if (studentId) {
+      this.props.getStudentById(studentId);
     }
   }
 
@@ -56,6 +71,62 @@ class StudentView extends Component {
     }
     if (this.props.updatestudent !== nextProps.updatestudent) {
       this.props.getStudentById();
+    }
+
+    if (this.props.getstudent !== nextProps.getstudent) {
+      this.setState({ students: nextProps.getstudent.students });
+    }
+
+    if (this.props.deletestudent !== nextProps.deletestudent) {
+      this.props.getAllStudents();
+    }
+
+    if (this.props.deletestudenterror !== nextProps.deletestudenterror) {
+      if (
+        nextProps.deletestudenterror &&
+        nextProps.deletestudenterror.message
+      ) {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error(nextProps.deletestudenterror.message);
+        });
+      } else {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error('Student Record Delete Fail');
+        });
+      }
+    }
+  };
+
+  closeModal() {
+    const { removeStudentId } = this.state;
+
+    if (removeStudentId) {
+      $(`#q${removeStudentId}`).modal('toggle');
+      this.setState(initialState);
+    }
+  }
+
+  setRemoveStudentId = (event, studentId) => {
+    if (event) {
+      this.setState({ removeStudentId: studentId });
+      // console.log(studentId);
+      // this.props.deleteStudent(studentId);
+      // this.setState({ isLoading: false });
+      // this.closeModal();
+    }
+  };
+
+  removeStudent = (event) => {
+    if (event) {
+      event.preventDefault();
+      const { removeStudentId } = this.state;
+
+      if (removeStudentId) {
+        console.log(removeStudentId);
+        this.props.deleteStudent(removeStudentId);
+        this.setState({ isLoading: false });
+        this.closeModal();
+      }
     }
   };
 
@@ -143,6 +214,7 @@ class StudentView extends Component {
   };
 
   actionButtonFormatter = (row) => {
+    const { removeStudentId } = this.state;
     return (
       <span className="dropdown show">
         <span className="dropdown">
@@ -164,7 +236,12 @@ class StudentView extends Component {
               <i class="far fa-edit" /> Edit
             </a>
 
-            <a className="dropdown-item" href="#">
+            <a
+              className="dropdown-item"
+              data-mdb-toggle="modal"
+              data-mdb-target={`#q${removeStudentId}`}
+              onClick={(event) => this.setRemoveStudentId(event, row._id)}
+            >
               <i class="far fa-trash-alt" /> Delete
             </a>
           </div>
@@ -269,7 +346,8 @@ class StudentView extends Component {
   };
 
   render() {
-    const { students, selectedstudent } = this.state;
+    const { students, selectedstudent, isLoading, removeStudentId } =
+      this.state;
     return (
       <div className="p-4 admin-container-color">
         <div className="card p-3 container ">
@@ -320,31 +398,88 @@ class StudentView extends Component {
               </div>
             )}
           </ToolkitProvider>
+          <Student />
+          <UpdateStudent selectedstudent={selectedstudent} />
+          <div
+            className="modal fade"
+            id={'q' + removeStudentId}
+            tabIndex="-1"
+            aria-labelledby="exampleModalLabel"
+            data-mdb-backdrop="static"
+            data-mdb-keyboard="false"
+            aria-hidden="true"
+          >
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLabel">
+                    Remove Student
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-mdb-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <p>Do you want to remove this student?</p>
+                </div>
+                <div className="modal-footer d-flex justify-content-center">
+                  {isLoading ? (
+                    <Loader size={50} />
+                  ) : (
+                    <div>
+                      <button
+                        type="button"
+                        className="btn btn-light btn-no-shadow btn-rounded"
+                        data-mdb-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-no-shadow btn-rounded"
+                        onClick={this.removeStudent}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <Student />
-        <UpdateStudent selectedstudent={selectedstudent} />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
+  getstudent: state.studentReducer.getstudent,
+  getstudenterror: state.studentReducer.getstudenterror,
   getallstudents: state.studentReducer.getallstudents,
   createstudent: state.studentReducer.createstudent,
   createstudenterror: state.studentReducer.createstudenterror,
   updatestudent: state.studentReducer.updatestudent,
   updatestudenterror: state.studentReducer.updatestudenterror,
+  deletestudent: state.studentReducer.deletestudent,
+  deletestudenterror: state.studentReducer.deletestudenterror,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getAllStudents: () => {
     dispatch(getAllStudents());
   },
-  getStudentById: () => {
-    dispatch(getStudentById());
+  getStudentById: (studentId) => {
+    dispatch(getStudentById(studentId));
   },
   setStudent: (studentData) => {
     dispatch(setStudent(studentData));
+  },
+  deleteStudent: (studentId) => {
+    dispatch(deleteStudent(studentId));
   },
 });
 export default connect(mapStateToProps, mapDispatchToProps)(StudentView);
