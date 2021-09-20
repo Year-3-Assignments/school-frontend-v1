@@ -5,13 +5,13 @@ import {
     UPDATE_EMPLOYEE,
     SET_EMPLOYEE
   } from '../actions';
-import { setEmployee } from '../actions/employeeAction';
   
   const initialState = {
     createemployee: '',
     employeeList: [],
     deleteEmployee: '',
     updateEmployee: '',
+    setEmployee:'',
     createemployeeError: null,
     employeeListError: null,
     deleteemployeeError: null,
@@ -19,7 +19,7 @@ import { setEmployee } from '../actions/employeeAction';
   };
   
   function employeeReducer(state = initialState, action) {
-    let createemployee, employeeList, deleteEmployee, updateEmployee;
+    let createemployee, employeeList, deleteEmployee, updateEmployee, setEmployee;
   
     switch (action.type) {
       case `${CREATE_EMPLOYEE_ACCOUNT}_PENDING`:
@@ -71,8 +71,9 @@ import { setEmployee } from '../actions/employeeAction';
           loading: false,
           updateEmployee,
         };
-      case `${SET_EMPLOYEE}_FULFILLED`:
-        setEmployee = action.payload.data.data;
+      case `${SET_EMPLOYEE}`:
+        setEmployee = action.payload;
+        console.log(action.payload);
         return { ...state, loading: false, setEmployee 
         };
       

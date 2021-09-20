@@ -50,7 +50,7 @@ export function updateEmployee(employee) {
   return {
     type: UPDATE_EMPLOYEE,
     payload: axios.put(
-      `${process.env.REACT_APP_API_DEV_URL}/user/update/${employee.id}`,
+      `${process.env.REACT_APP_API_DEV_URL}/user/update/${employee._id}`,
       employee,
       {
         headers: { Authorization: localStorage.getItem('token') },

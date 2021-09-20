@@ -8,6 +8,7 @@ import { NotificationManager } from 'react-notifications';
 import DatePicker from 'react-datepicker';
 import Select from 'react-select';
 import Loader from '../../../components/loader';
+import moment from 'moment';
 
 let formData = {};
 const $ = window.$;
@@ -19,6 +20,7 @@ const roleOptions = [
 ];
 
 const initialState = {
+  _id: '',
   firstName: '',
   lastName: '',
   email: '',
@@ -47,23 +49,23 @@ class UpdateEmployee extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.selectedEmployee != nextProps.selectedEmployee) {
+    if (this.props.employee !== nextProps.employee) {
       this.setState({
-        _id: nextProps.selectedstudent._id,
-        firstName: nextProps.selectedEmployee.firstName,
-        lastName: nextProps.selectedEmployee.lastName,
-        email: nextProps.selectedEmployee.email,
-        phoneNumber: nextProps.selectedEmployee.phoneNumber,
-        addressLine1: nextProps.selectedEmployee.addressLine1,
-        addressLine2: nextProps.selectedEmployee.addressLine2,
-        city: nextProps.selectedEmployee.city,
-        province: nextProps.selectedEmployee.province,
-        description: nextProps.selectedEmployee.description,
-        dateofbirth: nextProps.selectedEmployee.dateofbirth,
-        userName: nextProps.selectedEmployee.userName,
-        password: nextProps.selectedEmployee.password,
-        salary: nextProps.selectedEmployee.salary,
-        role: nextProps.selectedEmployee.role,
+        _id: nextProps.employee._id,
+        firstName: nextProps.employee.firstName,
+        lastName: nextProps.employee.lastName,
+        email: nextProps.employee.email,
+        phoneNumber: nextProps.employee.phoneNumber,
+        addressLine1: nextProps.employee.addressLine1,
+        addressLine2: nextProps.employee.addressLine2,
+        city: nextProps.employee.city,
+        province: nextProps.employee.province,
+        description: nextProps.employee.description,
+        userName: nextProps.employee.userName,
+        password: nextProps.employee.password,
+        salary: nextProps.employee.salary,
+        role: nextProps.employee.role,
+        dateofbirth: moment(nextProps.employee .dateofbirth).toDate(),
       });
     }
     if (this.props.updateEmployee !== nextProps.updateEmployee) {
@@ -82,7 +84,7 @@ class UpdateEmployee extends Component {
   }
 
   onTimeChange(date) {
-    this.setState({ dob: date });
+    this.setState({ dateofbirth: date });
   }
 
   closeModal() {
@@ -138,15 +140,16 @@ class UpdateEmployee extends Component {
 
       if (!data.includes(false)) {
         let employeeData = {
-          firstName: this.state.firstName,
-          lastName: this.state.lastName,
-          addressLine1: this.state.addressLine1,
-          addressLine2: this.state.addressLine2,
+          _id: this.state._id,
+          firstname: this.state.firstName,
+          lastname: this.state.lastName,
+          address1: this.state.addressLine1,
+          address2: this.state.addressLine2,
           city: this.state.city,
           province: this.state.province,
-          phoneNumber: this.state.phoneNumber,
+          phone: this.state.phoneNumber,
           email: this.state.email,
-          userName: this.state.userName,
+          username: this.state.userName,
           password: this.state.password,
           role: this.state.role,
           description: this.state.description,
@@ -242,7 +245,6 @@ class UpdateEmployee extends Component {
                   peekNextMonth
                   showMonthDropdown
                   showYearDropdown
-                  dropdownMode="select"
                 />
                 {formData.dateofbirth === null && this.state.formNotValid ? (
                   <span className="text-danger validation-text p-0">
@@ -498,7 +500,7 @@ class UpdateEmployee extends Component {
 const mapStateToProps = (state) => ({
   updateemployee: state.employeeReducer.updateEmployee,
   updateemployeeError: state.employeeReducer.updateemployeeError,
-  selectedEmployee: state.employeeReducer.setEmployee,
+  employee: state.employeeReducer.setEmployee,
 });
 
 const mapDispatchToProps = (dispatch) => ({
