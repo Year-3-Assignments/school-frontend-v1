@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  updateEmployee,
-  setEmployee,
-} from '../../../actions/employeeAction';
+import { updateEmployee, setEmployee } from '../../../actions/employeeAction';
 import { NotificationManager } from 'react-notifications';
 import DatePicker from 'react-datepicker';
 import Select from 'react-select';
@@ -36,7 +33,7 @@ const initialState = {
   isLoading: false,
   salary: '',
   role: '0',
-}
+};
 
 class UpdateEmployee extends Component {
   constructor(props) {
@@ -65,15 +62,17 @@ class UpdateEmployee extends Component {
         password: nextProps.employee.password,
         salary: nextProps.employee.salary,
         role: nextProps.employee.role,
-        dateofbirth: moment(nextProps.employee .dateofbirth).toDate(),
+        dateofbirth: moment(nextProps.employee.dateofbirth).toDate(),
       });
     }
-    if (this.props.updateEmployee !== nextProps.updateEmployee) {
-      NotificationManager.success('Updated Employee Details successfully!')
+
+    if (this.props.update !== nextProps.update) {
+      NotificationManager.success('Updated Employee Details successfully!');
+      this.setState({ isLoading: false });
       this.closeModal();
     }
-    if(this.props.updateemployeeError !== nextProps.updateemployeeError){
-      this.setState({isLoading: false}, () => {
+    if (this.props.updateemployeeError !== nextProps.updateemployeeError) {
+      this.setState({ isLoading: false }, () => {
         NotificationManager.error(nextProps.updateemployeeerror.message);
       });
     }
@@ -113,15 +112,22 @@ class UpdateEmployee extends Component {
 
     const data = {
       firstName: firstName && firstName.trim().length > 0 ? firstName : null,
-      lastName: lastName && lastName.trim().length >0 ? lastName : null,
-      email: email && email.trim().length >0 ? email : null,
-      phoneNumber: phoneNumber && phoneNumber.trim().length > 0 ? phoneNumber : null,
-      addressLine1: addressLine1 && addressLine1.trim().length > 0 ? addressLine1 : null,
-      addressLine2: addressLine2 && addressLine2.trim().length > 0 ? addressLine2 : null,
+      lastName: lastName && lastName.trim().length > 0 ? lastName : null,
+      email: email && email.trim().length > 0 ? email : null,
+      phoneNumber:
+        phoneNumber && phoneNumber.trim().length > 0 ? phoneNumber : null,
+      addressLine1:
+        addressLine1 && addressLine1.trim().length > 0 ? addressLine1 : null,
+      addressLine2:
+        addressLine2 && addressLine2.trim().length > 0 ? addressLine2 : null,
       city: city && city.trim().length > 0 ? city : null,
       province: province && province.trim().length > 0 ? province : null,
-      description: description && description.trim().length > 0 ? description : null,
-      dateofbirth: dateofbirth && dateofbirth.toString().trim().length > 0 ? dateofbirth : null,
+      description:
+        description && description.trim().length > 0 ? description : null,
+      dateofbirth:
+        dateofbirth && dateofbirth.toString().trim().length > 0
+          ? dateofbirth
+          : null,
       userName: userName && userName.trim().length > 0 ? userName : null,
       password: password && password.trim().length > 0 ? password : null,
       salary: salary && salary.toString().trim().length > 0 ? salary : null,
@@ -169,7 +175,7 @@ class UpdateEmployee extends Component {
   };
 
   render() {
-    return  (
+    return (
       <div
         className="modal fade"
         id="update-employee"
@@ -498,14 +504,14 @@ class UpdateEmployee extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  updateemployee: state.employeeReducer.updateEmployee,
+  update: state.employeeReducer.updateEmployee,
   updateemployeeError: state.employeeReducer.updateemployeeError,
   employee: state.employeeReducer.setEmployee,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   updateEmployee: (emplyeeDate) => {
-    dispatch(updateEmployee(emplyeeDate))
+    dispatch(updateEmployee(emplyeeDate));
   },
   setEmployee: (employeeData) => {
     dispatch(setEmployee(employeeData));

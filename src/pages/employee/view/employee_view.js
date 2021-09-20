@@ -8,10 +8,7 @@ import ToolkitProvider, {
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
-import {
-  getEmployeeList,
-  setEmployee,
-  } from '../../../actions/employeeAction';
+import { getEmployeeList, setEmployee } from '../../../actions/employeeAction';
 import CreateEmployee from '../add/create_new_employee';
 import UpdateEmployee from '../update/update_employee';
 
@@ -58,12 +55,17 @@ class EmployeePage extends Component {
     if (this.props.addEmployee !== nextProps.addEmployee) {
       this.props.getEmployeeList();
     }
+    if (this.props.updateEmp !== nextProps.updateEmp) {
+      this.props.getEmployeeList();
+    }
   };
 
   OnSelectEmployeeToUpdate = (event, employeeId) => {
     const { employees } = this.state;
     if (event && employees && employees.length > 0 && employeeId) {
-      const selectedEmployee = employees.find((employee) => employee._id === employeeId);
+      const selectedEmployee = employees.find(
+        (employee) => employee._id === employeeId
+      );
       this.props.setEmployee(selectedEmployee);
       this.setState({ selectedEmployee: selectedEmployee });
       //console.log(selectedEmployee);
@@ -187,17 +189,17 @@ class EmployeePage extends Component {
             <i className="fas fa-ellipsis-h"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a 
-              className="dropdown-item" 
-              href="#" 
+            <a
+              className="dropdown-item"
+              href="#"
               data-mdb-toggle="modal"
-              data-mdb-target="#update-employee" 
+              data-mdb-target="#update-employee"
               onClick={(e) => this.OnSelectEmployeeToUpdate(e, row._id)}
             >
-            <i class="far fa-edit" /> Edit
+              <i class="far fa-edit" /> Edit
             </a>
 
-            <a className="dropdown-item" href="#" >
+            <a className="dropdown-item" href="#">
               <i class="far fa-trash-alt" /> Delete
             </a>
           </div>
@@ -338,8 +340,8 @@ class EmployeePage extends Component {
             )}
           </ToolkitProvider>
         </div>
-        <CreateEmployee/>
-        <UpdateEmployee/>
+        <CreateEmployee />
+        <UpdateEmployee />
       </div>
     );
   }
@@ -349,7 +351,7 @@ const mapStateToProps = (state) => ({
   employees: state.employeeReducer.employeeList,
   employeeListError: state.employeeReducer.employeeListError,
   addEmployee: state.employeeReducer.createemployee,
-  UpdateEmployee: state.employeeReducer.UpdateEmployee,
+  updateEmp: state.employeeReducer.updateEmployee,
   updateEmployeeError: state.employeeReducer.updateEmployeeError,
 });
 
