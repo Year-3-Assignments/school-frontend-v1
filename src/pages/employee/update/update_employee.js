@@ -25,7 +25,6 @@ const initialState = {
   addressLine1: '',
   addressLine2: '',
   city: '',
-  province: '',
   description: '',
   dateofbirth: '',
   userName: '',
@@ -56,7 +55,6 @@ class UpdateEmployee extends Component {
         addressLine1: nextProps.employee.addressLine1,
         addressLine2: nextProps.employee.addressLine2,
         city: nextProps.employee.city,
-        province: nextProps.employee.province,
         description: nextProps.employee.description,
         userName: nextProps.employee.userName,
         password: nextProps.employee.password,
@@ -101,7 +99,6 @@ class UpdateEmployee extends Component {
       addressLine1,
       addressLine2,
       city,
-      province,
       description,
       dateofbirth,
       userName,
@@ -121,7 +118,6 @@ class UpdateEmployee extends Component {
       addressLine2:
         addressLine2 && addressLine2.trim().length > 0 ? addressLine2 : null,
       city: city && city.trim().length > 0 ? city : null,
-      province: province && province.trim().length > 0 ? province : null,
       description:
         description && description.trim().length > 0 ? description : null,
       dateofbirth:
@@ -152,7 +148,6 @@ class UpdateEmployee extends Component {
           address1: this.state.addressLine1,
           address2: this.state.addressLine2,
           city: this.state.city,
-          province: this.state.province,
           phone: this.state.phoneNumber,
           email: this.state.email,
           username: this.state.userName,
@@ -355,25 +350,6 @@ class UpdateEmployee extends Component {
               </div>
 
               <div className="row m-0 mb-3">
-                <label htmlFor="province" className="form-label p-0">
-                  Province :
-                </label>
-                <input
-                  type="text"
-                  id="province"
-                  className="form-control"
-                  name="province"
-                  value={this.state.province}
-                  onChange={this.onChange}
-                />
-                {formData.province === null && this.state.formNotValid ? (
-                  <span className="text-danger validation-text p-0">
-                    Province is required
-                  </span>
-                ) : null}
-              </div>
-
-              <div className="row m-0 mb-3">
                 <label htmlFor="description" className="form-label p-0">
                   Description :
                 </label>
@@ -420,7 +396,7 @@ class UpdateEmployee extends Component {
                   id="password"
                   className="form-control"
                   name="password"
-                  value={this.state.password}
+                  placeholder="********"
                   onChange={this.onChange}
                 />
                 {formData.password === null && this.state.formNotValid ? (
