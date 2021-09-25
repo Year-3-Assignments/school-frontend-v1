@@ -4,18 +4,14 @@ class LandingPage extends Component {
   render() {
     return (
       <div>
-        <div></div>
         <header className="masthead">
           <div className="container">
             <div className="masthead-subheading">Welcome To Our School!</div>
             <div className="masthead-heading text-uppercase">
               It's Nice To Meet You
             </div>
-            <a
-              className="btn btn-primary btn-xl text-uppercase"
-              href="#services"
-            >
-              Tell Me More
+            <a className="btn btn-primary btn-xl text-uppercase" href="/login">
+              Login
             </a>
           </div>
         </header>
@@ -91,7 +87,7 @@ class LandingPage extends Component {
                     </div>
                     <img
                       className="img-fluid"
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLNn9Uz6I4tvx3aqP0ioVfi26czaFgiku9Elw29QpW4muvHnHO4AB8xkyQ4U_K656YHmQ&usqp=CAU"
+                      src="https://static.vecteezy.com/system/resources/previews/002/560/710/non_2x/little-children-studying-in-classroom-vector.jpg"
                       alt="..."
                     />
                   </a>
@@ -117,7 +113,7 @@ class LandingPage extends Component {
                     </div>
                     <img
                       className="img-fluid"
-                      src="https://pubs.asha.org/cms/asset/ec295913-cf24-48af-9dcb-094ed386c638/jslhr-20-00378chow_featimage.jpg"
+                      src="https://d1me9gyjqvn2ca.cloudfront.net/assets/kids_2-c24f5de232752639434941a62d682fbe.png"
                       alt="..."
                     />
                   </a>
