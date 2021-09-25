@@ -75,7 +75,7 @@ class NavigationBar extends Component {
                 className="collapse navbar-collapse"
                 id="navbarSupportedContent"
               >
-                <a className="navbar-brand mt-2 mt-lg-0" href="#">
+                <a className="navbar-brand mt-2 mt-lg-0" href="/">
                   <img
                     src={schoolLogo}
                     alt=""
@@ -108,11 +108,6 @@ class NavigationBar extends Component {
 
                 {userRole === Constant.ROLE_ADMIN ? (
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
-                      <a className="nav-link" href="#">
-                        Dashboard
-                      </a>
-                    </li>
                     <li className="nav-item">
                       <NavLink className="nav-link" to="/employee">
                         Employees

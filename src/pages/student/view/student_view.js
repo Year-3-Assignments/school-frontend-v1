@@ -317,6 +317,7 @@ class StudentView extends Component {
         ) : null}
       </div>
     ),
+    expandByColumnOnly: true,
     expandHeaderColumnRenderer: ({ isAnyExpands }) => {
       if (isAnyExpands) {
         return <b style={{ cursor: 'pointer' }}></b>;

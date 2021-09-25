@@ -238,6 +238,7 @@ class EmployeePage extends Component {
         </div>
       </div>
     ),
+    expandByColumnOnly: true,
     expandHeaderColumnRenderer: ({ isAnyExpands }) => {
       if (isAnyExpands) {
         return <b style={{ cursor: 'pointer' }}></b>;

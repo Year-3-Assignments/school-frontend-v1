@@ -233,9 +233,6 @@ class ExaminationPage extends Component {
               <i className="far fa-edit" /> Edit
             </a>
             <a className="dropdown-item" href="#">
-              <i className="fas fa-check"></i> Make as Complete
-            </a>
-            <a className="dropdown-item" href="#">
               <i className="far fa-trash-alt" /> Delete
             </a>
           </div>

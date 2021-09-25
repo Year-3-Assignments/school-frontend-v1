@@ -10,32 +10,14 @@
   box-shadow: none !important;
 }
 
+.pages {
+  margin-top: 50px;
+}
+
 .admin-container-color {
   background: url('./assets/background_1.jpg');
   position: relative;
   height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-size: cover;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    //background-color: rgba(0,0,0,0.25);
-    background-color: rgba(0, 0, 0, 0.694);
-  }
-}
-
-.login-container-color {
-  background: url('./assets/login_background.jpg');
-  position: absolute;
-  height: 94.8%;
   width: 100%;
   display: flex;
   align-items: center;
@@ -69,6 +51,7 @@
 
 .btn-primary {
   background-color: #02424d;
+  border: none;
 }
 
 .btn-primary:hover {
@@ -86,6 +69,7 @@
 .btn-secondary {
   background-color: #6de3d0;
   color: #282c34;
+  border: none;
 }
 
 .btn-secondary:hover {
@@ -166,6 +150,10 @@ textarea {
   font-size: 14px;
 }
 
+.btn-floating {
+  border-radius: 50%;
+}
+
 .download-btn {
   width: '130px';
   height: '38px';
@@ -174,9 +162,8 @@ textarea {
 }
 
 .action-column {
-  font-size: 10px;
+  font-size: 12px;
   width: 80px;
-  transform: rotate(-50deg);
 }
 
 .teacher-exam-header {
