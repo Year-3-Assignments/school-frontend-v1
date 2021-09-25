@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { NotificationContainer } from 'react-notifications';
 import {
-  deleteSport
-} from '../../actions/sportActions';
+  deleteSportInventory
+} from '../../actions/sportInventoryActions';
 import {connect} from 'react-redux';
 
 const $ = window.$;
@@ -16,7 +16,7 @@ class DeleteSport extends Component {
 
     onSubmit = () => {
         console.log(this.props.id._id)
-        this.props.deleteSport(this.props.id);
+        this.props.deleteSportInventory(this.props.id);
         this.closeModal()
     }
 
@@ -66,8 +66,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  deleteSport: (sportData) => {
-    dispatch(deleteSport(sportData));
+  deleteSportInventory: (sportData) => {
+    dispatch(deleteSportInventory(sportData));
   }
 });
 

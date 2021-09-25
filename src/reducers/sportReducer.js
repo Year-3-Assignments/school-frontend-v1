@@ -49,7 +49,7 @@ import { CREATE_SPORT, GET_ALL_SPORT, GET_SPORT_FOR_SPORT_INVENTORY, SET_SPORT, 
         getsport = action.payload.data;
         return { ...state, loading: false, getsport }; 
       case `${UPDATE_SPORT}_FULFILLED`:
-        updatesport = action.payload.data;
+        updatesport = action.payload.data.data;
         return { ...state, loading: false, updatesport };
       case `${DELETE_SPORT}_FULFILLED`:
         deletesport = action.payload.data;

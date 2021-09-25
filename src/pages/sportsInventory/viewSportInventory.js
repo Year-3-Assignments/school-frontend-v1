@@ -1,53 +1,52 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getAllSport, setSport } from '../../actions/sportActions';
+import { getAllSportInventory, setSportInventory } from '../../actions/sportInventoryActions';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   CSVExport,
   Search,
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import CreateSport from './AddSports';
-import DeleteSport from './DeleteSport';
-import ShowSport from './ShowSport';
-import EditSport from './EditSport';
+import CreateSport from './AddSportInventory';
+import DeleteSport from './DeleteSportInventory';
+import ShowSport from './ShowSportInventory';
+import EditSport from './EditSportInventory';
 
 const { SearchBar } = Search;
 const { ExportCSVButton } = CSVExport;
 
-class SportPage extends Component {
+class SportPageInventory extends Component {
   constructor(props) {
     super(props);
     this.onSelectSportToUpdate = this.onSelectSportToUpdate.bind(this);
     this.state = {
-      exams: [],
-      allSports: [],
-      selectedSport: [],
+      allSportsInventory: [],
+      selectedSportInventory: [],
     };
   }
 
   componentDidMount() {
-    this.props.getAllSport();
+    this.props.getAllSportInventory();
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (this.props.getallsports !== nextProps.getallsports) {
+    if (this.props.getsportinventory !== nextProps.getsportinventory) {
       this.setState({
-        allSports: nextProps.getallsports,
+        allSportsInventory: nextProps.getsportinventory,
       });
     }
 
-    if (this.props.createSport !== nextProps.createSport) {
-      this.props.getAllSport();
+    if (this.props.createsportinventory !== nextProps.createsportinventory) {
+      this.props.getAllSportInventory();
     }
 
-    if (this.props.deleteSport !== nextProps.deleteSport) {
-      this.props.getAllSport();
+    if (this.props.deletesportinventory !== nextProps.deletesportinventory) {
+      this.props.getAllSportInventory();
     }
 
-    if (this.props.updatesport !== nextProps.updatesport) {
-      this.props.getAllSport();
+    if (this.props.updatesportinventory !== nextProps.updatesportinventory) {
+      this.props.getAllSportInventory();
     }
 
   };
@@ -64,50 +63,46 @@ class SportPage extends Component {
       csvExport: false,
     },
     {
-      dataField: 'sportId',
-      text: 'Sport ID',
+      dataField: 'name',
+      text: 'Equipment Name',
     },
-    { dataField: 'name', text: 'Sport Title' },
-    {
-      dataField: 'coach',
-      text: 'Coach Name',
-      formatter: (cell, row) => this.showCoach(row),
-    },
+    { dataField: 'sportname', text: 'Sport Name', formatter: (cell, row) => this.showCoach(row), },
+    { dataField: 'dateOfPurchase', text: 'Date Of Purchase' },
+    { dataField: 'quantity', text: 'Quantity' },
   ];
 
   showCoach = (row) => {
-    return row.coach.map((item, index) => (
+    return row.sportname.map((item, index) => (
       <p>
-        <img src={item.imageurl} className="thumb-img" />
-        &nbsp;&nbsp;{item.firstName} {item.lastName}
+        &nbsp;{item.name}
       </p>
     ));
   };
 
   onViewSportDetail = (event, sportId) => {
-    const { allSports } = this.state;
-    if (event && allSports && allSports.length > 0 && sportId) {
-      const selectedSport = allSports.find((sport) => sport._id === sportId);
-      this.props.setSport(selectedSport);
-      this.setState({ selectedSport: selectedSport });
+    const { allSportsInventory } = this.state;
+    if (event && allSportsInventory && allSportsInventory.length > 0 && sportId) {
+      const selectedSportInventory = allSportsInventory.find((sport) => sport._id === sportId);
+      this.props.setSportInventory(selectedSportInventory);
+      this.setState({ selectedSportInventory: selectedSportInventory });
     }
   };
 
   onSportDelete = (event, sportId) => {
-    const { allSports } = this.state;
-    if (event && allSports && allSports.length > 0 && sportId) {
-      const selectedSport = allSports.find((sport) => sport._id === sportId);
-      this.props.setSport(selectedSport);
-      this.setState({ selectedSport: selectedSport });
+    const { allSportsInventory } = this.state;
+    if (event && allSportsInventory && allSportsInventory.length > 0 && sportId) {
+      const selectedSportInventory = allSportsInventory.find((sport) => sport._id === sportId);
+      this.props.setSportInventory(selectedSportInventory);
+      this.setState({ selectedSportInventory: selectedSportInventory });
     }
   };
 
   onSelectSportToUpdate = (event, sportId) => {
-    const { allSports } = this.state;
-    if (event && allSports && allSports.length > 0 && sportId) {
-      const selectedSport = allSports.find((sport) => sport._id === sportId);
-      this.props.setSport(selectedSport);
-      this.setState({ selectedSport: selectedSport });
+    const { allSportsInventory } = this.state;
+    if (event && allSportsInventory && allSportsInventory.length > 0 && sportId) {
+      const selectedSportInventory = allSportsInventory.find((sport) => sport._id === sportId);
+      this.props.setSportInventory(selectedSportInventory);
+      this.setState({ selectedSportInventory: selectedSportInventory });
     }
   };
 
@@ -158,7 +153,7 @@ class SportPage extends Component {
   };
 
   render() {
-    const { allSports } = this.state;
+    const { allSportsInventory } = this.state;
     return (
       <div className="pt-5 pb-5 admin-container-color">
         <div className="card p-4 exam-table container">
@@ -176,26 +171,25 @@ class SportPage extends Component {
           </div>
           <ToolkitProvider
             keyField="_id"
-            data={allSports}
+            data={allSportsInventory}
             columns={this.tableColumnData}
             search
             exportCSV
           >
             {(props) => (
               <div>
-                <div className="d-flex">
-                  <SearchBar
-                    {...props.searchProps}
-                    placeholder="Search sport by name"
-                    className="mb-3 search-bar"
-                  />
-                  <ExportCSVButton
-                    {...props.csvProps}
-                    className="btn-secondary btn-rounded btn-no-shadow mx-3 mb-3"
-                  >
+              <div className="d-flex">
+                <SearchBar
+                  {...props.searchProps}
+                  placeholder="Search sport by name"
+                  className="mb-3 search-bar"
+                />
+                  <ExportCSVButton 
+                  {...props.csvProps}
+                  className="btn-secondary btn-rounded btn-no-shadow mx-3 mb-3">
                     Download Sport Details!!
                   </ExportCSVButton>
-                </div>
+              </div>
                 <BootstrapTable
                   {...props.baseProps}
                   pagination={paginationFactory()}
@@ -211,9 +205,9 @@ class SportPage extends Component {
           </ToolkitProvider>
         </div>
         <CreateSport />
-        <DeleteSport id={this.state.selectedSport} />
-        <ShowSport id={this.state.selectedSport} />
-        <EditSport selectedSport={this.state.selectedSport} />
+        <DeleteSport id={this.state.selectedSportInventory} />
+        <ShowSport id={this.state.selectedSportInventory} />
+        <EditSport selectedSportInventory={this.state.selectedSportInventory} />
       </div>
     );
   }
@@ -221,19 +215,20 @@ class SportPage extends Component {
 
 const mapStateToProps = (state) => ({
   // updateExam: state.examinationReducer.updateexamination,
-  createSport: state.sportReducer.createsport,
-  getallsports: state.sportReducer.getallsports,
-  deleteSport: state.sportReducer.deletesport,
-  updatesport: state.sportReducer.updatesport
+  createsportinventory: state.sportInventoryReducer.createsportinventory,
+  getsportinventory: state.sportInventoryReducer.getsportinventory,
+  deletesportinventory: state.sportInventoryReducer.deletesportinventory,
+  updatesportinventory: state.sportInventoryReducer.updatesportinventory
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setSport: (sportData) => {
-    dispatch(setSport(sportData));
+  setSportInventory: (sportData) => {
+    dispatch(setSportInventory(sportData));
   },
-  getAllSport: () => {
-    dispatch(getAllSport());
+  getAllSportInventory: () => {
+    dispatch(getAllSportInventory());
   },
+
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SportPage);
+export default connect(mapStateToProps, mapDispatchToProps)(SportPageInventory);

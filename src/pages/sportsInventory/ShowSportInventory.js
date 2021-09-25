@@ -32,27 +32,16 @@ export default class ShowSport extends Component {
               </div>
               <div className="modal-body">
 
-                {this.props.id.coach && this.props.id.coach !== '' ?
-                (<div>Coachs: {this.props.id.coach.map((item, index) => (
-                    <p key={item._id}>{item.firstName} {item.lastName}</p>
+                {this.props.id.sportname && this.props.id.sportname !== '' ?
+                (<div>Sports: {this.props.id.sportname.map((item, index) => (
+                    <p key={item._id}>{index+1}.&nbsp;{item.name}</p>
                 ))} </div> )
                 : null }
 
-                {this.props.id.teamPlayers && this.props.id.teamPlayers !== '' ?
-                (<div>Team Players: {this.props.id.teamPlayers.map((item, index) => (
-                    <p key={item._id}>{index+1}. {item.firstname} {item.lastname} - Grade: {item.grade}</p>
-                ))} </div> )
-                : null }
+                <p>Date of Purchase: {this.props.id.dateOfPurchase}</p>
 
-                {this.props.id.teamImageUrl && this.props.id.teamImageUrl !== '' ?
-                  <div>
-                    <img alt="icon" src={this.props.id.teamImageUrl} width="50%" height="50%" className="upload-img" />
-                  </div>
+                <p>Quantity: {this.props.id.quantity}</p>
 
-                :
-                  null
-                
-                }
               </div>  
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary btn--pill" onClick={this.closeModal}>Ok</button>

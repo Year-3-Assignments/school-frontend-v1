@@ -232,7 +232,7 @@ constructor(props) {
             </div>
             {this.state.image && this.state.image !== '' ?
               <div>
-                <img src={this.state.image} className="upload-img" />
+                <img alt="icon" src={this.state.image} className="upload-img" />
               </div>
             :
               null
