@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -7,7 +8,7 @@ import ToolkitProvider, {
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
-import { 
+import {
   getEmployeeList,
   setEmployee,
   deleteEmployee,
@@ -23,7 +24,6 @@ const initialState = {
   employees: [],
   isLoading: false,
   removeemployeeId: '',
-
 };
 
 const { ExportCSVButton } = CSVExport;
@@ -57,8 +57,8 @@ class EmployeePage extends Component {
   componentDidMount() {
     this.props.getEmployeeList();
     const employeeId = this.props.employeeId;
-    if(employeeId){
-      this.props.getEmployeeById(employeeId)
+    if (employeeId) {
+      this.props.getEmployeeById(employeeId);
     }
   }
 
@@ -80,12 +80,12 @@ class EmployeePage extends Component {
     }
 
     if (this.props.deleteempError !== nextProps.deleteempError) {
-      if(nextProps.deleteempError && nextProps.deleteempError.message) {
-        this.setState({isLoading: false}, () => {
+      if (nextProps.deleteempError && nextProps.deleteempError.message) {
+        this.setState({ isLoading: false }, () => {
           NotificationManager.error(nextProps.deleteempError.message);
         });
       } else {
-        this.setState({ isLoading: false}, () => {
+        this.setState({ isLoading: false }, () => {
           NotificationManager.error('Employee delete failed!');
         });
       }
@@ -95,7 +95,7 @@ class EmployeePage extends Component {
   closeModal() {
     const { removeemployeeId } = this.state;
 
-    if(removeemployeeId) {
+    if (removeemployeeId) {
       $(`#q${removeemployeeId}`).modal('toggle');
       this.setState(initialState);
     }
@@ -104,12 +104,10 @@ class EmployeePage extends Component {
   setRemoveEmployeeId = (event, employeeId) => {
     if (event) {
       this.setState({ removeemployeeId: employeeId });
-      console.log(employeeId);
       this.props.deleteEmployee(employeeId);
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       this.closeModal();
     }
-    
   };
 
   OnSelectEmployeeToUpdate = (event, employeeId) => {
@@ -129,14 +127,14 @@ class EmployeePage extends Component {
       event.preventDefault();
       const { removeemployeeId } = this.state;
 
-      if(removeemployeeId) {
+      if (removeemployeeId) {
         console.log(removeemployeeId);
         this.props.deleteEmployee(removeemployeeId);
-        this.setState({isLoading: false});
+        this.setState({ isLoading: false });
         this.closeModal();
       }
     }
-  }
+  };
 
   tableColumData = [
     {
@@ -244,7 +242,7 @@ class EmployeePage extends Component {
   }
 
   actionButtonFormatter = (row) => {
-    const {removeemployeeId} = this.state;
+    const { removeemployeeId } = this.state;
     return (
       <span className="dropdown show">
         <span className="dropdown">
@@ -266,10 +264,8 @@ class EmployeePage extends Component {
               <i class="far fa-edit" /> Edit
             </a>
 
-            <a 
-              className="dropdown-item" 
-              data-mdb-toggle="modal"
-              data-mdb-target={`#q${this.removeemployeeId}`}
+            <a
+              className="dropdown-item"
               onClick={(event) => this.setRemoveEmployeeId(event, row._id)}
             >
               <i class="far fa-trash-alt" /> Delete
@@ -359,7 +355,7 @@ class EmployeePage extends Component {
   };
 
   render() {
-    const { employees,isLoading,removeemployeeId } = this.state;
+    const { employees, isLoading, removeemployeeId } = this.state;
     return (
       <div className="pt-5 pb-5 admin-container-color">
         <div className="card p-4 exam-table container">

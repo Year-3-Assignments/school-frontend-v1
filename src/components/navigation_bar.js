@@ -47,7 +47,7 @@ class NavigationBar extends Component {
       localStorage.removeItem('token');
 
       NotificationManager.success(Constant.LOGOUT_MESSAGE);
-      window.location = '/login';
+      window.location = '/';
     }
   };
 

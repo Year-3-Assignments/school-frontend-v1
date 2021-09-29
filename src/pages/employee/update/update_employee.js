@@ -65,9 +65,10 @@ class UpdateEmployee extends Component {
     }
 
     if (this.props.update !== nextProps.update) {
-      NotificationManager.success('Updated Employee Details successfully!');
-      this.setState({ isLoading: false });
-      this.closeModal();
+      this.setState({ isLoading: false }, () => {
+        NotificationManager.success('Updated Employee Details successfully!');
+        this.closeModal();
+      });
     }
     if (this.props.updateemployeeError !== nextProps.updateemployeeError) {
       this.setState({ isLoading: false }, () => {

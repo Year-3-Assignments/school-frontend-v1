@@ -144,7 +144,7 @@ function examinationReducer(state = INITIALSTATE, action) {
       return {
         ...state,
         loading: false,
-        deleteexaminationerror: action.payload.data,
+        deleteexaminationerror: action.payload,
         state: INITIALSTATE,
       };
     case `${CREATE_QUESTION}_REJECTED`:

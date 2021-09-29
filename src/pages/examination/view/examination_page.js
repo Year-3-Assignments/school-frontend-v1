@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import {
   getExaminationsForTeacher,
   setExam,
+  deleteExamination,
 } from '../../../actions/examination_actions';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
@@ -17,9 +18,12 @@ import CreateExam from '../add/create_new_exam';
 import UpdateExam from '../update/update_exam';
 import axios from 'axios';
 import download from 'downloadjs';
+import Loader from '../../../components/loader';
+import { NotificationManager } from 'react-notifications';
 
 const { SearchBar } = Search;
 const { ExportCSVButton } = CSVExport;
+const $ = window.$;
 
 const rowStyle = (row, rowIndex) => {
   const style = {};
@@ -45,10 +49,23 @@ class ExaminationPage extends Component {
   constructor(props) {
     super(props);
     this.onSelectExamToUpdate = this.onSelectExamToUpdate.bind(this);
+    this.removeExamination = this.removeExamination.bind(this);
+    this.setRemoveExam = this.setRemoveExam.bind(this);
+    this.closeModal = this.closeModal.bind(this);
     this.state = {
       exams: [],
       selectedExam: '',
+      isLoading: false,
+      removeExamId: '',
     };
+  }
+
+  closeModal() {
+    $('#delete-exam').modal('toggle');
+    this.setState({
+      isLoading: false,
+      removeExamId: '',
+    });
   }
 
   componentDidMount() {
@@ -72,6 +89,23 @@ class ExaminationPage extends Component {
 
     if (this.props.updateExam !== nextProps.updateExam) {
       this.props.getExaminationsForTeacher();
+    }
+
+    if (this.props.deleteExam !== nextProps.deleteExam) {
+      this.props.getExaminationsForTeacher();
+      this.closeModal();
+    }
+
+    if (this.props.deleteExamError !== nextProps.deleteExamError) {
+      if (nextProps.deleteExamError && nextProps.deleteExamError.message) {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error(nextProps.deleteExamError.message);
+        });
+      } else {
+        this.setState({ isLoading: false }, () => {
+          NotificationManager.error('Error with delete examination');
+        });
+      }
     }
   };
 
@@ -232,13 +266,40 @@ class ExaminationPage extends Component {
             >
               <i className="far fa-edit" /> Edit
             </a>
-            <a className="dropdown-item" href="#">
+            <button
+              className="dropdown-item"
+              data-mdb-toggle="modal"
+              data-mdb-target="#delete-exam"
+              onClick={(event) => this.setRemoveExam(event, row._id)}
+            >
               <i className="far fa-trash-alt" /> Delete
-            </a>
+            </button>
           </div>
         </span>
       </span>
     );
+  };
+
+  setRemoveExam = (event, examId) => {
+    if (event) {
+      console.log(examId);
+      this.setState({ removeExamId: examId });
+    }
+  };
+
+  removeExamination = (event) => {
+    if (event) {
+      event.preventDefault();
+      const { removeExamId } = this.state;
+
+      if (removeExamId) {
+        const removeExamData = {
+          id: removeExamId,
+        };
+        this.props.deleteExamination(removeExamData);
+        this.setState({ isLoading: true });
+      }
+    }
   };
 
   examDateTimeFormatter = (cell) => {
@@ -299,6 +360,58 @@ class ExaminationPage extends Component {
             )}
           </ToolkitProvider>
         </div>
+
+        <div
+          className="modal fade"
+          id="delete-exam"
+          tabIndex="-1"
+          aria-labelledby="exampleModalLabel"
+          data-mdb-backdrop="static"
+          data-mdb-keyboard="false"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  Remove Examination
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-mdb-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>Do you want to remove the examination?</p>
+              </div>
+              <div className="modal-footer d-flex justify-content-center">
+                {this.state.isLoading ? (
+                  <Loader size={50} />
+                ) : (
+                  <div>
+                    <button
+                      type="button"
+                      className="btn btn-light btn-no-shadow btn-rounded"
+                      data-mdb-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-no-shadow btn-rounded"
+                      onClick={this.removeExamination}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <CreateExam />
         <UpdateExam selectedExam={selectedExam} />
       </div>
@@ -311,6 +424,8 @@ const mapStateToProps = (state) => ({
   createExam: state.examinationReducer.createexamination,
   updateExam: state.examinationReducer.updateexamination,
   updateExamError: state.examinationReducer.updateexaminationerror,
+  deleteExam: state.examinationReducer.deleteexamination,
+  deleteExamError: state.examinationReducer.deleteexaminationerror,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -319,6 +434,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   setExam: (examData) => {
     dispatch(setExam(examData));
+  },
+  deleteExamination: (examinationData) => {
+    dispatch(deleteExamination(examinationData));
   },
 });
 
