@@ -127,11 +127,12 @@ class UpdateExam extends Component {
       this.closeModal();
     }
 
-    if (
-      this.props.updateexaminationerror !== nextProps.updateexaminationerror
-    ) {
+    if (this.props.updateError !== nextProps.updateError) {
+      console.log('datga', nextProps.updateError);
       this.setState({ isLoading: false }, () => {
-        NotificationManager.error(nextProps.updateexaminationerror.message);
+        if (nextProps.updateError && nextProps.updateError.message) {
+          NotificationManager.error(nextProps.updateError.message);
+        }
       });
     }
   };
@@ -516,7 +517,7 @@ const mapStateToProps = (state) => ({
   exams: state.examinationReducer.getexaminationsforteacher,
   selectedExam: state.examinationReducer.setexamination,
   updateexamination: state.examinationReducer.updateexamination,
-  updateexaminationerror: state.examinationReducer.updateexaminationerror,
+  updateError: state.examinationReducer.updateexaminationerror,
 });
 
 const mapDispatchToProps = (dispatch) => ({

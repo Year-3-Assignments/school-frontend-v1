@@ -3,6 +3,7 @@ import {
     GET_ALL_EMPLOYEE_LIST,
     DELETE_EMPLOYEE,
     UPDATE_EMPLOYEE,
+    SET_EMPLOYEE
   } from '../actions';
   
   const initialState = {
@@ -10,6 +11,7 @@ import {
     employeeList: [],
     deleteEmployee: '',
     updateEmployee: '',
+    setEmployee:'',
     createemployeeError: null,
     employeeListError: null,
     deleteemployeeError: null,
@@ -17,7 +19,7 @@ import {
   };
   
   function employeeReducer(state = initialState, action) {
-    let createemployee, employeeList, deleteEmployee, updateEmployee;
+    let createemployee, employeeList, deleteEmployee, updateEmployee, setEmployee;
   
     switch (action.type) {
       case `${CREATE_EMPLOYEE_ACCOUNT}_PENDING`:
@@ -69,7 +71,12 @@ import {
           loading: false,
           updateEmployee,
         };
-  
+      case `${SET_EMPLOYEE}`:
+        setEmployee = action.payload;
+        console.log(action.payload);
+        return { ...state, loading: false, setEmployee 
+        };
+      
       case `${CREATE_EMPLOYEE_ACCOUNT}_REJECTED`:
         return {
           ...state,

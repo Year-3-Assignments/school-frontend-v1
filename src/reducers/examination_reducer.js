@@ -133,10 +133,11 @@ function examinationReducer(state = INITIALSTATE, action) {
         state: INITIALSTATE,
       };
     case `${UPDATE_EXAMINATION}_REJECTED`:
+      console.log(action.payload);
       return {
         ...state,
         loading: false,
-        updateexaminationerror: action.payload.data,
+        updateexaminationerror: action.payload,
         state: INITIALSTATE,
       };
     case `${DELETE_EXAMINATION}_REJECTED`:
@@ -175,6 +176,7 @@ function examinationReducer(state = INITIALSTATE, action) {
         state: INITIALSTATE,
       };
     case `${UPDATE_QUESTION}_REJECTED`:
+      console.log(action.payload);
       return {
         ...state,
         loading: false,

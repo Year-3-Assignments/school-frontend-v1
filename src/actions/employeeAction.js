@@ -4,7 +4,16 @@ import {
   GET_ALL_EMPLOYEE_LIST,
   UPDATE_EMPLOYEE,
   DELETE_EMPLOYEE,
+  SET_EMPLOYEE,
+  GET_EMPLOYEE,
 } from './index';
+
+export function setEmployee(employeeData) {
+  return {
+    type: SET_EMPLOYEE,
+    payload: employeeData,
+  };
+}
 
 export function createEmployee(employee) {
   return {
@@ -16,6 +25,16 @@ export function createEmployee(employee) {
   };
 }
 
+export function getEmployeeById(employeeId) {
+  return{
+    type : GET_EMPLOYEE,
+    payload: axios.get(
+      `${process.env.REACT_APP_API_DEV_URL}/user/${employeeId}`,
+      {headers: {Authorization:localStorage.getItem('token') } }
+    )
+  }
+}
+
 export function getEmployeeList() {
   return {
     type: GET_ALL_EMPLOYEE_LIST,
@@ -25,12 +44,11 @@ export function getEmployeeList() {
   };
 }
 
-export function deleteEmployee(employee) {
+export function deleteEmployee(employeeData) {
   return {
     type: DELETE_EMPLOYEE,
-    payload: axios.put(
-      `${process.env.REACT_APP_API_DEV_URL}/user/delete/${employee.id}`,
-      employee,
+    payload: axios.delete(
+      `${process.env.REACT_APP_API_DEV_URL}/user/delete/${employeeData}`,
       {
         headers: { Authorization: localStorage.getItem('token') },
       }
@@ -42,7 +60,7 @@ export function updateEmployee(employee) {
   return {
     type: UPDATE_EMPLOYEE,
     payload: axios.put(
-      `${process.env.REACT_APP_API_DEV_URL}/user/update/${employee.id}`,
+      `${process.env.REACT_APP_API_DEV_URL}/user/update/${employee._id}`,
       employee,
       {
         headers: { Authorization: localStorage.getItem('token') },
