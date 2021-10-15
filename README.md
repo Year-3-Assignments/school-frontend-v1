@@ -1,4 +1,4 @@
-# 2021S2_REG_WE_14 - School Management System - Frontend
+## 2021S2_REG_WE_14 - School Management System - Frontend
 
 ## Group Details
 | Name | Student ID | Username |
