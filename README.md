@@ -1,22 +1,30 @@
-### School Management Frontend React Application
+# 2021S2_REG_WE_14 - School Management System - Frontend
 
-This is the frontend React application for school management system. This is build using React and Redux as the state management system.
+## Group Details
+| Name | Student ID | Username |
+| ---- | ---------- | -------- |
+|Bandara G.B.M.A.G.R.A.V.| IT19104218 | rusiruavb |
+|V.W.A.N.R.Wickramasinghe| IT19146652 | RaveenaWickramasinghe |
+|Rathnayake R.M.K.G| IT19202600 | kalanarathnayake |
+|T.Parathan| IT19125176 | Parathantl |
+---
+## Project Description
+Student Management system is an online platform for a school. This can be used by students, employees and the users(administration) for making their tasks easier. Student Management system uses only four business functions. We are going to implement 4 major business functions in this application. They are,
+ - Employee management system
+ - Student management system
+ - Sports management system
+ - Examination management system
 
-### How to contribute
+## Technologies
+- Frontend : React
+- Backend : Node JS & Express JS
+- Database Solution : Mongo DB
+- State management library : Redux
+- User Authentication : Json Web Token (JWT)
 
-1. Fork the project into your local GitHub profile.:fork_and_knife:
-2. Clone that project into your computer.:rocket:
-3. Assign a issue from the **issue** tab. - _All the issues are the **features** of the API._
-4. Create new brach and called it with the respected feature.:seedling:
-   > For example: Issue - Create customer account
-   > Then you should name your brach like this.
-   > `feature/student-account`
-   > Brach name always should be simple letters.
-5. Do your modifications to the code.👨‍💻
-6. Commit changes to your local repository.💬
-7. Create a pull request to upstream repository.:hand:
-   > Before create the pull request, please chack if there are merge conflicts in your code. If there are not conflicts, then create the **Pull Request(PR)**
-8. Then you have to assign one or more team members to review your code.:eyes:
-   > After reviewing process are done and your code is ready to merge, one of our organization member will merge your changes to the **master** branch.
-
-_More imformation about the documentation will be update in future_
+## How to start the application
+1. Clone that project into your computer.
+2. Open the codebase using VS Code or any other code editor.
+3. Run `npm install` to install the required dependencies.
+4. Run `npm start` to start the application.
+5. The application will run on your browser in port 3000 (`localhost:3000`)
